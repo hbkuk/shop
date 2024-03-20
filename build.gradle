@@ -39,6 +39,11 @@ dependencies {
 	testImplementation("org.junit.platform:junit-platform-commons:1.10.0")
 	testImplementation("org.junit.platform:junit-platform-engine:1.10.0")
 
+	// lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// db
 	runtimeOnly 'com.h2database:h2'
 }
 
