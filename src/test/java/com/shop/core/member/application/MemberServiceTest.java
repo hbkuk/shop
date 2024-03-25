@@ -10,6 +10,7 @@ import com.shop.core.member.domain.Status;
 import com.shop.core.member.domain.Type;
 import com.shop.core.member.exception.DuplicateEmailException;
 import com.shop.core.member.exception.NotFoundMemberException;
+import com.shop.core.userSecurity.application.UserSecurityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -31,7 +32,7 @@ public class MemberServiceTest {
     MemberRepository memberRepository;
 
     @Autowired
-    SecurityService securityService;
+    UserSecurityService userSecurityService;
 
     @Nested
     class 회원_생성 {
@@ -56,7 +57,7 @@ public class MemberServiceTest {
                 // then
                 assertThat(memberRepository.findByEmail(브라운.이메일).get())
                         .usingRecursiveComparison()
-                        .ignoringFields("id")
+                        .ignoringFields("id", "password")
                         .isEqualTo(브라운_회원_생성_요청);
             }
 
