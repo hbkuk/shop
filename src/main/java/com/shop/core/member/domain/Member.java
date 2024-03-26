@@ -48,4 +48,9 @@ public class Member {
         this.status = status;
         return this;
     }
+
+    public Member updateEncodedPassword(String encodedPassword) {
+        this.password = encodedPassword;
+        return this;
+    }
 }

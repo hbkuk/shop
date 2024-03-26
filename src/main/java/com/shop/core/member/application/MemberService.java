@@ -9,6 +9,7 @@ import com.shop.core.member.domain.Status;
 import com.shop.core.member.domain.Type;
 import com.shop.core.member.exception.DuplicateEmailException;
 import com.shop.core.member.exception.NotFoundMemberException;
+import com.shop.core.userSecurity.application.UserSecurityService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final SecurityService securityService;
+    private final UserSecurityService userSecurityService;
 
-    public MemberService(MemberRepository memberRepository, SecurityService securityService) {
+    public MemberService(MemberRepository memberRepository, UserSecurityService userSecurityService) {
         this.memberRepository = memberRepository;
-        this.securityService = securityService;
+        this.userSecurityService = userSecurityService;
     }
 
     @Transactional
@@ -30,10 +31,10 @@ public class MemberService {
             throw new DuplicateEmailException(ErrorType.DUPLICATE_MEMBER_EMAIL);
         }
 
-        // TODO: Salt 추가
-        Member member = request.toMember(Type.NORMAL, Status.ACTIVE);
+        Member savedMember = memberRepository.save(request.toMember(Type.NORMAL, Status.ACTIVE));
+        userSecurityService.applyPasswordSecurity(savedMember);
 
-        return MemberResponse.of(memberRepository.save(member));
+        return MemberResponse.of(savedMember);
     }
 
     public MemberResponse findMemberById(Long id) {
