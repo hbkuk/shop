@@ -9,6 +9,7 @@ public enum ErrorType {
 
     NOT_FOUND_MEMBER(3001, "존재하지 않는 회원입니다."),
     DUPLICATE_MEMBER_EMAIL(3002, "중복된 회원 이메일입니다."),
+    PASSWORD_MISMATCH(3003, "비밀번호가 동일하지 않습니다."),
 
     REQUEST_EXCEPTION(9001, "http 요청 에러입니다."),
     INVALID_PATH(9002, "잘못된 경로입니다."),

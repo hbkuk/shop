@@ -9,7 +9,7 @@ import com.shop.core.member.domain.Status;
 import com.shop.core.member.domain.Type;
 import com.shop.core.member.exception.DuplicateEmailException;
 import com.shop.core.member.exception.NotFoundMemberException;
-import com.shop.core.userSecurity.application.UserSecurityService;
+import com.shop.core.memberSecurity.application.MemberSecurityService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,11 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final UserSecurityService userSecurityService;
+    private final MemberSecurityService memberSecurityService;
 
-    public MemberService(MemberRepository memberRepository, UserSecurityService userSecurityService) {
+    public MemberService(MemberRepository memberRepository, MemberSecurityService memberSecurityService) {
         this.memberRepository = memberRepository;
-        this.userSecurityService = userSecurityService;
+        this.memberSecurityService = memberSecurityService;
     }
 
     @Transactional
@@ -32,7 +32,7 @@ public class MemberService {
         }
 
         Member savedMember = memberRepository.save(request.toMember(Type.NORMAL, Status.ACTIVE));
-        userSecurityService.applyPasswordSecurity(savedMember);
+        memberSecurityService.applyPasswordSecurity(savedMember);
 
         return MemberResponse.of(savedMember);
     }
@@ -59,4 +59,9 @@ public class MemberService {
     private boolean isEmailAlreadyRegistered(String email) {
         return memberRepository.findByEmail(email).isPresent();
     }
+
+    public Member findMemberByEmail(String email) {
+        return memberRepository.findByEmail(email).orElseThrow(() -> new NotFoundMemberException(ErrorType.NOT_FOUND_MEMBER));
+    }
+
 }
