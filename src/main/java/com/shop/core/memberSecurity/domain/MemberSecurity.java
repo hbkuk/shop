@@ -1,4 +1,4 @@
-package com.shop.core.userSecurity.domain;
+package com.shop.core.memberSecurity.domain;
 
 import com.shop.core.member.domain.Member;
 import lombok.EqualsAndHashCode;
@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @EqualsAndHashCode
 @Getter
-public class UserSecurity {
+public class MemberSecurity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +20,10 @@ public class UserSecurity {
     @OneToOne
     private Member member;
 
-    protected UserSecurity() {
+    protected MemberSecurity() {
     }
 
-    public UserSecurity(String salt, Member member) {
+    public MemberSecurity(String salt, Member member) {
         this.salt = salt;
         this.member = member;
     }

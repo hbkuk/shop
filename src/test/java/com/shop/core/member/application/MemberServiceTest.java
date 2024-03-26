@@ -10,7 +10,7 @@ import com.shop.core.member.domain.Status;
 import com.shop.core.member.domain.Type;
 import com.shop.core.member.exception.DuplicateEmailException;
 import com.shop.core.member.exception.NotFoundMemberException;
-import com.shop.core.userSecurity.application.UserSecurityService;
+import com.shop.core.memberSecurity.application.MemberSecurityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -32,7 +32,7 @@ public class MemberServiceTest {
     MemberRepository memberRepository;
 
     @Autowired
-    UserSecurityService userSecurityService;
+    MemberSecurityService memberSecurityService;
 
     @Nested
     class 회원_생성 {

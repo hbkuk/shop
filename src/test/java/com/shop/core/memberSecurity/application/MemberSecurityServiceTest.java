@@ -1,4 +1,4 @@
-package com.shop.core.userSecurity.application;
+package com.shop.core.memberSecurity.application;
 
 import com.shop.common.annotation.ApplicationTest;
 import com.shop.common.security.PasswordSecurityManager;
@@ -9,8 +9,8 @@ import com.shop.core.member.domain.Member;
 import com.shop.core.member.domain.MemberRepository;
 import com.shop.core.member.domain.Status;
 import com.shop.core.member.domain.Type;
-import com.shop.core.userSecurity.domain.UserSecurity;
-import com.shop.core.userSecurity.domain.UserSecurityRepository;
+import com.shop.core.memberSecurity.domain.MemberSecurity;
+import com.shop.core.memberSecurity.domain.MemberSecurityRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,13 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("유저 보안 서비스 레이어 테스트")
 @ApplicationTest
-public class UserUserSecurityServiceTest {
+public class MemberSecurityServiceTest {
 
     @Autowired
-    UserSecurityService userSecurityService;
+    MemberSecurityService memberSecurityService;
 
     @Autowired
-    UserSecurityRepository userSecurityRepository;
+    MemberSecurityRepository memberSecurityRepository;
 
     @Autowired
     PasswordSecurityManager passwordSecurityManager;
@@ -57,10 +57,10 @@ public class UserUserSecurityServiceTest {
                 Member 저장된_브라운_정보 = memberRepository.save(브라운_회원_생성_요청.toMember());
 
                 // when
-                userSecurityService.applyPasswordSecurity(저장된_브라운_정보);
+                memberSecurityService.applyPasswordSecurity(저장된_브라운_정보);
 
                 // then
-                UserSecurity 저장된_보안_정보 = userSecurityRepository.findByMember(저장된_브라운_정보);
+                MemberSecurity 저장된_보안_정보 = memberSecurityRepository.findByMember(저장된_브라운_정보);
                 assertThat(저장된_보안_정보.getSalt()).isNotBlank();
             }
         }
@@ -86,7 +86,7 @@ public class UserUserSecurityServiceTest {
                 MemberResponse 생성된_브라운_회원 = memberService.createMember(브라운_회원_생성_요청);
 
                 // when
-                boolean 비밀번호_일치_여부 = userSecurityService.verifyPassword(브라운.비밀번호, memberRepository.findById(생성된_브라운_회원.getId()).get());
+                boolean 비밀번호_일치_여부 = memberSecurityService.verifyPassword(브라운.비밀번호, memberRepository.findById(생성된_브라운_회원.getId()).get());
 
                 // then
                 assertThat(비밀번호_일치_여부).isTrue();
@@ -109,7 +109,7 @@ public class UserUserSecurityServiceTest {
                 MemberResponse 생성된_브라운_회원 = memberService.createMember(브라운_회원_생성_요청);
 
                 // when
-                boolean 비밀번호_일치_여부 = userSecurityService.verifyPassword("random" + 브라운.비밀번호, memberRepository.findById(생성된_브라운_회원.getId()).get());
+                boolean 비밀번호_일치_여부 = memberSecurityService.verifyPassword("random" + 브라운.비밀번호, memberRepository.findById(생성된_브라운_회원.getId()).get());
 
                 // then
                 assertThat(비밀번호_일치_여부).isFalse();

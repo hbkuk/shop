@@ -37,4 +37,5 @@ public class MemberSteps {
     public static void 회원_생성_실패_확인(ExtractableResponse<Response> 회원_생성_응답) {
         assertThat(회원_생성_응답.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
+
 }

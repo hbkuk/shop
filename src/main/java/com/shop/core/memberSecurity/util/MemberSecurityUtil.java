@@ -1,8 +1,8 @@
-package com.shop.core.userSecurity.util;
+package com.shop.core.memberSecurity.util;
 
 import java.security.SecureRandom;
 
-public class UserSecurityUtil {
+public class MemberSecurityUtil {
     public static String createSalt() {
         SecureRandom sr = new SecureRandom();
         byte[] salt = new byte[20];
