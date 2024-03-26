@@ -45,6 +45,9 @@ dependencies {
 
 	// db
 	runtimeOnly 'com.h2database:h2'
+
+	// password crypto
+	implementation 'org.springframework.security:spring-security-crypto:5.7.1'
 }
 
 test {
