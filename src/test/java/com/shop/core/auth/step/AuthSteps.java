@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.shop.core.member.step.MemberSteps.회원_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthSteps {
@@ -59,5 +60,10 @@ public class AuthSteps {
 
     public static void 토큰_확인(String 발급된_토큰) {
         AssertionsForClassTypes.assertThat(발급된_토큰).isNotBlank();
+    }
+
+    public static String 회원생성_후_토큰_발급(MemberFixture memberFixture) {
+        회원_생성_요청(memberFixture);
+        return "Bearer " + 성공하는_토큰_발급_요청(memberFixture);
     }
 }
