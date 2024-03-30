@@ -111,11 +111,7 @@ public class AddressAcceptanceTest extends AcceptanceTest {
             @Test
             void 주소록_수정_성공() {
                 // given
-                Map<String, String> 주소록_등록_요청_정보 = new HashMap<>();
-                주소록_등록_요청_정보.put("address", "서울특별시 강남구 역삼동 123-45");
-                주소록_등록_요청_정보.put("detailed_address", "역삼타워빌딩 5층 501호");
-                주소록_등록_요청_정보.put("description", "회사 주소");
-                주소록_등록_요청_정보.put("is_default", "true");
+                AddressRequest 주소록_등록_요청_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", true);
 
                 ExtractableResponse<Response> 주소록_등록_요청_응답 = given().log().all()
                         .header("Authorization", 정상적인_회원의_토큰)
@@ -128,20 +124,16 @@ public class AddressAcceptanceTest extends AcceptanceTest {
                         .extract();
 
                 // when
-                Map<String, String> 주소록_수정_요청_정보 = new HashMap<>();
-                주소록_수정_요청_정보.put("address", "대구광역시 중구 삼덕동 123-4");
-                주소록_수정_요청_정보.put("detailed_address", "대구타워 10층 1001호");
-                주소록_수정_요청_정보.put("description", "최근 바뀐 회사 주소");
-                주소록_수정_요청_정보.put("is_default", "true");
+                AddressRequest 주소록_수정_요청_정보 = AddressRequest.of("대구광역시 중구 삼덕동 123-4", "대구타워 10층 1001호", "최근 바뀐 회사 주소", true);
 
                 given().log().all()
                         .header("Authorization", 정상적인_회원의_토큰)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .body(주소록_등록_요청_정보)
+                        .body(주소록_수정_요청_정보)
                         .when()
-                        .put("/addresses/", getCreatedLocationId(주소록_등록_요청_응답))
+                        .put("/addresses/{id}", getCreatedLocationId(주소록_등록_요청_응답))
                         .then().log().all()
-                        .statusCode(HttpStatus.CREATED.value())
+                        .statusCode(HttpStatus.OK.value())
                         .extract()
                         .jsonPath();
 
@@ -157,7 +149,7 @@ public class AddressAcceptanceTest extends AcceptanceTest {
 
                 // then
                 assertThat(jsonPath.getList("address", String.class)).containsExactly("대구광역시 중구 삼덕동 123-4");
-                assertThat(jsonPath.getList("detailed_address", String.class)).containsExactly("대구타워 10층 1001호");
+                assertThat(jsonPath.getList("detailedAddress", String.class)).containsExactly("대구타워 10층 1001호");
                 assertThat(jsonPath.getList("description", String.class)).containsExactly("최근 바뀐 회사 주소");
 
             }
@@ -177,11 +169,7 @@ public class AddressAcceptanceTest extends AcceptanceTest {
             @Test
             void 주소록_수정_실패() {
                 // given
-                Map<String, String> 주소록_등록_요청_정보 = new HashMap<>();
-                주소록_등록_요청_정보.put("address", "서울특별시 강남구 역삼동 123-45");
-                주소록_등록_요청_정보.put("detailed_address", "역삼타워빌딩 5층 501호");
-                주소록_등록_요청_정보.put("description", "회사 주소");
-                주소록_등록_요청_정보.put("is_default", "true");
+                AddressRequest 주소록_등록_요청_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", true);
 
                 ExtractableResponse<Response> 주소록_등록_요청_응답 = given().log().all()
                         .header("Authorization", 정상적인_회원의_토큰)
@@ -194,18 +182,13 @@ public class AddressAcceptanceTest extends AcceptanceTest {
                         .extract();
 
                 // when
-                Map<String, String> 주소록_수정_요청_정보 = new HashMap<>();
-                주소록_수정_요청_정보.put("address", "대구광역시 중구 삼덕동 123-4");
-                주소록_수정_요청_정보.put("detailed_address", "대구타워 10층 1001호");
-                주소록_수정_요청_정보.put("description", "최근 바뀐 회사 주소");
-                주소록_수정_요청_정보.put("is_default", "true");
+                AddressRequest 주소록_수정_요청_정보 = AddressRequest.of("대구광역시 중구 삼덕동 123-4", "대구타워 10층 1001호", "최근 바뀐 회사 주소", true);
 
                 given().log().all()
-                        .header("Authorization", 정상적인_회원의_토큰)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .body(주소록_등록_요청_정보)
+                        .body(주소록_수정_요청_정보)
                         .when()
-                        .put("/addresses/", getCreatedLocationId(주소록_등록_요청_응답))
+                        .put("/addresses/{id}", getCreatedLocationId(주소록_등록_요청_응답))
                         .then().log().all()
                         .statusCode(HttpStatus.UNAUTHORIZED.value())
                         .extract();
@@ -222,7 +205,7 @@ public class AddressAcceptanceTest extends AcceptanceTest {
 
                 // then
                 assertThat(jsonPath.getList("address", String.class)).containsExactly("서울특별시 강남구 역삼동 123-45");
-                assertThat(jsonPath.getList("detailed_address", String.class)).containsExactly("역삼타워빌딩 5층 501호");
+                assertThat(jsonPath.getList("detailedAddress", String.class)).containsExactly("역삼타워빌딩 5층 501호");
                 assertThat(jsonPath.getList("description", String.class)).containsExactly("회사 주소");
             }
         }
@@ -237,12 +220,8 @@ public class AddressAcceptanceTest extends AcceptanceTest {
 
         @BeforeEach
         void 사전_주소록_등록() {
-            Map<String, String> 첫번째_주소록_등록_요청_정보 = new HashMap<>();
-            첫번째_주소록_등록_요청_정보.put("address", "서울특별시 강남구 역삼동 123-45");
-            첫번째_주소록_등록_요청_정보.put("detailed_address", "역삼타워빌딩 5층 501호");
-            첫번째_주소록_등록_요청_정보.put("description", "회사 주소");
-            첫번째_주소록_등록_요청_정보.put("is_default", "true");
 
+            AddressRequest 첫번째_주소록_등록_요청_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", false);
             첫번째_주소록_등록_요청_응답 = given().log().all()
                     .header("Authorization", 정상적인_회원의_토큰)
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -253,12 +232,7 @@ public class AddressAcceptanceTest extends AcceptanceTest {
                     .statusCode(HttpStatus.CREATED.value())
                     .extract();
 
-            Map<String, String> 두번째_주소록_등록_요청_정보 = new HashMap<>();
-            두번째_주소록_등록_요청_정보.put("address", "대구광역시 중구 삼덕동 123-4");
-            두번째_주소록_등록_요청_정보.put("detailed_address", "대구타워 10층 1001호");
-            두번째_주소록_등록_요청_정보.put("description", "최근 바뀐 회사 주소");
-            두번째_주소록_등록_요청_정보.put("is_default", "true");
-
+            AddressRequest 두번째_주소록_등록_요청_정보 = AddressRequest.of("대구광역시 중구 삼덕동 123-4", "대구타워 10층 1001호", "최근 바뀐 회사 주소", false);
             두번째_주소록_등록_요청_응답 = given().log().all()
                     .header("Authorization", 정상적인_회원의_토큰)
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -269,12 +243,7 @@ public class AddressAcceptanceTest extends AcceptanceTest {
                     .statusCode(HttpStatus.CREATED.value())
                     .extract();
 
-            Map<String, String> 세번째_주소록_등록_요청_정보 = new HashMap<>();
-            두번째_주소록_등록_요청_정보.put("address", "부산광역시 해운대구 우동 543-21");
-            두번째_주소록_등록_요청_정보.put("detailed_address", "해운대 마린시티 3동 1202호");
-            두번째_주소록_등록_요청_정보.put("description", "휴가용 숙소");
-            두번째_주소록_등록_요청_정보.put("is_default", "true");
-
+            AddressRequest 세번째_주소록_등록_요청_정보 = AddressRequest.of("부산광역시 해운대구 우동 543-21", "해운대 마린시티 3동 1202호", "휴가용 숙소", false);
             세번째_주소록_등록_요청_응답 = given().log().all()
                     .header("Authorization", 정상적인_회원의_토큰)
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -299,17 +268,12 @@ public class AddressAcceptanceTest extends AcceptanceTest {
             @Test
             void 기본_주소록_변경_성공() {
                 // when
-                Map<String, String> 기본_주소록_변경_정보 = new HashMap<>();
-                기본_주소록_변경_정보.put("is_default", "true");
-
                 given().log().all()
                         .header("Authorization", 정상적인_회원의_토큰)
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .body(기본_주소록_변경_정보)
                         .when()
-                        .put("/address-book/default-address/", getCreatedLocationId(두번째_주소록_등록_요청_응답))
+                        .put("/addresses/default/{id}", getCreatedLocationId(두번째_주소록_등록_요청_응답))
                         .then().log().all()
-                        .statusCode(HttpStatus.CREATED.value())
+                        .statusCode(HttpStatus.OK.value())
                         .extract();
 
                 // then
@@ -317,13 +281,13 @@ public class AddressAcceptanceTest extends AcceptanceTest {
                         .header("Authorization", 정상적인_회원의_토큰)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .when()
-                        .get("/addresses/", getCreatedLocationId(첫번째_주소록_등록_요청_응답))
+                        .get("/addresses/{id}", getCreatedLocationId(두번째_주소록_등록_요청_응답))
                         .then().log().all()
                         .statusCode(HttpStatus.OK.value())
                         .extract()
                         .jsonPath();
 
-                assertThat(jsonPath.getList("is_default", String.class)).containsExactly("true");
+                assertThat(jsonPath.getBoolean("isDefault")).isEqualTo(true);
 
             }
 
@@ -340,19 +304,26 @@ public class AddressAcceptanceTest extends AcceptanceTest {
              */
             @Test
             void 기본_주소록_변경_실패() {
-                // when, then
-                Map<String, String> 기본_주소록_변경_정보 = new HashMap<>();
-                기본_주소록_변경_정보.put("is_default", "true");
-
+                // when
                 given().log().all()
-                        .header("Authorization", 정상적인_회원의_토큰)
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .body(기본_주소록_변경_정보)
                         .when()
-                        .put("/address-book/default-address/", getCreatedLocationId(두번째_주소록_등록_요청_응답))
+                        .put("/addresses/default/{id}", getCreatedLocationId(두번째_주소록_등록_요청_응답))
                         .then().log().all()
                         .statusCode(HttpStatus.UNAUTHORIZED.value())
                         .extract();
+
+                // then
+                JsonPath jsonPath = given().log().all()
+                        .header("Authorization", 정상적인_회원의_토큰)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .when()
+                        .get("/addresses/{id}", getCreatedLocationId(두번째_주소록_등록_요청_응답))
+                        .then().log().all()
+                        .statusCode(HttpStatus.OK.value())
+                        .extract()
+                        .jsonPath();
+
+                assertThat(jsonPath.getBoolean("isDefault")).isEqualTo(false);
             }
         }
     }

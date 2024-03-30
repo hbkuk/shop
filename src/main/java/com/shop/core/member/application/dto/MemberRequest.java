@@ -33,12 +33,6 @@ public class MemberRequest {
         this.age = age;
     }
 
-    public MemberRequest(String email, String password, Integer age) {
-        this.email = email;
-        this.password = password;
-        this.age = age;
-    }
-
     public static MemberRequest updateOf(String password, int age) {
         return new MemberRequest(password, age);
     }

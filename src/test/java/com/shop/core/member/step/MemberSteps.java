@@ -1,12 +1,17 @@
 package com.shop.core.member.step;
 
 import com.shop.core.member.application.dto.MemberRequest;
+import com.shop.core.member.application.dto.MemberResponse;
+import com.shop.core.member.domain.Member;
+import com.shop.core.member.domain.Status;
+import com.shop.core.member.domain.Type;
 import com.shop.core.member.fixture.MemberFixture;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,7 +26,7 @@ public class MemberSteps {
         return RestAssured
                 .given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new MemberRequest(이메일, 비밀번호, 나이))
+                .body(new MemberRequest(이메일, 비밀번호, 나이, Type.NORMAL, Status.ACTIVE))
                 .when().post("/members")
                 .then().log().all().extract();
     }
@@ -37,5 +42,4 @@ public class MemberSteps {
     public static void 회원_생성_실패_확인(ExtractableResponse<Response> 회원_생성_응답) {
         assertThat(회원_생성_응답.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
-
 }

@@ -1,9 +1,11 @@
 package com.shop.core.member.domain;
 
+import com.shop.core.address.domain.Address;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -52,5 +54,9 @@ public class Member {
     public Member updateEncodedPassword(String encodedPassword) {
         this.password = encodedPassword;
         return this;
+    }
+
+    public boolean isOwner(Address address) {
+        return Objects.equals(this.id, address.getMemberId());
     }
 }
