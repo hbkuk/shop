@@ -3,7 +3,6 @@ package com.shop.core.member.presentation;
 import com.shop.core.member.application.MemberService;
 import com.shop.core.member.application.dto.MemberRequest;
 import com.shop.core.member.application.dto.MemberResponse;
-import com.shop.core.member.domain.Type;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

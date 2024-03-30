@@ -1,5 +1,6 @@
 package com.shop.core.address.domain;
 
+import com.shop.core.member.domain.Member;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -46,5 +47,9 @@ public class Address {
 
     public void updateDefault(boolean isDefault) {
         this.isDefault = isDefault;
+    }
+
+    public boolean isOwn(Member member) {
+        return memberId.equals(member.getId());
     }
 }

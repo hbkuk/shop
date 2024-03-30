@@ -41,7 +41,7 @@ public class AddressService {
         Member member = memberService.findMemberByEmail(loginUser.getEmail());
         Address address = findAddressById(addressId);
 
-        if (!member.isOwner(address)) {
+        if (!address.isOwn(member)) {
             throw new NonMatchingMemberException(ErrorType.NON_MATCHING_MEMBER);
         }
 
@@ -53,7 +53,7 @@ public class AddressService {
         Member member = memberService.findMemberByEmail(loginUser.getEmail());
         Address address = findAddressById(request.getId());
 
-        if (!member.isOwner(address)) {
+        if (!address.isOwn(member)) {
             throw new NonMatchingMemberException(ErrorType.NON_MATCHING_MEMBER);
         }
         if (request.getIsDefault()) {
@@ -68,7 +68,7 @@ public class AddressService {
         Member member = memberService.findMemberByEmail(loginUser.getEmail());
         Address address = findAddressById(addressId);
 
-        if (!member.isOwner(address)) {
+        if (!address.isOwn(member)) {
             throw new NonMatchingMemberException(ErrorType.NON_MATCHING_MEMBER);
         }
 
