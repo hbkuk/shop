@@ -49,15 +49,15 @@ public class AddressServiceTest {
             @DisplayName("주소록을 등록할 수 있다.")
             void 주소록_등록_성공() {
                 // given
-                Member 생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
+                회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
 
                 // when
                 AddressRequest 주소록_등록_요청_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", true);
-                AddressResponse 주소록_등록_정보 = addressService.create(주소록_등록_요청_정보, LoginUser.of(생성된_회원.getEmail()));
+                AddressResponse 등록할_주소록_정보 = addressService.create(주소록_등록_요청_정보, LoginUser.of(스미스.이메일));
 
                 // then
-                Address 찾은_주소록_정보 = addressRepository.findById(주소록_등록_정보.getId()).get();
-                assertThat(AddressResponse.of(찾은_주소록_정보)).usingRecursiveComparison().isEqualTo(주소록_등록_정보);
+                AddressResponse 찾은_주소록_정보 = AddressResponse.of(addressRepository.findById(등록할_주소록_정보.getId()).get());
+                assertThat(찾은_주소록_정보).usingRecursiveComparison().isEqualTo(등록할_주소록_정보);
             }
         }
     }
@@ -93,16 +93,16 @@ public class AddressServiceTest {
             @DisplayName("타인의 주소록을 찾을 수 없다.")
             void 타인의_주소록_찾기() {
                 // given
-                Member 스미스_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
-                Member 존슨_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이);
+                Member 생성된_첫번째_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
+                Member 생성된_두번째_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이);
 
                 AddressRequest 등록할_주소록_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", true);
-                Address 저장된_주소록 = addressRepository.save(등록할_주소록_정보.toEntity(스미스_회원.getId()));
+                Address 저장된_주소록 = addressRepository.save(등록할_주소록_정보.toEntity(생성된_첫번째_회원.getId()));
 
                 // when,then
                 assertThatExceptionOfType(NonMatchingMemberException.class)
                         .isThrownBy(() -> {
-                            addressService.findById(저장된_주소록.getId(), LoginUser.of(존슨_회원.getEmail()));
+                            addressService.findById(저장된_주소록.getId(), LoginUser.of(생성된_두번째_회원.getEmail()));
                         })
                         .withMessageMatching(ErrorType.NON_MATCHING_MEMBER.getMessage());
             }
@@ -138,16 +138,16 @@ public class AddressServiceTest {
                 // given
                 Member 생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
 
-                AddressRequest 주소록_등록_요청_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", true);
-                Address 저장된_주소록 = addressRepository.save(주소록_등록_요청_정보.toEntity(생성된_회원.getId()));
+                AddressRequest 등록할_주소록_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", true);
+                Address 저장된_주소록 = addressRepository.save(등록할_주소록_정보.toEntity(생성된_회원.getId()));
 
                 // when
-                AddressRequest 주소록_수정_요청_정보 = AddressRequest.of("서울특별시 강남구 대치동 435-12", "대치타워빌딩 5층 1001호", "학원 주소", true);
-                AddressResponse 주소록_수정_정보 = addressService.update(AddressRequest.mergeAddressId(저장된_주소록.getId(), 주소록_수정_요청_정보), LoginUser.of(생성된_회원.getEmail()));
+                AddressRequest 수정할_주소록_정보 = AddressRequest.of("서울특별시 강남구 대치동 435-12", "대치타워빌딩 5층 1001호", "학원 주소", true);
+                AddressResponse 수정된_주소록_정보 = addressService.update(AddressRequest.mergeAddressId(저장된_주소록.getId(), 수정할_주소록_정보), LoginUser.of(생성된_회원.getEmail()));
 
                 // then
-                Address 찾은_주소록_정보 = addressRepository.findById(저장된_주소록.getId()).get();
-                assertThat(AddressResponse.of(찾은_주소록_정보)).usingRecursiveComparison().isEqualTo(주소록_수정_정보);
+                AddressResponse 찾은_주소록_정보 = AddressResponse.of(addressRepository.findById(저장된_주소록.getId()).get());
+                assertThat(찾은_주소록_정보).usingRecursiveComparison().isEqualTo(수정된_주소록_정보);
             }
         }
 
@@ -158,18 +158,18 @@ public class AddressServiceTest {
             @DisplayName("타인의 주소록을 찾을 수 없다.")
             void 타인의_주소록_변경() {
                 // given
-                Member 스미스_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
-                Member 존슨_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이);
+                Member 생성된_첫번째_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
+                Member 생성된_두번째_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이);
 
-                AddressRequest 주소록_등록_요청_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", true);
-                Address 저장된_주소록 = addressRepository.save(주소록_등록_요청_정보.toEntity(스미스_회원.getId()));
+                AddressRequest 등록할_주소록_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", true);
+                Address 저장된_주소록 = addressRepository.save(등록할_주소록_정보.toEntity(생성된_첫번째_회원.getId()));
 
                 // when,then
-                AddressRequest 주소록_수정_요청_정보 = AddressRequest.of("서울특별시 강남구 대치동 435-12", "대치타워빌딩 5층 1001호", "학원 주소", true);
+                AddressRequest 수정할_주소록_정보 = AddressRequest.of("서울특별시 강남구 대치동 435-12", "대치타워빌딩 5층 1001호", "학원 주소", true);
 
                 assertThatExceptionOfType(NonMatchingMemberException.class)
                         .isThrownBy(() -> {
-                            AddressResponse 주소록_수정_정보 = addressService.update(AddressRequest.mergeAddressId(저장된_주소록.getId(), 주소록_수정_요청_정보), LoginUser.of(존슨_회원.getEmail()));
+                            addressService.update(AddressRequest.mergeAddressId(저장된_주소록.getId(), 수정할_주소록_정보), LoginUser.of(생성된_두번째_회원.getEmail()));
                         })
                         .withMessageMatching(ErrorType.NON_MATCHING_MEMBER.getMessage());
             }
@@ -188,9 +188,14 @@ public class AddressServiceTest {
                 // given
                 Member 생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
 
-                addressRepository.save(AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", false).toEntity(생성된_회원.getId()));
-                Address 두번째_주소록 = addressRepository.save(AddressRequest.of("대전광역시 서구 둔산동 123-456", "둔산한화꿈에그린 10층 1001호", "집 주소", false).toEntity(생성된_회원.getId()));
-                addressRepository.save(AddressRequest.of("경기도 수원시 장안구 영화동 789-012", "영화아파트 101동 201호", "집 주소", true).toEntity(생성된_회원.getId()));
+                AddressRequest 첫번째_등록할_주소록_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", false);
+                Address 첫번째_주소록 = addressRepository.save(첫번째_등록할_주소록_정보.toEntity(생성된_회원.getId()));
+
+                AddressRequest 두번째_등록할_주소록_정보 = AddressRequest.of("대전광역시 서구 둔산동 123-456", "둔산한화꿈에그린 10층 1001호", "집 주소", false);
+                Address 두번째_주소록 = addressRepository.save(두번째_등록할_주소록_정보.toEntity(생성된_회원.getId()));
+
+                AddressRequest 세번째_등록할_주소록_정보 = AddressRequest.of("경기도 수원시 장안구 영화동 789-012", "영화아파트 101동 201호", "집 주소", true);
+                Address 세번째_주소록 = addressRepository.save(세번째_등록할_주소록_정보.toEntity(생성된_회원.getId()));
 
                 // when
                 addressService.updateDefaultAddress(두번째_주소록.getId(), LoginUser.of(생성된_회원.getEmail()));
@@ -210,17 +215,22 @@ public class AddressServiceTest {
             @DisplayName("타인의 주소록을 기본 주소록으로 변경할 수 없다.")
             void 기본_주소록_변경_성공() {
                 // given
-                Member 스미스_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
-                Member 존슨_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이);
+                Member 생성된_첫번째_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
+                Member 생성된_두번째_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이);
 
-                addressRepository.save(AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", false).toEntity(스미스_회원.getId()));
-                Address 두번째_주소록 = addressRepository.save(AddressRequest.of("대전광역시 서구 둔산동 123-456", "둔산한화꿈에그린 10층 1001호", "집 주소", false).toEntity(스미스_회원.getId()));
-                addressRepository.save(AddressRequest.of("경기도 수원시 장안구 영화동 789-012", "영화아파트 101동 201호", "집 주소", true).toEntity(스미스_회원.getId()));
+                AddressRequest 첫번째_등록할_주소록_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", false);
+                Address 첫번째_주소록 = addressRepository.save(첫번째_등록할_주소록_정보.toEntity(생성된_첫번째_회원.getId()));
+
+                AddressRequest 두번째_등록할_주소록_정보 = AddressRequest.of("대전광역시 서구 둔산동 123-456", "둔산한화꿈에그린 10층 1001호", "집 주소", false);
+                Address 두번째_주소록 = addressRepository.save(두번째_등록할_주소록_정보.toEntity(생성된_첫번째_회원.getId()));
+
+                AddressRequest 세번째_등록할_주소록_정보 = AddressRequest.of("경기도 수원시 장안구 영화동 789-012", "영화아파트 101동 201호", "집 주소", true);
+                Address 세번째_주소록 = addressRepository.save(세번째_등록할_주소록_정보.toEntity(생성된_첫번째_회원.getId()));
 
                 // when
                 assertThatExceptionOfType(NonMatchingMemberException.class)
                         .isThrownBy(() -> {
-                            addressService.updateDefaultAddress(두번째_주소록.getId(), LoginUser.of(존슨_회원.getEmail()));
+                            addressService.updateDefaultAddress(두번째_주소록.getId(), LoginUser.of(생성된_두번째_회원.getEmail()));
                         })
                         .withMessageMatching(ErrorType.NON_MATCHING_MEMBER.getMessage());
             }
