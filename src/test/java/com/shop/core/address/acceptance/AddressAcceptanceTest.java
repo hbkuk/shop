@@ -24,7 +24,7 @@ public class AddressAcceptanceTest extends AcceptanceTest {
     }
 
     @Nested
-    class 주소록_생성 {
+    class 주소록_등록 {
 
 
         @Nested

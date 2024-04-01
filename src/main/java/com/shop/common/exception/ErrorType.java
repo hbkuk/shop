@@ -11,8 +11,11 @@ public enum ErrorType {
     DUPLICATE_MEMBER_EMAIL(3002, "중복된 회원 이메일입니다."),
     PASSWORD_MISMATCH(3003, "비밀번호가 동일하지 않습니다."),
     NON_MATCHING_MEMBER(3004, "다른 회원의 주소록을 확인할 수 없습니다."),
+    NON_MATCHING_SIGNUP_CHANNEL(3005, "회원 가입 경로에 맞는 회원 정보가 없습니다."),
 
     NOT_FOUND_ADDRESS(4001, "존재하지 않는 주소록입니다."),
+
+    NOT_FOUND_ADMIN(8001, "존재하지 않는 관리자입니다."),
 
     REQUEST_EXCEPTION(9001, "http 요청 에러입니다."),
     INVALID_PATH(9002, "잘못된 경로입니다."),

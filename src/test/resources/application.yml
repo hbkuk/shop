@@ -1,16 +1,16 @@
 spring:
   profiles:
     active: test # defualt
-    group:
-      test:
-        - common
-        - test
 
 ---
+
+server:
+  port: 8080
+
 spring:
   config:
     activate:
-      on-profile: "common"
+      on-profile: test
 
   jpa:
     properties:
@@ -25,10 +25,14 @@ logging:
     org.springframework.transaction: DEBUG
     org.hibernate.type.descriptor.sql: trace
 
----
-
 security:
   jwt:
     token:
       secret-key: shop-secret-key
       expire-length: 3600000
+
+github:
+  base-url: http://localhost:8080/github/
+  client:
+    id: client-id
+    secret: github-client-secret

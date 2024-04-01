@@ -10,7 +10,7 @@ spring:
 spring:
   config:
     activate:
-      on-profile: "common"
+      on-profile: common
 
   jpa:
     properties:
@@ -25,3 +25,20 @@ logging:
     org.springframework.transaction: DEBUG
     org.hibernate.type.descriptor.sql: trace
 ---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+security:
+  jwt:
+    token:
+      secret-key: atdd-secret-key
+      expire-length: 3600000
+
+github:
+  base-url: https://github.com/
+  client:
+    id: client-id
+    secret: github-client-secret
