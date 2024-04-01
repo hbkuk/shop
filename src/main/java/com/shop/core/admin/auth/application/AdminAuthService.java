@@ -20,18 +20,29 @@ public class AdminAuthService {
     private final GithubClient githubClient;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public AdminTokenResponse createTokenByGithub(String code) {
-        String githubToken = githubClient.requestGithubToken(code);
-        AdminGithubProfileResponse profileResponse = githubClient.requestGithubProfile(githubToken);
+    public AdminTokenResponse createTokenByGithub(String githubCode) {
+        AdminGithubProfileResponse profileResponse = requestGithubProfile(githubCode);
 
-        Admin admin = findAdminByEmail(profileResponse.getEmail());
-        if (!admin.isSameSignupChannel(AdminSignupChannel.GITHUB)) {
-            throw new NonMatchingSignupChannelException(ErrorType.NON_MATCHING_SIGNUP_CHANNEL);
-        }
+        Admin admin = findMatchingAdmin(profileResponse);
         return AdminTokenResponse.of(jwtTokenProvider.createToken(admin.getEmail()));
     }
 
     public Admin findAdminByEmail(String email) {
         return adminRepository.findByEmail(email).orElseThrow(() -> new NotFoundAdminException(ErrorType.NOT_FOUND_ADMIN));
+    }
+
+    private Admin findMatchingAdmin(AdminGithubProfileResponse profileResponse) {
+        Admin admin = findAdminByEmail(profileResponse.getEmail());
+        if (!admin.isSameSignupChannel(AdminSignupChannel.GITHUB)) {
+            throw new NonMatchingSignupChannelException(ErrorType.NON_MATCHING_SIGNUP_CHANNEL);
+        }
+
+        return admin;
+    }
+
+    private AdminGithubProfileResponse requestGithubProfile(String code) {
+        String githubToken = githubClient.requestGithubToken(code);
+
+        return githubClient.requestGithubProfile(githubToken);
     }
 }
