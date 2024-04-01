@@ -1,13 +1,16 @@
 package com.shop.core.member.domain;
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @EqualsAndHashCode
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +30,6 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Status status;
-
-    protected Member() {
-    }
 
     public Member(String email, String password, Integer age, Type type, Status status) {
         this.email = email;

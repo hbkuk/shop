@@ -1,14 +1,17 @@
 package com.shop.core.memberSecurity.domain;
 
 import com.shop.core.member.domain.Member;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @EqualsAndHashCode
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberSecurity {
 
     @Id
@@ -19,9 +22,6 @@ public class MemberSecurity {
 
     @OneToOne
     private Member member;
-
-    protected MemberSecurity() {
-    }
 
     public MemberSecurity(String salt, Member member) {
         this.salt = salt;

@@ -1,12 +1,15 @@
 package com.shop.core.address.domain;
 
 import com.shop.core.member.domain.Member;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
 
     @Id
@@ -23,9 +26,6 @@ public class Address {
 
     @JoinColumn(name = "MEMBER_ID")
     private Long memberId;
-
-    protected Address() {
-    }
 
     public Address(String address, String detailedAddress, String description, boolean isDefault, Long memberId) {
         this.address = address;

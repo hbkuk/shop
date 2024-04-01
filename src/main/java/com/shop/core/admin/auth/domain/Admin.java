@@ -1,11 +1,14 @@
 package com.shop.core.admin.auth.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +28,6 @@ public class Admin {
 
     @Enumerated(EnumType.STRING)
     private AdminStatus status;
-
-    protected Admin() {
-    }
 
     public Admin(String email, String phoneNumber, AdminRole role, AdminSignupChannel signupChannel, AdminStatus status) {
         this.email = email;
