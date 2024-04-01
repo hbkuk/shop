@@ -3,20 +3,14 @@ package com.shop.core.admin.auth.acceptance;
 import com.shop.common.util.AcceptanceTest;
 import com.shop.core.admin.auth.domain.*;
 import com.shop.core.admin.auth.fixture.AdminGithubFixture;
-import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
+import com.shop.core.admin.auth.presentation.dto.AdminGithubCodeRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.shop.core.admin.auth.step.AdminAuthSteps.관리자_토큰_발급_확인;
+import static com.shop.core.admin.auth.step.AdminAuthSteps.깃허브_토큰_발급_요청;
 
 @DisplayName("관리자 인증 인수 테스트")
 public class AdminAuthAcceptanceTest extends AcceptanceTest {
@@ -38,28 +32,20 @@ public class AdminAuthAcceptanceTest extends AcceptanceTest {
             @Test
             void 깃허브로_관리자_토큰_발급() {
                 // given
-                Admin 관리자 = new Admin(AdminGithubFixture.황병국.email, "010-1234-5678", AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
-                adminRepository.save(관리자);
+                var 관리자_정보 = new Admin(AdminGithubFixture.황병국.email, "010-1234-5678", AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
+                관리자_등록(관리자_정보);
 
                 // when
-                Map<String, String> githubCodeParams = new HashMap<>();
-                githubCodeParams.put("code", "github_admin_code_001");
-
-
-                ExtractableResponse<Response> 로그인_요청_응답 = RestAssured
-                        .given().log().all()
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .body(githubCodeParams)
-                        .when()
-                        .post("/admin/login/github")
-                        .then().log().all()
-                        .statusCode(HttpStatus.OK.value()).extract();
-
-                String 토큰 = 로그인_요청_응답.jsonPath().getString("accessToken");
+                var 깃허브_코드_정보 = AdminGithubCodeRequest.of(AdminGithubFixture.황병국.code);
+                var 깃허브_토큰_발급_정보 = 깃허브_토큰_발급_요청(깃허브_코드_정보);
 
                 // then
-                assertThat(토큰).isNotBlank();
+                관리자_토큰_발급_확인(깃허브_토큰_발급_정보);
             }
         }
+    }
+
+    private void 관리자_등록(Admin 관리자_정보) {
+        adminRepository.save(관리자_정보);
     }
 }
