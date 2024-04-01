@@ -1,6 +1,7 @@
 package com.shop.core.admin.auth.acceptance;
 
 import com.shop.common.util.AcceptanceTest;
+import com.shop.common.util.AdminAcceptanceTest;
 import com.shop.core.admin.auth.domain.*;
 import com.shop.core.admin.auth.fixture.AdminGithubFixture;
 import com.shop.core.admin.auth.presentation.dto.AdminGithubCodeRequest;
@@ -13,10 +14,7 @@ import static com.shop.core.admin.auth.step.AdminAuthSteps.관리자_토큰_발�
 import static com.shop.core.admin.auth.step.AdminAuthSteps.깃허브_토큰_발급_요청;
 
 @DisplayName("관리자 인증 인수 테스트")
-public class AdminAuthAcceptanceTest extends AcceptanceTest {
-
-    @Autowired
-    AdminRepository adminRepository;
+public class AdminAuthAcceptanceTest extends AdminAcceptanceTest {
 
     @Nested
     class 관리자_깃허브_토큰_발급 {
@@ -43,9 +41,5 @@ public class AdminAuthAcceptanceTest extends AcceptanceTest {
                 관리자_토큰_발급_확인(깃허브_토큰_발급_정보);
             }
         }
-    }
-
-    private void 관리자_등록(Admin 관리자_정보) {
-        adminRepository.save(관리자_정보);
     }
 }

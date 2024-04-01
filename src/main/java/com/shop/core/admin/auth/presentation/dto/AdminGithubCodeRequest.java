@@ -10,4 +10,8 @@ import lombok.NoArgsConstructor;
 public class AdminGithubCodeRequest {
 
     private String code;
+
+    public static AdminGithubCodeRequest of(String code) {
+        return new AdminGithubCodeRequest(code);
+    }
 }
