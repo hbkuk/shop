@@ -1,13 +1,12 @@
 package com.shop.core.member.application;
 
-import com.shop.common.annotation.ApplicationTest;
 import com.shop.common.exception.ErrorType;
 import com.shop.core.member.application.dto.MemberRequest;
 import com.shop.core.member.application.dto.MemberResponse;
 import com.shop.core.member.domain.Member;
 import com.shop.core.member.domain.MemberRepository;
-import com.shop.core.member.domain.Status;
-import com.shop.core.member.domain.Type;
+import com.shop.core.member.domain.MemberStatus;
+import com.shop.core.member.domain.MemberType;
 import com.shop.core.member.exception.DuplicateEmailException;
 import com.shop.core.member.exception.NotFoundMemberException;
 import com.shop.core.memberSecurity.application.MemberSecurityService;
@@ -22,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @DisplayName("회원 서비스 레이어 테스트")
-@ApplicationTest
 public class MemberServiceTest {
 
     @Autowired
@@ -49,7 +47,7 @@ public class MemberServiceTest {
             @DisplayName("회원을 생성한다.")
             void 회원_생성() {
                 // given
-                MemberRequest 브라운_회원_생성_요청 = MemberRequest.createOf(브라운.이메일, 브라운.비밀번호, 브라운.나이, Type.NORMAL, Status.ACTIVE);
+                MemberRequest 브라운_회원_생성_요청 = MemberRequest.createOf(브라운.이메일, 브라운.비밀번호, 브라운.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
 
                 // when
                 memberService.createMember(브라운_회원_생성_요청);
@@ -68,11 +66,11 @@ public class MemberServiceTest {
 
             @BeforeEach
             void 사전_회원_생성() {
-                memberService.createMember(MemberRequest.createOf(스미스.이메일, 스미스.비밀번호, 스미스.나이, Type.NORMAL, Status.ACTIVE));
-                memberService.createMember(MemberRequest.createOf(존슨.이메일, 존슨.비밀번호, 존슨.나이, Type.NORMAL, Status.ACTIVE));
-                memberService.createMember(MemberRequest.createOf(윌리엄스.이메일, 윌리엄스.비밀번호, 윌리엄스.나이, Type.NORMAL, Status.ACTIVE));
-                memberService.createMember(MemberRequest.createOf(브라운.이메일, 브라운.비밀번호, 브라운.나이, Type.NORMAL, Status.ACTIVE));
-                memberService.createMember(MemberRequest.createOf(잭슨.이메일, 잭슨.비밀번호, 잭슨.나이, Type.NORMAL, Status.ACTIVE));
+                memberService.createMember(MemberRequest.createOf(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE));
+                memberService.createMember(MemberRequest.createOf(존슨.이메일, 존슨.비밀번호, 존슨.나이, MemberType.NORMAL, MemberStatus.ACTIVE));
+                memberService.createMember(MemberRequest.createOf(윌리엄스.이메일, 윌리엄스.비밀번호, 윌리엄스.나이, MemberType.NORMAL, MemberStatus.ACTIVE));
+                memberService.createMember(MemberRequest.createOf(브라운.이메일, 브라운.비밀번호, 브라운.나이, MemberType.NORMAL, MemberStatus.ACTIVE));
+                memberService.createMember(MemberRequest.createOf(잭슨.이메일, 잭슨.비밀번호, 잭슨.나이, MemberType.NORMAL, MemberStatus.ACTIVE));
             }
 
             /**
@@ -84,7 +82,7 @@ public class MemberServiceTest {
             @DisplayName("회원을 생성할 수 없다.")
             void 회원_생성() {
                 // given
-                MemberRequest 기존_브라운과_동일한_이메일의_회원 = MemberRequest.createOf(브라운.이메일, "password1!", 20, Type.NORMAL, Status.ACTIVE);
+                MemberRequest 기존_브라운과_동일한_이메일의_회원 = MemberRequest.createOf(브라운.이메일, "password1!", 20, MemberType.NORMAL, MemberStatus.ACTIVE);
 
                 // when, then
                 assertThatExceptionOfType(DuplicateEmailException.class)
@@ -112,7 +110,7 @@ public class MemberServiceTest {
             @DisplayName("회원을 조회한다.")
             void 회원_조회() {
                 // given
-                MemberRequest 스미스_회원_생성_요청 = MemberRequest.createOf(스미스.이메일, 스미스.비밀번호, 스미스.나이, Type.NORMAL, Status.ACTIVE);
+                MemberRequest 스미스_회원_생성_요청 = MemberRequest.createOf(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
 
                 // when
                 MemberResponse 스미스_회원_정보 = memberService.createMember(스미스_회원_생성_요청);
@@ -159,7 +157,7 @@ public class MemberServiceTest {
             @DisplayName("회원을 수정한다.")
             void 회원_수정() {
                 // given
-                MemberRequest 스미스_회원_생성_요청 = MemberRequest.createOf(스미스.이메일, 스미스.비밀번호, 스미스.나이, Type.NORMAL, Status.ACTIVE);
+                MemberRequest 스미스_회원_생성_요청 = MemberRequest.createOf(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
                 MemberResponse 스미스_회원_정보 = memberService.createMember(스미스_회원_생성_요청);
 
                 // when
@@ -193,7 +191,7 @@ public class MemberServiceTest {
             @DisplayName("회원을 삭제한다.")
             void 회원_수정() {
                 // given
-                MemberRequest 스미스_회원_생성_요청 = MemberRequest.createOf(스미스.이메일, 스미스.비밀번호, 스미스.나이, Type.NORMAL, Status.ACTIVE);
+                MemberRequest 스미스_회원_생성_요청 = MemberRequest.createOf(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
                 MemberResponse 스미스_회원_정보 = memberService.createMember(스미스_회원_생성_요청);
 
                 // when
@@ -202,7 +200,7 @@ public class MemberServiceTest {
                 // then
                 Member 스미스_회원_상태 = memberRepository.findById(스미스_회원_정보.getId()).get();
 
-                assertThat(스미스_회원_상태.getStatus()).isEqualTo(Status.WITHDRAWN);
+                assertThat(스미스_회원_상태.getMemberStatus()).isEqualTo(MemberStatus.WITHDRAWN);
             }
 
         }

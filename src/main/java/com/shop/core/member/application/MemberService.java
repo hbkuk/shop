@@ -5,8 +5,8 @@ import com.shop.core.member.application.dto.MemberRequest;
 import com.shop.core.member.application.dto.MemberResponse;
 import com.shop.core.member.domain.Member;
 import com.shop.core.member.domain.MemberRepository;
-import com.shop.core.member.domain.Status;
-import com.shop.core.member.domain.Type;
+import com.shop.core.member.domain.MemberStatus;
+import com.shop.core.member.domain.MemberType;
 import com.shop.core.member.exception.DuplicateEmailException;
 import com.shop.core.member.exception.NotFoundMemberException;
 import com.shop.core.memberSecurity.application.MemberSecurityService;
@@ -31,7 +31,7 @@ public class MemberService {
             throw new DuplicateEmailException(ErrorType.DUPLICATE_MEMBER_EMAIL);
         }
 
-        Member savedMember = memberRepository.save(request.toMember(Type.NORMAL, Status.ACTIVE));
+        Member savedMember = memberRepository.save(request.toMember(MemberType.NORMAL, MemberStatus.ACTIVE));
         memberSecurityService.applyPasswordSecurity(savedMember);
 
         return MemberResponse.of(savedMember);
@@ -49,7 +49,7 @@ public class MemberService {
 
     @Transactional
     public void deleteMember(Long id) {
-        findById(id).updateStatus(Status.WITHDRAWN);
+        findById(id).updateStatus(MemberStatus.WITHDRAWN);
     }
 
     private Member findById(Long id) {

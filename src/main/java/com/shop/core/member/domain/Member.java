@@ -26,17 +26,17 @@ public class Member {
     private Integer age;
 
     @Enumerated(EnumType.STRING)
-    private Type type;
+    private MemberType memberType;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private MemberStatus memberStatus;
 
-    public Member(String email, String password, Integer age, Type type, Status status) {
+    public Member(String email, String password, Integer age, MemberType memberType, MemberStatus memberStatus) {
         this.email = email;
         this.password = password;
         this.age = age;
-        this.type = type;
-        this.status = status;
+        this.memberType = memberType;
+        this.memberStatus = memberStatus;
     }
 
     public void update(Member member) {
@@ -44,8 +44,8 @@ public class Member {
         this.age = member.age;
     }
 
-    public Member updateStatus(Status status) {
-        this.status = status;
+    public Member updateStatus(MemberStatus memberStatus) {
+        this.memberStatus = memberStatus;
         return this;
     }
 

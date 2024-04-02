@@ -5,8 +5,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum Type {
-    NORMAL("NORMAL");
-
-    private final String type;
+public enum MemberType {
+    NORMAL;
 }

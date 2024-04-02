@@ -2,8 +2,8 @@ package com.shop.core.member.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shop.core.member.domain.Member;
-import com.shop.core.member.domain.Status;
-import com.shop.core.member.domain.Type;
+import com.shop.core.member.domain.MemberStatus;
+import com.shop.core.member.domain.MemberType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,16 +16,16 @@ public class MemberRequest {
     private String password;
     private int age;
     @JsonIgnore
-    private Type type;
+    private MemberType memberType;
     @JsonIgnore
-    private Status status;
+    private MemberStatus memberStatus;
 
     public Member toMember() {
-        return new Member(email, password, age, type, status);
+        return new Member(email, password, age, memberType, memberStatus);
     }
 
-    public Member toMember(Type type, Status status) {
-        return new Member(email, password, age, type, status);
+    public Member toMember(MemberType memberType, MemberStatus memberStatus) {
+        return new Member(email, password, age, memberType, memberStatus);
     }
 
     public MemberRequest(String password, Integer age) {
@@ -37,7 +37,7 @@ public class MemberRequest {
         return new MemberRequest(password, age);
     }
 
-    public static MemberRequest createOf(String email, String password, int age, Type type, Status status) {
-        return new MemberRequest(email, password, age, type, status);
+    public static MemberRequest createOf(String email, String password, int age, MemberType memberType, MemberStatus memberStatus) {
+        return new MemberRequest(email, password, age, memberType, memberStatus);
     }
 }
