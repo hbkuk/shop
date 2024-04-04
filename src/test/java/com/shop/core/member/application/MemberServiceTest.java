@@ -1,6 +1,7 @@
 package com.shop.core.member.application;
 
 import com.shop.common.exception.ErrorType;
+import com.shop.common.util.ApplicationTest;
 import com.shop.core.member.application.dto.MemberRequest;
 import com.shop.core.member.application.dto.MemberResponse;
 import com.shop.core.member.domain.Member;
@@ -21,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @DisplayName("회원 서비스 레이어 테스트")
-public class MemberServiceTest {
+public class MemberServiceTest extends ApplicationTest {
 
     @Autowired
     MemberService memberService;

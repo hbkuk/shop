@@ -8,7 +8,6 @@ import com.shop.core.admin.auth.exception.NotFoundAdminException;
 import com.shop.core.admin.auth.fixture.AdminGithubFixture;
 import com.shop.core.admin.auth.presentation.dto.AdminTokenResponse;
 import com.shop.core.auth.application.JwtTokenProvider;
-import com.shop.core.member.exception.NonMatchingMemberException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

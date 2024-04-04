@@ -1,12 +1,12 @@
 package com.shop.core.auth.application;
 
-import com.shop.common.annotation.ApplicationTest;
 import com.shop.common.exception.ErrorType;
+import com.shop.common.util.ApplicationTest;
 import com.shop.core.auth.application.dto.AuthResponse;
 import com.shop.core.member.application.MemberService;
 import com.shop.core.member.application.dto.MemberRequest;
-import com.shop.core.member.domain.Status;
-import com.shop.core.member.domain.Type;
+import com.shop.core.member.domain.MemberStatus;
+import com.shop.core.member.domain.MemberType;
 import com.shop.core.member.exception.PasswordMismatchException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -18,8 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @DisplayName("인증 서비스 레이어 테스트")
-@ApplicationTest
-public class AuthServiceTest {
+public class AuthServiceTest extends ApplicationTest {
 
     @Autowired
     AuthService authService;
@@ -47,7 +46,7 @@ public class AuthServiceTest {
             @Test
             void 토큰_발급_요청() {
                 // given
-                MemberRequest 브라운_회원_생성_요청 = MemberRequest.createOf(브라운.이메일, 브라운.비밀번호, 브라운.나이, Type.NORMAL, Status.ACTIVE);
+                MemberRequest 브라운_회원_생성_요청 = MemberRequest.createOf(브라운.이메일, 브라운.비밀번호, 브라운.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
                 memberService.createMember(브라운_회원_생성_요청);
 
                 // when
@@ -69,7 +68,7 @@ public class AuthServiceTest {
             @Test
             void 토큰_발급_요청() {
                 // given
-                MemberRequest 브라운_회원_생성_요청 = MemberRequest.createOf(브라운.이메일, 브라운.비밀번호, 브라운.나이, Type.NORMAL, Status.ACTIVE);
+                MemberRequest 브라운_회원_생성_요청 = MemberRequest.createOf(브라운.이메일, 브라운.비밀번호, 브라운.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
                 memberService.createMember(브라운_회원_생성_요청);
 
                 // when, then

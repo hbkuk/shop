@@ -15,12 +15,21 @@ public enum ErrorType {
 
     NOT_FOUND_ADDRESS(4001, "존재하지 않는 주소록입니다."),
 
+    NOT_FOUND_COUPON(5001, "존재하지 않는 쿠폰입니다."),
+    COUPON_EXHAUSTED(5002, "발급 가능한 쿠폰이 없습니다."),
+    COUPON_STATUS_CHANGE_NOT_ALLOWED(5003, "쿠폰의 상태를 변경할 수 없습니다."),
+    COUPON_ISSUANCE_NOT_ALLOWED(5004, "쿠폰을 발급할 수 없는 상태입니다."),
+
     NOT_FOUND_ADMIN(8001, "존재하지 않는 관리자입니다."),
 
     REQUEST_EXCEPTION(9001, "http 요청 에러입니다."),
+
     INVALID_PATH(9002, "잘못된 경로입니다."),
+
     UNPROCESSABLE_ENTITY(9003, "요청 데이터가 유효하지 않습니다."),
+
     DATA_INTEGRITY_VIOLATION(9004, "예상하지 못한 데이터가 입력되었습니다."),
+
     UNHANDLED_EXCEPTION(9999, "예상치 못한 예외입니다.");
 
     private final int code;

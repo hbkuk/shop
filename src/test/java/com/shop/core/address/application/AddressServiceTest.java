@@ -1,7 +1,7 @@
 package com.shop.core.address.application;
 
-import com.shop.common.annotation.ApplicationTest;
 import com.shop.common.exception.ErrorType;
+import com.shop.common.util.ApplicationTest;
 import com.shop.core.address.domain.Address;
 import com.shop.core.address.domain.AddressRepository;
 import com.shop.core.address.exception.NotFoundAddressException;
@@ -9,26 +9,22 @@ import com.shop.core.address.presentation.dto.AddressRequest;
 import com.shop.core.address.presentation.dto.AddressResponse;
 import com.shop.core.auth.domain.LoginUser;
 import com.shop.core.member.application.MemberService;
-import com.shop.core.member.application.dto.MemberRequest;
-import com.shop.core.member.application.dto.MemberResponse;
 import com.shop.core.member.domain.Member;
-import com.shop.core.member.domain.Status;
-import com.shop.core.member.domain.Type;
+import com.shop.core.member.domain.MemberStatus;
+import com.shop.core.member.domain.MemberType;
 import com.shop.core.member.exception.NonMatchingMemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import static com.shop.core.member.fixture.MemberFixture.스미스;
 import static com.shop.core.member.fixture.MemberFixture.존슨;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-@ApplicationTest
 @DisplayName("주소록 서비스 레이어 테스트")
-public class AddressServiceTest {
+public class AddressServiceTest extends ApplicationTest {
 
     @Autowired
     AddressService addressService;
@@ -49,7 +45,7 @@ public class AddressServiceTest {
             @DisplayName("주소록을 등록할 수 있다.")
             void 주소록_등록_성공() {
                 // given
-                회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
+                회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
 
                 // when
                 AddressRequest 주소록_등록_요청_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", true);
@@ -72,7 +68,7 @@ public class AddressServiceTest {
             @DisplayName("주소록을 찾을 수 있다.")
             void 주소록_찾기_성공() {
                 // given
-                Member 생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
+                Member 생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
 
                 AddressRequest 등록할_주소록_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", true);
                 Address 저장된_주소록 = addressRepository.save(등록할_주소록_정보.toEntity(생성된_회원.getId()));
@@ -93,8 +89,8 @@ public class AddressServiceTest {
             @DisplayName("타인의 주소록을 찾을 수 없다.")
             void 타인의_주소록_찾기() {
                 // given
-                Member 생성된_첫번째_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
-                Member 생성된_두번째_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이);
+                Member 생성된_첫번째_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
+                Member 생성된_두번째_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
 
                 AddressRequest 등록할_주소록_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", true);
                 Address 저장된_주소록 = addressRepository.save(등록할_주소록_정보.toEntity(생성된_첫번째_회원.getId()));
@@ -112,7 +108,7 @@ public class AddressServiceTest {
             @DisplayName("등록되지 않은 주소록을 찾을 수 없다.")
             void 존재하지_않는_주소록_찾기() {
                 // given
-                Member 생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
+                Member 생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
 
                 Long 존재하지_않는_주소록_번호 = 100L;
 
@@ -136,7 +132,7 @@ public class AddressServiceTest {
             @DisplayName("주소록을 변경할 수 있다.")
             void 주소록_변경_성공() {
                 // given
-                Member 생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
+                Member 생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
 
                 AddressRequest 등록할_주소록_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", true);
                 Address 저장된_주소록 = addressRepository.save(등록할_주소록_정보.toEntity(생성된_회원.getId()));
@@ -158,8 +154,8 @@ public class AddressServiceTest {
             @DisplayName("타인의 주소록을 찾을 수 없다.")
             void 타인의_주소록_변경() {
                 // given
-                Member 생성된_첫번째_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
-                Member 생성된_두번째_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이);
+                Member 생성된_첫번째_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
+                Member 생성된_두번째_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
 
                 AddressRequest 등록할_주소록_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", true);
                 Address 저장된_주소록 = addressRepository.save(등록할_주소록_정보.toEntity(생성된_첫번째_회원.getId()));
@@ -186,7 +182,7 @@ public class AddressServiceTest {
             @DisplayName("기본 주소록을 변경할 수 있다.")
             void 기본_주소록_변경_성공() {
                 // given
-                Member 생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
+                Member 생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
 
                 AddressRequest 첫번째_등록할_주소록_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", false);
                 Address 첫번째_주소록 = addressRepository.save(첫번째_등록할_주소록_정보.toEntity(생성된_회원.getId()));
@@ -215,8 +211,8 @@ public class AddressServiceTest {
             @DisplayName("타인의 주소록을 기본 주소록으로 변경할 수 없다.")
             void 기본_주소록_변경_성공() {
                 // given
-                Member 생성된_첫번째_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이);
-                Member 생성된_두번째_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이);
+                Member 생성된_첫번째_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
+                Member 생성된_두번째_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
 
                 AddressRequest 첫번째_등록할_주소록_정보 = AddressRequest.of("서울특별시 강남구 역삼동 123-45", "역삼타워빌딩 5층 501호", "회사 주소", false);
                 Address 첫번째_주소록 = addressRepository.save(첫번째_등록할_주소록_정보.toEntity(생성된_첫번째_회원.getId()));
@@ -236,14 +232,5 @@ public class AddressServiceTest {
             }
         }
 
-    }
-
-
-    private Member 회원_생성(String email, String password, int age) {
-        Member member = new Member(email, password, age, Type.NORMAL, Status.ACTIVE);
-        MemberResponse memberResponse = memberService.createMember(new MemberRequest(email, password, age, Type.NORMAL, Status.ACTIVE));
-
-        ReflectionTestUtils.setField(member, "id", memberResponse.getId());
-        return member;
     }
 }

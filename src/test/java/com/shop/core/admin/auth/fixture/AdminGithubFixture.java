@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public enum AdminGithubFixture {
 
-    황병국("github_admin_code_001", "github_admin_token_001", "hwang@email.com");
+    황병국("github_admin_code_001", "github_admin_token_001", "hwang@email.com", "010-1234-5678");
 
     public final String code;
 
@@ -12,10 +12,13 @@ public enum AdminGithubFixture {
 
     public final String email;
 
-    AdminGithubFixture(String code, String token, String email) {
+    public final String phoneNumber;
+
+    AdminGithubFixture(String code, String token, String email, String phoneNumber) {
         this.code = code;
         this.token = token;
         this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
     public static String findTokenByCode(String code) {

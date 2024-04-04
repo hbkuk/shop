@@ -1,6 +1,7 @@
 package com.shop.core.memberSecurity.application;
 
 import com.shop.common.security.PasswordSecurityManager;
+import com.shop.common.util.ApplicationTest;
 import com.shop.core.member.application.MemberService;
 import com.shop.core.member.application.dto.MemberRequest;
 import com.shop.core.member.application.dto.MemberResponse;
@@ -19,7 +20,7 @@ import static com.shop.core.member.fixture.MemberFixture.브라운;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("유저 보안 서비스 레이어 테스트")
-public class MemberSecurityServiceTest {
+public class MemberSecurityServiceTest extends ApplicationTest {
 
     @Autowired
     MemberSecurityService memberSecurityService;
