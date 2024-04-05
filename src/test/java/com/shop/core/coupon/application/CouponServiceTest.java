@@ -238,4 +238,66 @@ public class CouponServiceTest extends ApplicationTest {
             }
         }
     }
+
+    @Nested
+    class 쿠폰_소진_상태_자동_변경 {
+
+        @Nested
+        class 변경됨 {
+
+            @Test
+            @DisplayName("잔여 발급 횟수가 0으로 변경될 경우, 소진 상태로 저장된다.")
+            void 소진_상태_자동_변경() {
+                // given
+                Member 생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
+                Admin 생성된_관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
+
+                // when
+                CouponRequest 등록할_쿠폰_정보 =
+                        CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1);
+
+                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getId()));
+
+                CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(생성된_회원.getId()));
+
+                CouponIssueResponse 발급된_쿠폰_정보 = couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
+
+                // then
+                Coupon 찾은_쿠폰 = couponRepository.findById(등록된_쿠폰.getId()).get();
+
+                assertThat(찾은_쿠폰.getCouponStatus()).isEqualTo(CouponStatus.EXHAUSTED);
+                assertThat(찾은_쿠폰.getRemainingIssueCount()).isEqualTo(0);
+
+            }
+        }
+
+        @Nested
+        class 변경_안됨 {
+
+            @Test
+            @DisplayName("잔여 발급 횟수가 0보다 큰 경우, 소진 상태로 저장되지 않는다.")
+            void 소진_상태_변경_안됨() {
+                // given
+                Member 생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
+                Admin 생성된_관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
+
+                // when
+                CouponRequest 등록할_쿠폰_정보 =
+                        CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 2);
+
+                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getId()));
+
+                CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(생성된_회원.getId()));
+
+                CouponIssueResponse 발급된_쿠폰_정보 = couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
+
+                // then
+                Coupon 찾은_쿠폰 = couponRepository.findById(등록된_쿠폰.getId()).get();
+
+                assertThat(찾은_쿠폰.getCouponStatus()).isEqualTo(CouponStatus.ISSUABLE);
+                assertThat(찾은_쿠폰.getRemainingIssueCount()).isEqualTo(1);
+            }
+        }
+
+    }
 }
