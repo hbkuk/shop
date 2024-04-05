@@ -56,6 +56,8 @@ public class Coupon {
         this.adminId = adminId;
     }
 
+
+    // TODO: Refactoring
     public void issueCoupon(List<IssuedCoupon> issuedCoupons) {
         if (this.couponStatus != CouponStatus.ISSUABLE) {
             throw new CouponIssuanceNotAllowedException(ErrorType.COUPON_ISSUANCE_NOT_ALLOWED);
@@ -67,6 +69,10 @@ public class Coupon {
 
         this.issuedCoupons.addAll(issuedCoupons);
         this.remainingIssueCount -= issuedCoupons.size();
+
+        if (this.remainingIssueCount == 0) {
+            this.couponStatus = CouponStatus.EXHAUSTED;
+        }
     }
 
     public Coupon updateStatus(CouponStatus status) {
@@ -77,7 +83,4 @@ public class Coupon {
         this.couponStatus = status;
         return this;
     }
-
-    // TODO: 소진 상태를 어떻게 변경할 것인가?
-    //   잔여 발급 횟수에 따라, 쿠폰 상태 변경 @PostLoad
 }
