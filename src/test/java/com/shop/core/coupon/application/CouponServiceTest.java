@@ -31,6 +31,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import static com.shop.core.admin.auth.fixture.AdminGithubFixture.황병국;
@@ -54,7 +57,49 @@ public class CouponServiceTest extends ApplicationTest {
     @Autowired
     IssuedCouponRepository issuedCouponRepository;
 
-    // TODO: MultiThread Environment test 추가
+    @Nested
+    class 동시에_쿠폰_100개_발급 {
+
+        @Nested
+        class 성공 {
+
+            @Test
+            @DisplayName("동시다발적으로 쿠폰을 발급한다.")
+            void 동시에_쿠폰_발급_성공() throws InterruptedException {
+                // given
+                랜덤_회원_10명_생성(MemberType.NORMAL, MemberStatus.ACTIVE);
+
+                Admin 생성된_관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
+
+                int remainingIssueCount = 1;
+                CouponRequest 등록할_쿠폰_정보 =
+                        CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, remainingIssueCount);
+                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getId()));
+
+                // when
+                int threadCount = 10; // 동시에 실행될 스레드 수
+                ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+                CountDownLatch latch = new CountDownLatch(threadCount);
+
+                for (int i = 0; i < threadCount; i++) {
+                    Long index = (long) i;
+                    executorService.submit(() -> {
+                        try {
+                            couponService.issueCoupon(CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(index)), LoginUser.of(생성된_관리자.getEmail()));
+                        } finally {
+                            latch.countDown();
+                        }
+                    });
+                }
+                latch.await();
+
+                int issuedCouponCount = couponRepository.findCouponWithIssuedCoupons(등록된_쿠폰.getId()).getIssuedCoupons().size();
+                assertThat(remainingIssueCount).isEqualTo(issuedCouponCount);
+            }
+
+        }
+    }
+
     @Nested
     class 쿠폰_발급 {
 

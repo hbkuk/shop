@@ -31,12 +31,12 @@ public class CouponIssueRequest {
         return new CouponIssueRequest(couponId, request.getMemberIds());
     }
 
-    public static CouponIssueRequest of(List<Long> remainingIssueCount) {
-        return new CouponIssueRequest(remainingIssueCount);
+    public static CouponIssueRequest of(List<Long> memberIds) {
+        return new CouponIssueRequest(memberIds);
     }
 
-    public static CouponIssueRequest of(Long couponId, List<Long> remainingIssueCount) {
-        return new CouponIssueRequest(couponId, remainingIssueCount);
+    public static CouponIssueRequest of(Long couponId, List<Long> memberIds) {
+        return new CouponIssueRequest(couponId, memberIds);
     }
 
     public List<IssuedCoupon> toEntity(LocalDateTime issuedAt, LocalDateTime expiredAt, IssuedCouponStatus status, Coupon coupon) {
