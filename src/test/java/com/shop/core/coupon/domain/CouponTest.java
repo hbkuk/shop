@@ -33,7 +33,7 @@ public class CouponTest {
                 Long memberId = 1L;
                 IssuedCoupon issuedCoupon = new IssuedCoupon(memberId, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
 
-                coupon.issueCoupon(List.of(issuedCoupon));
+                coupon.issueCoupons(List.of(issuedCoupon));
 
                 assertThat(coupon.getRemainingIssueCount()).isEqualTo(0);
                 assertThat(coupon.getIssuedCoupons()).containsExactly(issuedCoupon);
@@ -48,7 +48,7 @@ public class CouponTest {
                 Long memberId = 1L;
                 IssuedCoupon issuedCoupon = new IssuedCoupon(memberId, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
 
-                coupon.issueCoupon(List.of(issuedCoupon));
+                coupon.issueCoupons(List.of(issuedCoupon));
 
                 assertThat(coupon.getRemainingIssueCount()).isEqualTo(0);
                 assertThat(coupon.getIssuedCoupons()).containsExactly(issuedCoupon);
@@ -69,7 +69,7 @@ public class CouponTest {
 
                 assertThatExceptionOfType(CouponExhaustedException.class)
                         .isThrownBy(() -> {
-                            coupon.issueCoupon(List.of(issuedCoupon));
+                            coupon.issueCoupons(List.of(issuedCoupon));
                         })
                         .withMessageMatching(ErrorType.COUPON_EXHAUSTED.getMessage());
             }
@@ -85,7 +85,7 @@ public class CouponTest {
 
                 assertThatExceptionOfType(CouponIssuanceNotAllowedException.class)
                         .isThrownBy(() -> {
-                            coupon.issueCoupon(List.of(issuedCoupon));
+                            coupon.issueCoupons(List.of(issuedCoupon));
                         })
                         .withMessageMatching(ErrorType.COUPON_ISSUANCE_NOT_ALLOWED.getMessage());
             }
@@ -101,7 +101,7 @@ public class CouponTest {
 
                 assertThatExceptionOfType(CouponIssuanceNotAllowedException.class)
                         .isThrownBy(() -> {
-                            coupon.issueCoupon(List.of(issuedCoupon));
+                            coupon.issueCoupons(List.of(issuedCoupon));
                         })
                         .withMessageMatching(ErrorType.COUPON_ISSUANCE_NOT_ALLOWED.getMessage());
             }
@@ -115,11 +115,11 @@ public class CouponTest {
                 Long memberId = 1L;
                 IssuedCoupon issuedCoupon = new IssuedCoupon(memberId, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
 
-                assertThatExceptionOfType(CouponIssuanceNotAllowedException.class)
+                assertThatExceptionOfType(CouponExhaustedException.class)
                         .isThrownBy(() -> {
-                            coupon.issueCoupon(List.of(issuedCoupon));
+                            coupon.issueCoupons(List.of(issuedCoupon));
                         })
-                        .withMessageMatching(ErrorType.COUPON_ISSUANCE_NOT_ALLOWED.getMessage());
+                        .withMessageMatching(ErrorType.COUPON_EXHAUSTED.getMessage());
             }
         }
     }

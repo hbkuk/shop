@@ -43,7 +43,7 @@ public class Coupon {
 
     // TODO: 일급 컬렉션으로 리팩토링
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<IssuedCoupon> issuedCoupons = new ArrayList<>();
+    private final List<IssuedCoupon> issuedCoupons = new ArrayList<>();
 
     @Version
     private Long version;
@@ -59,22 +59,31 @@ public class Coupon {
         this.adminId = adminId;
     }
 
+    public void issueCoupons(List<IssuedCoupon> issuedCoupons) {
+        checkRemainingIssueCoupon(issuedCoupons);
+        checkIssuableStatus();
 
-    // TODO: Refactoring
-    public void issueCoupon(List<IssuedCoupon> issuedCoupons) {
-        if (this.couponStatus != CouponStatus.ISSUABLE) {
-            throw new CouponIssuanceNotAllowedException(ErrorType.COUPON_ISSUANCE_NOT_ALLOWED);
-        }
+        processIssuedCoupons(issuedCoupons);
+    }
 
-        if (remainingIssueCount < issuedCoupons.size()) {
-            throw new CouponExhaustedException(ErrorType.COUPON_EXHAUSTED);
-        }
-
+    private void processIssuedCoupons(List<IssuedCoupon> issuedCoupons) {
         this.issuedCoupons.addAll(issuedCoupons);
         this.remainingIssueCount -= issuedCoupons.size();
 
         if (this.remainingIssueCount == 0) {
             this.couponStatus = CouponStatus.EXHAUSTED;
+        }
+    }
+
+    private void checkIssuableStatus() {
+        if (this.couponStatus != CouponStatus.ISSUABLE) {
+            throw new CouponIssuanceNotAllowedException(ErrorType.COUPON_ISSUANCE_NOT_ALLOWED);
+        }
+    }
+
+    private void checkRemainingIssueCoupon(List<IssuedCoupon> issuedCoupons) {
+        if (remainingIssueCount < issuedCoupons.size()) {
+            throw new CouponExhaustedException(ErrorType.COUPON_EXHAUSTED);
         }
     }
 

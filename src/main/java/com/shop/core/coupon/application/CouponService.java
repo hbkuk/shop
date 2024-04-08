@@ -34,19 +34,18 @@ public class CouponService {
 
     private final CouponRepository couponRepository;
 
-    @Transactional
-    public CouponResponse createCoupon(CouponRequest request, LoginUser loginUser) {
-        Admin admin = adminAuthService.findAdminByEmail(loginUser.getEmail());
-        Coupon coupon = request.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, admin.getId());
+    public CouponResponse findById(Long couponId, LoginUser loginUser) {
+        verifyAdminByEmail(loginUser);
 
-        return CouponResponse.of(couponRepository.save(coupon));
+        Coupon coupon = findCouponById(couponId);
+        return CouponResponse.of(coupon);
     }
 
-    public CouponResponse findById(Long couponId, LoginUser loginUser) {
-        Admin admin = adminAuthService.findAdminByEmail(loginUser.getEmail());
-        Coupon coupon = findCouponById(couponId);
+    public CouponIssueResponse findIssueCoupons(Long couponId, LoginUser loginAdmin) {
+        verifyAdminByEmail(loginAdmin);
 
-        return CouponResponse.of(coupon);
+        Coupon coupon = findCouponById(couponId);
+        return CouponIssueResponse.of(coupon.getIssuedCoupons());
     }
 
     public Coupon findCouponById(Long couponId) {
@@ -54,31 +53,49 @@ public class CouponService {
     }
 
     @Transactional
-    public CouponIssueResponse issueCoupon(CouponIssueRequest request, LoginUser loginAdmin) {
-        Admin admin = adminAuthService.findAdminByEmail(loginAdmin.getEmail());
+    public CouponResponse createCoupon(CouponRequest request, LoginUser loginUser) {
+        Admin admin = verifyAdminByEmail(loginUser);
 
-        request.getMemberIds().forEach(memberService::findMemberById);
-        Coupon coupon = couponRepository.findByCouponIdLock(request.getCouponId());
-
-        List<IssuedCoupon> issuedCoupons = request.toEntity(LocalDateTime.now(), LocalDateTime.now().plusMonths(1), IssuedCouponStatus.ACTIVE, coupon);
-        coupon.issueCoupon(issuedCoupons);
-
-        return CouponIssueResponse.of(issuedCoupons);
-    }
-
-    public CouponIssueResponse findIssueCoupons(Long couponId, LoginUser loginAdmin) {
-        Admin admin = adminAuthService.findAdminByEmail(loginAdmin.getEmail());
-        Coupon coupon = findCouponById(couponId);
-
-        List<IssuedCoupon> issuedCoupons = coupon.getIssuedCoupons();
-        return CouponIssueResponse.of(issuedCoupons);
+        Coupon coupon = createCoupon(request, admin.getId());
+        return CouponResponse.of(couponRepository.save(coupon));
     }
 
     @Transactional
-    public void updateStatus(CouponStatusRequest couponStatusRequest, LoginUser loginAdmin) {
-        Admin admin = adminAuthService.findAdminByEmail(loginAdmin.getEmail());
-        Coupon coupon = findCouponById(couponStatusRequest.getCouponId());
+    public void updateStatus(CouponStatusRequest request, LoginUser loginAdmin) {
+        verifyAdminByEmail(loginAdmin);
 
-        coupon.updateStatus(couponStatusRequest.getStatus());
+        Coupon coupon = findCouponById(request.getCouponId());
+        coupon.updateStatus(request.getStatus());
+    }
+
+    @Transactional
+    public CouponIssueResponse issueCoupon(CouponIssueRequest request, LoginUser loginAdmin) {
+        verifyAdminByEmail(loginAdmin);
+        verifyMemberByIds(request.getMemberIds());
+
+        Coupon coupon = couponRepository.findByCouponIdLock(request.getCouponId());
+        coupon.issueCoupons(toIssuedCoupons(request, coupon));
+
+        return CouponIssueResponse.of(toIssuedCoupons(request, coupon));
+    }
+
+    private List<IssuedCoupon> toIssuedCoupons(CouponIssueRequest request, Coupon coupon) {
+        LocalDateTime issuedAt = LocalDateTime.now();
+        LocalDateTime expiredAt = issuedAt.plusMonths(1);
+
+        return request.toEntity(issuedAt, expiredAt, IssuedCouponStatus.ACTIVE, coupon);
+    }
+
+    private void verifyMemberByIds(List<Long> memberIds) {
+        memberIds.forEach(memberService::findMemberById);
+    }
+
+    private Admin verifyAdminByEmail(LoginUser loginUser) {
+        return adminAuthService.findAdminByEmail(loginUser.getEmail());
+    }
+
+    private Coupon createCoupon(CouponRequest request, Long adminId) {
+        LocalDateTime createdAt = LocalDateTime.now();
+        return request.toEntity(createdAt, CouponStatus.ISSUABLE, adminId);
     }
 }
