@@ -58,7 +58,7 @@ public class CouponService {
         Admin admin = adminAuthService.findAdminByEmail(loginAdmin.getEmail());
 
         request.getMemberIds().forEach(memberService::findMemberById);
-        Coupon coupon = findCouponById(request.getCouponId());
+        Coupon coupon = couponRepository.findByCouponIdLock(request.getCouponId());
 
         List<IssuedCoupon> issuedCoupons = request.toEntity(LocalDateTime.now(), LocalDateTime.now().plusMonths(1), IssuedCouponStatus.ACTIVE, coupon);
         coupon.issueCoupon(issuedCoupons);
