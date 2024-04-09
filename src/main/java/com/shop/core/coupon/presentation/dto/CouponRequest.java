@@ -14,18 +14,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CouponRequest {
 
-    public String name;
+    private String name;
 
-    public String description;
+    private String description;
 
     @JsonProperty("max_discount_amount")
-    public int maxDiscountAmount;
+    private int maxDiscountAmount;
 
     @JsonProperty("discount_amount")
-    public int discountAmount;
+    private int discountAmount;
 
     @JsonProperty("remaining_issue_count")
-    public int remainingIssueCount;
+    private int remainingIssueCount;
 
     public static CouponRequest of(String name, String description, int maxDiscountAmount, int discountAmount, int remainingIssueCount) {
         return new CouponRequest(name, description, maxDiscountAmount, discountAmount, remainingIssueCount);

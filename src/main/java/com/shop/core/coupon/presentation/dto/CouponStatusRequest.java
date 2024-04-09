@@ -19,6 +19,13 @@ public class CouponStatusRequest {
     @JsonProperty("coupon_status")
     private CouponStatus status;
 
+    public CouponStatusRequest(CouponStatus status) {
+        this.status = status;
+    }
+
+    public static CouponStatusRequest of(CouponStatus couponStatus) {
+        return new CouponStatusRequest(couponStatus);
+    }
 
     public static CouponStatusRequest of(Long couponId, CouponStatus couponStatus) {
         return new CouponStatusRequest(couponId, couponStatus);
