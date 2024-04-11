@@ -74,9 +74,10 @@ public class CouponService {
         verifyMemberByIds(request.getMemberIds());
 
         Coupon coupon = couponRepository.findByCouponIdLock(request.getCouponId());
-        coupon.issueCoupons(toIssuedCoupons(request, coupon));
+        List<IssuedCoupon> issuedCoupons = toIssuedCoupons(request, coupon);
+        coupon.issueCoupons(issuedCoupons);
 
-        return CouponIssueResponse.of(toIssuedCoupons(request, coupon));
+        return CouponIssueResponse.of(issuedCoupons);
     }
 
     private List<IssuedCoupon> toIssuedCoupons(CouponIssueRequest request, Coupon coupon) {
