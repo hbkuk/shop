@@ -45,6 +45,9 @@ public class Coupon {
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private final List<IssuedCoupon> issuedCoupons = new ArrayList<>();
 
+    @Version
+    private Integer version;
+
     public Coupon(String name, String description, int maxDiscountAmount, int discountAmount, int remainingIssueCount, LocalDateTime createdAt, CouponStatus couponStatus, Long issuerAdminId) {
         this.name = name;
         this.description = description;
