@@ -39,16 +39,13 @@ public class Coupon {
     private CouponStatus couponStatus;
 
     @JoinColumn(name = "ADMIN_ID")
-    private Long adminId;
+    private Long issuerAdminId;
 
     // TODO: 일급 컬렉션으로 리팩토링
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private final List<IssuedCoupon> issuedCoupons = new ArrayList<>();
 
-    @Version
-    private Long version;
-
-    public Coupon(String name, String description, int maxDiscountAmount, int discountAmount, int remainingIssueCount, LocalDateTime createdAt, CouponStatus couponStatus, Long adminId) {
+    public Coupon(String name, String description, int maxDiscountAmount, int discountAmount, int remainingIssueCount, LocalDateTime createdAt, CouponStatus couponStatus, Long issuerAdminId) {
         this.name = name;
         this.description = description;
         this.maxDiscountAmount = maxDiscountAmount;
@@ -56,7 +53,7 @@ public class Coupon {
         this.remainingIssueCount = remainingIssueCount;
         this.createdAt = createdAt;
         this.couponStatus = couponStatus;
-        this.adminId = adminId;
+        this.issuerAdminId = issuerAdminId;
     }
 
     public void issueCoupons(List<IssuedCoupon> issuedCoupons) {

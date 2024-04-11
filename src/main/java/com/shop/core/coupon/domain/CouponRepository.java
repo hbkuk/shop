@@ -9,7 +9,7 @@ import javax.persistence.LockModeType;
 
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
-    @Lock(LockModeType.OPTIMISTIC)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select coupon from Coupon coupon where coupon.id = :couponId")
     Coupon findByCouponIdLock(@Param("couponId") Long couponId);
 
