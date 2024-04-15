@@ -30,6 +30,8 @@ public enum ErrorType {
 
     DATA_INTEGRITY_VIOLATION(9004, "예상하지 못한 데이터가 입력되었습니다."),
 
+    NO_MORE_TRY(9005, "요청한 작업에 실패했습니다."),
+
     UNHANDLED_EXCEPTION(9999, "예상치 못한 예외입니다.");
 
     private final int code;

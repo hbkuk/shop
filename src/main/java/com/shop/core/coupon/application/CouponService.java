@@ -1,6 +1,7 @@
 package com.shop.core.coupon.application;
 
 import com.shop.common.exception.ErrorType;
+import com.shop.common.reTry.IsTryAgain;
 import com.shop.core.admin.auth.application.AdminAuthService;
 import com.shop.core.admin.auth.domain.Admin;
 import com.shop.core.auth.domain.LoginUser;
@@ -68,6 +69,7 @@ public class CouponService {
         coupon.updateStatus(request.getStatus());
     }
 
+    @IsTryAgain
     @Transactional
     public CouponIssueResponse issueCoupon(CouponIssueRequest request, LoginUser loginAdmin) {
         verifyAdminByEmail(loginAdmin);

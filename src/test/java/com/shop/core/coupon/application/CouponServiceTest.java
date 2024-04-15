@@ -72,7 +72,7 @@ public class CouponServiceTest extends ApplicationTest {
 
             랜덤_회원_10명_생성(MemberType.NORMAL, MemberStatus.ACTIVE);
 
-            초기_잔여_발급_쿠폰_개수 = 1;
+            초기_잔여_발급_쿠폰_개수 = 3;
             CouponRequest 등록할_쿠폰_정보 =
                     CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 초기_잔여_발급_쿠폰_개수);
             쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 관리자.getId()));
