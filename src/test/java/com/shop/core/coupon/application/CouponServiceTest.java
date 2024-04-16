@@ -70,7 +70,7 @@ public class CouponServiceTest extends ApplicationTest {
         void 사전_준비() {
             관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
 
-            랜덤_회원_10명_생성(MemberType.NORMAL, MemberStatus.ACTIVE);
+            랜덤_회원_목록_생성(10, MemberType.NORMAL, MemberStatus.ACTIVE);
 
             초기_잔여_발급_쿠폰_개수 = 3;
             CouponRequest 등록할_쿠폰_정보 =
@@ -117,37 +117,77 @@ public class CouponServiceTest extends ApplicationTest {
     @Nested
     class 쿠폰_발급 {
 
-
         @Nested
         class 성공 {
 
-            Member 생성된_회원;
-            Admin 생성된_관리자;
+            @Nested
+            class 대량_쿠폰_발급 {
 
-            Coupon 등록된_쿠폰;
+                List<Member> 생성된_회원_목록;
+                Admin 생성된_관리자;
 
-            @BeforeEach
-            void 사전_준비() {
-                생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
-                생성된_관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
+                Coupon 등록된_쿠폰;
 
-                CouponRequest 등록할_쿠폰_정보 =
-                        CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 100);
-                등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getId()));
+                @BeforeEach
+                void 사전_준비() {
+                    생성된_회원_목록 = 랜덤_회원_목록_생성(100, MemberType.NORMAL, MemberStatus.ACTIVE);
+                    생성된_관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
+
+                    CouponRequest 등록할_쿠폰_정보 =
+                            CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 100);
+                    등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getId()));
+                }
+
+                @Test
+                @DisplayName("정상적으로 쿠폰을 발급한다.")
+                void 쿠폰_정상_발급() {
+                    // given
+                    List<Long> 회원_번호_목록 = 생성된_회원_목록.stream().map(Member::getId).collect(Collectors.toList());
+
+                    // when
+                    CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), 회원_번호_목록);
+                    couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
+
+                    // then
+                    List<IssuedCoupon> 발급된_쿠폰_목록 = issuedCouponRepository.findByCoupon(등록된_쿠폰);
+                    List<Long> 발급된_쿠폰_목록의_회원_번호 = 발급된_쿠폰_목록.stream().map(IssuedCoupon::getMemberId).collect(Collectors.toList());
+
+                    assertThat(발급된_쿠폰_목록의_회원_번호).isEqualTo(회원_번호_목록);
+                }
+
             }
 
-            @Test
-            @DisplayName("정상적으로 쿠폰을 발급한다.")
-            void 쿠폰_정상_발급() {
-                // when
-                CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(생성된_회원.getId()));
-                couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
+            @Nested
+            class 소량_쿠폰_발급 {
 
-                // then
-                List<IssuedCoupon> 발급된_쿠폰_목록 = issuedCouponRepository.findByCoupon(등록된_쿠폰);
-                List<Long> 발급된_쿠폰_목록의_회원_번호 = 발급된_쿠폰_목록.stream().map(IssuedCoupon::getMemberId).collect(Collectors.toList());
+                Member 생성된_회원;
+                Admin 생성된_관리자;
 
-                assertThat(발급된_쿠폰_목록의_회원_번호).containsExactlyInAnyOrder(생성된_회원.getId());
+                Coupon 등록된_쿠폰;
+
+                @BeforeEach
+                void 사전_준비() {
+                    생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
+                    생성된_관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
+
+                    CouponRequest 등록할_쿠폰_정보 =
+                            CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 100);
+                    등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getId()));
+                }
+
+                @Test
+                @DisplayName("정상적으로 쿠폰을 발급한다.")
+                void 쿠폰_정상_발급() {
+                    // when
+                    CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(생성된_회원.getId()));
+                    couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
+
+                    // then
+                    List<IssuedCoupon> 발급된_쿠폰_목록 = issuedCouponRepository.findByCoupon(등록된_쿠폰);
+                    List<Long> 발급된_쿠폰_목록의_회원_번호 = 발급된_쿠폰_목록.stream().map(IssuedCoupon::getMemberId).collect(Collectors.toList());
+
+                    assertThat(발급된_쿠폰_목록의_회원_번호).containsExactlyInAnyOrder(생성된_회원.getId());
+                }
             }
         }
 

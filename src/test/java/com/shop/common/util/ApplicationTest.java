@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.stream.IntStream;
@@ -31,14 +33,17 @@ public class ApplicationTest {
         return memberRepository.save(new Member(email, password, age, memberType, memberStatus));
     }
 
-    public void 랜덤_회원_10명_생성(MemberType memberType, MemberStatus memberStatus) {
-        IntStream.range(0, 10).forEach(number -> {
+    public List<Member> 랜덤_회원_목록_생성(int numberOfMembers, MemberType memberType, MemberStatus memberStatus) {
+        List<Member> members = new ArrayList<>();
+
+        IntStream.range(0, numberOfMembers).forEach(number -> {
             String 랜덤_이메일 = 랜덤_이메일_생성();
             String 랜덤_비밀번호 = UUID.randomUUID().toString();
             int 랜덤_나이 = 랜덤_나이_생성();
 
-            memberRepository.save(new Member(랜덤_이메일, 랜덤_비밀번호, 랜덤_나이, memberType, memberStatus));
+            members.add(memberRepository.save(new Member(랜덤_이메일, 랜덤_비밀번호, 랜덤_나이, memberType, memberStatus)));
         });
+        return members;
     }
 
     private String 랜덤_이메일_생성() {
