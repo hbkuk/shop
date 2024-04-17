@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
     @Query("select coupon from Coupon coupon where coupon.id = :couponId")
-    Coupon findByCouponIdLock(@Param("couponId") Long couponId);
+    Coupon findByCouponId(@Param("couponId") Long couponId);
 
     @Query("select c from Coupon c join fetch c.issuedCoupons where c.id = :couponId")
     Coupon findCouponWithIssuedCoupons(Long couponId);

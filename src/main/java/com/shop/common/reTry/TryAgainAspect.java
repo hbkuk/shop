@@ -1,7 +1,6 @@
 package com.shop.common.reTry;
 
 import com.shop.common.exception.ErrorType;
-import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -10,21 +9,20 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.hibernate.StaleObjectStateException;
-import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
-@Getter
+@Order(1)
 @Setter
 @Aspect
 @Slf4j
 @Component
-public class TryAgainAspect implements Ordered {
+public class TryAgainAspect {
 
     private int maxRetries;
-    private int order = 1;
 
     @Pointcut("@annotation(IsTryAgain)")
     public void retryOnOptFailure() {
@@ -54,5 +52,4 @@ public class TryAgainAspect implements Ordered {
 
         return null;
     }
-
 }

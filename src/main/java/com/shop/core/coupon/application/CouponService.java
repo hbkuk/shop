@@ -75,7 +75,7 @@ public class CouponService {
         verifyAdminByEmail(loginAdmin);
         verifyMembersByEmail(request.getMemberEmails());
 
-        Coupon coupon = couponRepository.findByCouponIdLock(request.getCouponId());
+        Coupon coupon = couponRepository.findByCouponId(request.getCouponId());
         List<IssuedCoupon> issuedCoupons = toIssuedCoupons(request, coupon);
         coupon.issueCoupons(issuedCoupons);
 

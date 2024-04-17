@@ -72,7 +72,7 @@ public class CouponServiceTest extends ApplicationTest {
             List<Member> 랜덤_회원_목록 = 랜덤_회원_목록_생성(10, MemberType.NORMAL, MemberStatus.ACTIVE);
             랜덤_회원_이메일 = 랜덤_회원_목록.stream().map(Member::getEmail).collect(Collectors.toList());
 
-            초기_잔여_발급_쿠폰_개수 = 3;
+            초기_잔여_발급_쿠폰_개수 = 2;
             CouponRequest 등록할_쿠폰_정보 =
                     CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 초기_잔여_발급_쿠폰_개수);
             쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 관리자.getEmail()));
@@ -91,7 +91,7 @@ public class CouponServiceTest extends ApplicationTest {
                 int 발급된_쿠폰_개수 = couponRepository.findCouponWithIssuedCoupons(쿠폰.getId()).getIssuedCoupons().size();
 
                 // then
-                assertThat(초기_잔여_발급_쿠폰_개수).isEqualTo(발급된_쿠폰_개수);
+                assertThat(발급된_쿠폰_개수).isEqualTo(초기_잔여_발급_쿠폰_개수);
             }
 
             private void 동시_쿠폰_발급(int threadCount) throws InterruptedException {
