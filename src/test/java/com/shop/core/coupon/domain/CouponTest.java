@@ -30,8 +30,8 @@ public class CouponTest {
                 Long adminId = 1L;
                 Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.ISSUABLE, adminId);
 
-                Long memberId = 1L;
-                IssuedCoupon issuedCoupon = new IssuedCoupon(memberId, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
+                String memberEmail = "member001@gmail.com";
+                IssuedCoupon issuedCoupon = new IssuedCoupon(memberEmail, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
 
                 coupon.issueCoupons(List.of(issuedCoupon));
 
@@ -45,8 +45,8 @@ public class CouponTest {
                 Long adminId = 1L;
                 Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.ISSUABLE, adminId);
 
-                Long memberId = 1L;
-                IssuedCoupon issuedCoupon = new IssuedCoupon(memberId, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
+                String memberEmail = "member001@gmail.com";
+                IssuedCoupon issuedCoupon = new IssuedCoupon(memberEmail, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
 
                 coupon.issueCoupons(List.of(issuedCoupon));
 
@@ -64,8 +64,8 @@ public class CouponTest {
                 Long adminId = 1L;
                 Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 0, LocalDateTime.now(), CouponStatus.ISSUABLE, adminId);
 
-                Long memberId = 1L;
-                IssuedCoupon issuedCoupon = new IssuedCoupon(memberId, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
+                String memberEmail = "member001@gmail.com";
+                IssuedCoupon issuedCoupon = new IssuedCoupon(memberEmail, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
 
                 assertThatExceptionOfType(CouponExhaustedException.class)
                         .isThrownBy(() -> {
@@ -80,8 +80,8 @@ public class CouponTest {
                 Long adminId = 1L;
                 Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.STOPPED_ISSUANCE, adminId);
 
-                Long memberId = 1L;
-                IssuedCoupon issuedCoupon = new IssuedCoupon(memberId, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
+                String memberEmail = "member001@gmail.com";
+                IssuedCoupon issuedCoupon = new IssuedCoupon(memberEmail, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
 
                 assertThatExceptionOfType(CouponIssuanceNotAllowedException.class)
                         .isThrownBy(() -> {
@@ -96,8 +96,8 @@ public class CouponTest {
                 Long adminId = 1L;
                 Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.DELETED, adminId);
 
-                Long memberId = 1L;
-                IssuedCoupon issuedCoupon = new IssuedCoupon(memberId, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
+                String memberEmail = "member001@gmail.com";
+                IssuedCoupon issuedCoupon = new IssuedCoupon(memberEmail, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
 
                 assertThatExceptionOfType(CouponIssuanceNotAllowedException.class)
                         .isThrownBy(() -> {
@@ -112,8 +112,8 @@ public class CouponTest {
                 Long adminId = 1L;
                 Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 0, LocalDateTime.now(), CouponStatus.EXHAUSTED, adminId);
 
-                Long memberId = 1L;
-                IssuedCoupon issuedCoupon = new IssuedCoupon(memberId, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
+                String memberEmail = "member001@gmail.com";
+                IssuedCoupon issuedCoupon = new IssuedCoupon(memberEmail, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
 
                 assertThatExceptionOfType(CouponExhaustedException.class)
                         .isThrownBy(() -> {

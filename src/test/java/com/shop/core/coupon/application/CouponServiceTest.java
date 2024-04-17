@@ -61,16 +61,16 @@ public class CouponServiceTest extends ApplicationTest {
     class 동시에_쿠폰_100개_발급 {
 
         Admin 관리자;
-
+        List<String> 랜덤_회원_이메일;
         Coupon 쿠폰;
-
         int 초기_잔여_발급_쿠폰_개수;
 
         @BeforeEach
         void 사전_준비() {
             관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
 
-            랜덤_회원_목록_생성(10, MemberType.NORMAL, MemberStatus.ACTIVE);
+            List<Member> 랜덤_회원_목록 = 랜덤_회원_목록_생성(10, MemberType.NORMAL, MemberStatus.ACTIVE);
+            랜덤_회원_이메일 = 랜덤_회원_목록.stream().map(Member::getEmail).collect(Collectors.toList());
 
             초기_잔여_발급_쿠폰_개수 = 3;
             CouponRequest 등록할_쿠폰_정보 =
@@ -98,11 +98,11 @@ public class CouponServiceTest extends ApplicationTest {
                 ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
                 CountDownLatch latch = new CountDownLatch(threadCount);
 
-                for (int i = 0; i < threadCount; i++) {
-                    Long index = (long) i;
+                for (int index = 0; index < threadCount; index++) {
+                    int copyIndex = index;
                     executorService.submit(() -> {
                         try {
-                            couponService.issueCoupon(CouponIssueRequest.of(쿠폰.getId(), List.of(index)), LoginUser.of(관리자.getEmail()));
+                            couponService.issueCoupon(CouponIssueRequest.of(쿠폰.getId(), List.of(랜덤_회원_이메일.get(copyIndex))), LoginUser.of(관리자.getEmail()));
                         } finally {
                             latch.countDown();
                         }
@@ -123,15 +123,16 @@ public class CouponServiceTest extends ApplicationTest {
             @Nested
             class 대량_쿠폰_발급 {
 
-                List<Member> 생성된_회원_목록;
                 Admin 생성된_관리자;
-
+                List<String> 랜덤_회원_이메일;
                 Coupon 등록된_쿠폰;
 
                 @BeforeEach
                 void 사전_준비() {
-                    생성된_회원_목록 = 랜덤_회원_목록_생성(100, MemberType.NORMAL, MemberStatus.ACTIVE);
                     생성된_관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
+
+                    List<Member> 랜덤_회원_목록 = 랜덤_회원_목록_생성(100, MemberType.NORMAL, MemberStatus.ACTIVE);
+                    랜덤_회원_이메일 = 랜덤_회원_목록.stream().map(Member::getEmail).collect(Collectors.toList());
 
                     CouponRequest 등록할_쿠폰_정보 =
                             CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 100);
@@ -141,18 +142,15 @@ public class CouponServiceTest extends ApplicationTest {
                 @Test
                 @DisplayName("정상적으로 쿠폰을 발급한다.")
                 void 쿠폰_정상_발급() {
-                    // given
-                    List<Long> 회원_번호_목록 = 생성된_회원_목록.stream().map(Member::getId).collect(Collectors.toList());
-
                     // when
-                    CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), 회원_번호_목록);
+                    CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), 랜덤_회원_이메일);
                     couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
 
                     // then
                     List<IssuedCoupon> 발급된_쿠폰_목록 = issuedCouponRepository.findByCoupon(등록된_쿠폰);
-                    List<Long> 발급된_쿠폰_목록의_회원_번호 = 발급된_쿠폰_목록.stream().map(IssuedCoupon::getMemberId).collect(Collectors.toList());
+                    List<String> 발급된_쿠폰_목록의_회원_이메일 = 발급된_쿠폰_목록.stream().map(IssuedCoupon::getMemberEmail).collect(Collectors.toList());
 
-                    assertThat(발급된_쿠폰_목록의_회원_번호).isEqualTo(회원_번호_목록);
+                    assertThat(발급된_쿠폰_목록의_회원_이메일).isEqualTo(랜덤_회원_이메일);
                 }
 
             }
@@ -179,14 +177,14 @@ public class CouponServiceTest extends ApplicationTest {
                 @DisplayName("정상적으로 쿠폰을 발급한다.")
                 void 쿠폰_정상_발급() {
                     // when
-                    CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(생성된_회원.getId()));
+                    CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(생성된_회원.getEmail()));
                     couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
 
                     // then
                     List<IssuedCoupon> 발급된_쿠폰_목록 = issuedCouponRepository.findByCoupon(등록된_쿠폰);
-                    List<Long> 발급된_쿠폰_목록의_회원_번호 = 발급된_쿠폰_목록.stream().map(IssuedCoupon::getMemberId).collect(Collectors.toList());
+                    List<String> 발급된_쿠폰_목록의_회원_번호 = 발급된_쿠폰_목록.stream().map(IssuedCoupon::getMemberEmail).collect(Collectors.toList());
 
-                    assertThat(발급된_쿠폰_목록의_회원_번호).containsExactlyInAnyOrder(생성된_회원.getId());
+                    assertThat(발급된_쿠폰_목록의_회원_번호).containsExactlyInAnyOrder(생성된_회원.getEmail());
                 }
             }
         }
@@ -199,7 +197,7 @@ public class CouponServiceTest extends ApplicationTest {
 
             Admin 생성된_관리자;
 
-            Long 존재하지_않는_회원_번호 = 100L;
+            String 존재하지_않는_회원_이메일 = "non-registered-member001@email.com";
             Long 존재하지_않는_관리자_번호 = 100L;
 
             String 존재하지_않는_관리자_이메일 = "admin001@email.com";
@@ -221,10 +219,10 @@ public class CouponServiceTest extends ApplicationTest {
                 Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getId()));
 
                 // when, then
-                CouponIssueRequest 발급할_첫번째_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getId()));
+                CouponIssueRequest 발급할_첫번째_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getEmail()));
                 couponService.issueCoupon(발급할_첫번째_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
 
-                CouponIssueRequest 발급할_두번째_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(두번째_생성된_회원.getId()));
+                CouponIssueRequest 발급할_두번째_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(두번째_생성된_회원.getEmail()));
                 assertThatExceptionOfType(CouponExhaustedException.class)
                         .isThrownBy(() -> {
                             couponService.issueCoupon(발급할_두번째_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
@@ -240,7 +238,7 @@ public class CouponServiceTest extends ApplicationTest {
                         CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1);
                 Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getId()));
 
-                CouponIssueRequest 발급할_첫번째_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(존재하지_않는_회원_번호));
+                CouponIssueRequest 발급할_첫번째_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(존재하지_않는_회원_이메일));
                 assertThatExceptionOfType(NotFoundMemberException.class)
                         .isThrownBy(() -> {
                             couponService.issueCoupon(발급할_첫번째_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
@@ -256,7 +254,7 @@ public class CouponServiceTest extends ApplicationTest {
                         CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 100);
                 Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 존재하지_않는_관리자_번호));
 
-                CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getId()));
+                CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getEmail()));
                 assertThatExceptionOfType(NotFoundAdminException.class)
                         .isThrownBy(() -> {
                             couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(존재하지_않는_관리자_이메일));
@@ -371,7 +369,7 @@ public class CouponServiceTest extends ApplicationTest {
                         CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1);
                 Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getId()));
 
-                CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getId()));
+                CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getEmail()));
                 couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
 
                 // then
@@ -395,7 +393,7 @@ public class CouponServiceTest extends ApplicationTest {
                 Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getId()));
 
                 // when
-                CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getId()));
+                CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getEmail()));
                 couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
 
                 // then

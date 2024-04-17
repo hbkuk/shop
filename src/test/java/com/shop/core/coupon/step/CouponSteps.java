@@ -77,11 +77,11 @@ public class CouponSteps {
                 .statusCode(HttpStatus.OK.value())
                 .extract();
 
-        List<Long> 발급된_쿠폰의_회원_번호 = 발급된_쿠폰_조회_응답.jsonPath().getList("issued_member_ids", Long.class);
-        List<Long> 회원_번호 = 확인할_회원_정보.stream().map(Member::getId).collect(Collectors.toList());
+        List<String> 발급된_쿠폰의_회원_번호 = 발급된_쿠폰_조회_응답.jsonPath().getList("issued_member_emails", String.class);
+        List<String> 회원_이메일 = 확인할_회원_정보.stream().map(Member::getEmail).collect(Collectors.toList());
 
 
-        assertThat(발급된_쿠폰의_회원_번호).isEqualTo(회원_번호);
+        assertThat(발급된_쿠폰의_회원_번호).isEqualTo(회원_이메일);
     }
 
     public static void 쿠폰_발급_요청_토큰_미포함(CouponIssueRequest 쿠폰_발급할_회원_번호_목록, ExtractableResponse<Response> 쿠폰_추가_요청_응답) {

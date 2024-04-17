@@ -20,28 +20,27 @@ public class CouponIssueRequest {
     @JsonIgnore
     private Long couponId;
 
-    private List<Long> memberIds;
+    private List<String> memberEmails;
 
-    public CouponIssueRequest(List<Long> memberIds) {
-        this.memberIds = memberIds;
+    public CouponIssueRequest(List<String> memberEmails) {
+        this.memberEmails = memberEmails;
     }
-
 
     public static CouponIssueRequest mergeCouponId(Long couponId, CouponIssueRequest request) {
-        return new CouponIssueRequest(couponId, request.getMemberIds());
+        return new CouponIssueRequest(couponId, request.getMemberEmails());
     }
 
-    public static CouponIssueRequest of(List<Long> memberIds) {
-        return new CouponIssueRequest(memberIds);
+    public static CouponIssueRequest of(List<String> memberEmails) {
+        return new CouponIssueRequest(memberEmails);
     }
 
-    public static CouponIssueRequest of(Long couponId, List<Long> memberIds) {
-        return new CouponIssueRequest(couponId, memberIds);
+    public static CouponIssueRequest of(Long couponId, List<String> memberEmails) {
+        return new CouponIssueRequest(couponId, memberEmails);
     }
 
     public List<IssuedCoupon> toEntity(LocalDateTime issuedAt, LocalDateTime expiredAt, IssuedCouponStatus status, Coupon coupon) {
-        return memberIds.stream()
-                .map(memberId -> new IssuedCoupon(memberId, issuedAt, expiredAt, status, coupon))
+        return memberEmails.stream()
+                .map(memberEmail -> new IssuedCoupon(memberEmail, issuedAt, expiredAt, status, coupon))
                 .collect(Collectors.toList());
     }
 }

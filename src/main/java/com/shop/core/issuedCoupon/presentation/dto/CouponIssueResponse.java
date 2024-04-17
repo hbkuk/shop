@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class CouponIssueResponse {
 
-    @JsonProperty("issued_member_ids")
-    private List<Long> issuedMemberIds;
+    @JsonProperty("issued_member_emails")
+    private List<String> issuedMemberEmails;
 
     public static CouponIssueResponse of(List<IssuedCoupon> issuedCoupons) {
-        return new CouponIssueResponse(issuedCoupons.stream().map(IssuedCoupon::getMemberId).collect(Collectors.toList()));
+        return new CouponIssueResponse(issuedCoupons.stream().map(IssuedCoupon::getMemberEmail).collect(Collectors.toList()));
     }
 }

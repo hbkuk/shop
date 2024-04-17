@@ -104,7 +104,7 @@ public class CouponAcceptanceTest extends AdminAcceptanceTest {
             @Test
             void 쿠폰_발급_성공() {
                 // when
-                var 쿠폰_발급할_회원_번호_목록 = CouponIssueRequest.of(List.of(생성된_첫번째_회원.getId(), 생성된_두번째_회원.getId())); // TODO: email로 선택하게끔 수정
+                var 쿠폰_발급할_회원_번호_목록 = CouponIssueRequest.of(List.of(생성된_첫번째_회원.getEmail(), 생성된_두번째_회원.getEmail()));
                 쿠폰_발급_요청_토큰_포함(관리자_깃허브_토큰, 쿠폰_발급할_회원_번호_목록, 쿠폰_추가_요청_응답);
 
                 // then
@@ -125,7 +125,7 @@ public class CouponAcceptanceTest extends AdminAcceptanceTest {
             @Test
             void 관리자_토큰_없이_쿠폰_발급() {
                 // when, then
-                var 쿠폰_발급할_회원_번호_목록 = CouponIssueRequest.of(List.of(생성된_첫번째_회원.getId(), 생성된_두번째_회원.getId())); // TODO: email로 선택하게끔 수정
+                var 쿠폰_발급할_회원_번호_목록 = CouponIssueRequest.of(List.of(생성된_첫번째_회원.getEmail(), 생성된_두번째_회원.getEmail()));
                 쿠폰_발급_요청_토큰_미포함(쿠폰_발급할_회원_번호_목록, 쿠폰_추가_요청_응답);
             }
         }

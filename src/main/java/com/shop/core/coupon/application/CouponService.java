@@ -73,7 +73,7 @@ public class CouponService {
     @Transactional
     public CouponIssueResponse issueCoupon(CouponIssueRequest request, LoginUser loginAdmin) {
         verifyAdminByEmail(loginAdmin);
-        verifyMemberByIds(request.getMemberIds());
+        verifyMembersByEmail(request.getMemberEmails());
 
         Coupon coupon = couponRepository.findByCouponIdLock(request.getCouponId());
         List<IssuedCoupon> issuedCoupons = toIssuedCoupons(request, coupon);
@@ -89,8 +89,8 @@ public class CouponService {
         return request.toEntity(issuedAt, expiredAt, IssuedCouponStatus.ACTIVE, coupon);
     }
 
-    private void verifyMemberByIds(List<Long> memberIds) {
-        memberIds.forEach(memberService::findMemberById);
+    private void verifyMembersByEmail(List<String> memberEmails) {
+        memberEmails.forEach(memberService::findMemberByEmail);
     }
 
     private Admin verifyAdminByEmail(LoginUser loginUser) {
