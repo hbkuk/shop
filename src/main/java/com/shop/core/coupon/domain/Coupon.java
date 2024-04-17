@@ -38,8 +38,8 @@ public class Coupon {
     @Enumerated(EnumType.STRING)
     private CouponStatus couponStatus;
 
-    @JoinColumn(name = "ADMIN_ID")
-    private Long issuerAdminId;
+    @JoinColumn(name = "ADMIN_EMAIL")
+    private String issuerAdminEmail;
 
     // TODO: 일급 컬렉션으로 리팩토링
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -48,7 +48,7 @@ public class Coupon {
     @Version
     private Integer version;
 
-    public Coupon(String name, String description, int maxDiscountAmount, int discountAmount, int remainingIssueCount, LocalDateTime createdAt, CouponStatus couponStatus, Long issuerAdminId) {
+    public Coupon(String name, String description, int maxDiscountAmount, int discountAmount, int remainingIssueCount, LocalDateTime createdAt, CouponStatus couponStatus, String issuerAdminEmail) {
         this.name = name;
         this.description = description;
         this.maxDiscountAmount = maxDiscountAmount;
@@ -56,7 +56,7 @@ public class Coupon {
         this.remainingIssueCount = remainingIssueCount;
         this.createdAt = createdAt;
         this.couponStatus = couponStatus;
-        this.issuerAdminId = issuerAdminId;
+        this.issuerAdminEmail = issuerAdminEmail;
     }
 
     public void issueCoupons(List<IssuedCoupon> issuedCoupons) {

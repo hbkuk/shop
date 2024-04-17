@@ -14,7 +14,7 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, name = "ADMIN_EMAIL")
     private String email;
 
     @Column(unique = true)

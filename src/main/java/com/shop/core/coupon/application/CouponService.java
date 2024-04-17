@@ -57,7 +57,7 @@ public class CouponService {
     public CouponResponse createCoupon(CouponRequest request, LoginUser loginUser) {
         Admin admin = verifyAdminByEmail(loginUser);
 
-        Coupon coupon = createCoupon(request, admin.getId());
+        Coupon coupon = createCoupon(request, admin.getEmail());
         return CouponResponse.of(couponRepository.save(coupon));
     }
 
@@ -97,8 +97,8 @@ public class CouponService {
         return adminAuthService.findAdminByEmail(loginUser.getEmail());
     }
 
-    private Coupon createCoupon(CouponRequest request, Long adminId) {
+    private Coupon createCoupon(CouponRequest request, String adminEmail) {
         LocalDateTime createdAt = LocalDateTime.now();
-        return request.toEntity(createdAt, CouponStatus.ISSUABLE, adminId);
+        return request.toEntity(createdAt, CouponStatus.ISSUABLE, adminEmail);
     }
 }

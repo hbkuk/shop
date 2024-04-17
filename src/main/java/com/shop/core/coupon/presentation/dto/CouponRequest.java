@@ -31,7 +31,7 @@ public class CouponRequest {
         return new CouponRequest(name, description, maxDiscountAmount, discountAmount, remainingIssueCount);
     }
 
-    public Coupon toEntity(LocalDateTime createdAt, CouponStatus couponStatus, Long adminId) {
-        return new Coupon(name, description, maxDiscountAmount, discountAmount, remainingIssueCount, createdAt, couponStatus, adminId);
+    public Coupon toEntity(LocalDateTime createdAt, CouponStatus couponStatus, String adminEmail) {
+        return new Coupon(name, description, maxDiscountAmount, discountAmount, remainingIssueCount, createdAt, couponStatus, adminEmail);
     }
 }
