@@ -41,8 +41,7 @@ public class Coupon {
     @JoinColumn(name = "ADMIN_EMAIL")
     private String issuerAdminEmail;
 
-    // TODO: 일급 컬렉션으로 리팩토링
-    @OneToMany(mappedBy = "coupon", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "coupon", orphanRemoval = true, fetch = FetchType.LAZY)
     private final List<IssuedCoupon> issuedCoupons = new ArrayList<>();
 
     @Version
@@ -59,17 +58,12 @@ public class Coupon {
         this.issuerAdminEmail = issuerAdminEmail;
     }
 
-    public void issueCoupons(List<IssuedCoupon> issuedCoupons) {
+    public void deductCouponCount(List<IssuedCoupon> issuedCoupons) {
         checkRemainingIssueCoupon(issuedCoupons);
         checkIssuableStatus();
 
-        processIssuedCoupons(issuedCoupons);
-    }
-
-    private void processIssuedCoupons(List<IssuedCoupon> issuedCoupons) {
         this.issuedCoupons.addAll(issuedCoupons);
         this.remainingIssueCount -= issuedCoupons.size();
-
         if (this.remainingIssueCount == 0) {
             this.couponStatus = CouponStatus.EXHAUSTED;
         }

@@ -33,7 +33,7 @@ public class CouponTest {
                 String memberEmail = "member001@gmail.com";
                 IssuedCoupon issuedCoupon = new IssuedCoupon(memberEmail, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
 
-                coupon.issueCoupons(List.of(issuedCoupon));
+                coupon.deductCouponCount(List.of(issuedCoupon));
 
                 assertThat(coupon.getRemainingIssueCount()).isEqualTo(0);
                 assertThat(coupon.getIssuedCoupons()).containsExactly(issuedCoupon);
@@ -48,7 +48,7 @@ public class CouponTest {
                 String memberEmail = "member001@gmail.com";
                 IssuedCoupon issuedCoupon = new IssuedCoupon(memberEmail, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
 
-                coupon.issueCoupons(List.of(issuedCoupon));
+                coupon.deductCouponCount(List.of(issuedCoupon));
 
                 assertThat(coupon.getRemainingIssueCount()).isEqualTo(0);
                 assertThat(coupon.getIssuedCoupons()).containsExactly(issuedCoupon);
@@ -69,7 +69,7 @@ public class CouponTest {
 
                 assertThatExceptionOfType(CouponExhaustedException.class)
                         .isThrownBy(() -> {
-                            coupon.issueCoupons(List.of(issuedCoupon));
+                            coupon.deductCouponCount(List.of(issuedCoupon));
                         })
                         .withMessageMatching(ErrorType.COUPON_EXHAUSTED.getMessage());
             }
@@ -85,7 +85,7 @@ public class CouponTest {
 
                 assertThatExceptionOfType(CouponIssuanceNotAllowedException.class)
                         .isThrownBy(() -> {
-                            coupon.issueCoupons(List.of(issuedCoupon));
+                            coupon.deductCouponCount(List.of(issuedCoupon));
                         })
                         .withMessageMatching(ErrorType.COUPON_ISSUANCE_NOT_ALLOWED.getMessage());
             }
@@ -101,7 +101,7 @@ public class CouponTest {
 
                 assertThatExceptionOfType(CouponIssuanceNotAllowedException.class)
                         .isThrownBy(() -> {
-                            coupon.issueCoupons(List.of(issuedCoupon));
+                            coupon.deductCouponCount(List.of(issuedCoupon));
                         })
                         .withMessageMatching(ErrorType.COUPON_ISSUANCE_NOT_ALLOWED.getMessage());
             }
@@ -117,7 +117,7 @@ public class CouponTest {
 
                 assertThatExceptionOfType(CouponExhaustedException.class)
                         .isThrownBy(() -> {
-                            coupon.issueCoupons(List.of(issuedCoupon));
+                            coupon.deductCouponCount(List.of(issuedCoupon));
                         })
                         .withMessageMatching(ErrorType.COUPON_EXHAUSTED.getMessage());
             }
