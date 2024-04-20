@@ -1,22 +1,30 @@
 spring:
   profiles:
-    active: dev # defualt
-    group:
-      dev:
-        - common
-        - dev
+    active: dev
 
 ---
 spring:
   config:
     activate:
-      on-profile: common
+      on-profile: dev
 
   jpa:
+    hibernate:
+      ddl-auto: validate
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
+        format_sql: true # SQL 포맷팅
+        show_sql: false # SQL 콘솔 출력
+        jdbc:
+          batch_size: 100
+        generate_statistics: true
+    database-platform: org.hibernate.dialect.MySQL57Dialect # MySQL 5.7의 방언
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=999999
+    username: root
+    password: qudrnr132!
 
 logging:
   level:
@@ -24,12 +32,6 @@ logging:
     org.springframework.orm.jpa: DEBUG
     org.springframework.transaction: DEBUG
     org.hibernate.type.descriptor.sql: trace
----
-
-spring:
-  config:
-    activate:
-      on-profile: dev
 
 security:
   jwt:

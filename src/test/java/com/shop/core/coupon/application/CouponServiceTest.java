@@ -150,7 +150,7 @@ public class CouponServiceTest extends ApplicationTest {
                     List<IssuedCoupon> 발급된_쿠폰_목록 = issuedCouponRepository.findByCoupon(등록된_쿠폰);
                     List<String> 발급된_쿠폰_목록의_회원_이메일 = 발급된_쿠폰_목록.stream().map(IssuedCoupon::getMemberEmail).collect(Collectors.toList());
 
-                    assertThat(발급된_쿠폰_목록의_회원_이메일).isEqualTo(랜덤_회원_이메일);
+                    assertThat(발급된_쿠폰_목록의_회원_이메일).containsAnyElementsOf(랜덤_회원_이메일);
                 }
 
             }

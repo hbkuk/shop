@@ -44,7 +44,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     // db
-    runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java'
 
     // password crypto

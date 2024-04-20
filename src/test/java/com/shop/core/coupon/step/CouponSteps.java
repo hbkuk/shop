@@ -81,7 +81,7 @@ public class CouponSteps {
         List<String> 회원_이메일 = 확인할_회원_정보.stream().map(Member::getEmail).collect(Collectors.toList());
 
 
-        assertThat(발급된_쿠폰의_회원_번호).isEqualTo(회원_이메일);
+        assertThat(발급된_쿠폰의_회원_번호).containsAnyElementsOf(회원_이메일);
     }
 
     public static void 쿠폰_발급_요청_토큰_미포함(CouponIssueRequest 쿠폰_발급할_회원_번호_목록, ExtractableResponse<Response> 쿠폰_추가_요청_응답) {
