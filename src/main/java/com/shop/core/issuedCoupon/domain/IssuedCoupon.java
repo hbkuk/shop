@@ -4,9 +4,11 @@ import com.shop.core.coupon.domain.Coupon;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -14,8 +16,10 @@ import java.time.LocalDateTime;
 public class IssuedCoupon {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(name = "COUPON_CODE", columnDefinition = "BINARY(16)")
+    private UUID code;
 
     @JoinColumn(name = "MEMBER_EMAIL")
     private String memberEmail;
