@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.shop.core.admin.auth.step.AdminAuthSteps.깃허브_토큰_발급_요청;
 
-public class AdminAcceptanceTest extends AcceptanceTest {
+public class UserAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     AdminRepository adminRepository;
@@ -20,8 +20,7 @@ public class AdminAcceptanceTest extends AcceptanceTest {
     MemberRepository memberRepository;
 
     public String 관리자_생성_후_토큰_발급(AdminGithubFixture 관리자_깃허브_정보) {
-        var 관리자_정보 = new Admin(관리자_깃허브_정보.email, "010-1234-5678", AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
-        관리자_등록(관리자_정보);
+        관리자_생성(관리자_깃허브_정보.email, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
 
         return 깃허브_코드로_토큰_발급(관리자_깃허브_정보.code);
     }
@@ -35,6 +34,10 @@ public class AdminAcceptanceTest extends AcceptanceTest {
         var 깃허브_토큰_발급_정보 = 깃허브_토큰_발급_요청(깃허브_코드_정보);
 
         return "Bearer " + 깃허브_토큰_발급_정보.jsonPath().getString("accessToken");
+    }
+
+    public Admin 관리자_생성(String email, AdminRole role, AdminSignupChannel signupChannel, AdminStatus status) {
+        return adminRepository.save(new Admin(email, "010-1234-5678", role, signupChannel, status));
     }
 
     public Member 회원_생성(String email, String password, int age, MemberType memberType, MemberStatus memberStatus) {

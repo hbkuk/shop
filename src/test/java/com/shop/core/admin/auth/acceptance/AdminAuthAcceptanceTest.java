@@ -1,20 +1,21 @@
 package com.shop.core.admin.auth.acceptance;
 
-import com.shop.common.util.AcceptanceTest;
-import com.shop.common.util.AdminAcceptanceTest;
-import com.shop.core.admin.auth.domain.*;
+import com.shop.common.util.UserAcceptanceTest;
+import com.shop.core.admin.auth.domain.Admin;
+import com.shop.core.admin.auth.domain.AdminRole;
+import com.shop.core.admin.auth.domain.AdminSignupChannel;
+import com.shop.core.admin.auth.domain.AdminStatus;
 import com.shop.core.admin.auth.fixture.AdminGithubFixture;
 import com.shop.core.admin.auth.presentation.dto.AdminGithubCodeRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.shop.core.admin.auth.step.AdminAuthSteps.관리자_토큰_발급_확인;
 import static com.shop.core.admin.auth.step.AdminAuthSteps.깃허브_토큰_발급_요청;
 
 @DisplayName("관리자 인증 인수 테스트")
-public class AdminAuthAcceptanceTest extends AdminAcceptanceTest {
+public class AdminAuthAcceptanceTest extends UserAcceptanceTest {
 
     @Nested
     class 관리자_깃허브_토큰_발급 {
