@@ -70,10 +70,10 @@ public class NotificationServiceTest extends ApplicationTest {
                 NotificationRequest 발송할_알림_정보 = NotificationRequest.of(NotificationType.EVENT_NOTIFICATION, "신규 이벤트가 진행 중입니다.", 생성된_회원.getEmail());
 
                 // when
-                NotificationResponse response = notificationService.send(발송할_알림_정보, LoginUser.of(생성된_관리자.getEmail()));
+                NotificationResponse 발송된_알림_정보 = notificationService.send(발송할_알림_정보, LoginUser.of(생성된_관리자.getEmail()));
 
                 // then
-                Notification 찾은_알림_정보 = notificationRepository.findById(response.getId()).get();
+                Notification 찾은_알림_정보 = notificationRepository.findById(발송된_알림_정보.getId()).get();
                 assertThat(찾은_알림_정보.getNotificationStatus()).isEqualTo(NotificationStatus.UNREAD);
             }
         }
