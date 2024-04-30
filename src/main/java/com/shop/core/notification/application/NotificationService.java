@@ -34,7 +34,7 @@ public class NotificationService {
         verifyAdmin(loginAdmin);
         verifyMemberByEmail(request.getMemberEmail());
 
-        Notification notification = new Notification(request.getNotificationType(), request.getMessage(), LocalDateTime.now(), NotificationStatus.UNREAD, request.getMemberEmail(), loginAdmin.getEmail());
+        Notification notification = new Notification(request.getNotificationType(), LocalDateTime.now(), NotificationStatus.UNREAD, request.getMemberEmail(), loginAdmin.getEmail());
         return NotificationResponse.of(notificationRepository.save(notification));
     }
 

@@ -18,12 +18,10 @@ public class NotificationResponse {
     @JsonProperty("notification_type")
     private NotificationType type;
 
-    private String message;
-
     @JsonProperty("notification_status")
     private NotificationStatus notificationStatus;
 
     public static NotificationResponse of(Notification notification) {
-        return new NotificationResponse(notification.getId(), notification.getNotificationType(), notification.getMessage(), notification.getNotificationStatus());
+        return new NotificationResponse(notification.getId(), notification.getNotificationType(), notification.getNotificationStatus());
     }
 }

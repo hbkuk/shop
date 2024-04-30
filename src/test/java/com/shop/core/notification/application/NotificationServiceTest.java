@@ -67,7 +67,7 @@ public class NotificationServiceTest extends ApplicationTest {
             @DisplayName("정상적으로 알림이 발송된다.")
             void 알림_발송_성공() {
                 // given
-                NotificationRequest 발송할_알림_정보 = NotificationRequest.of(NotificationType.EVENT_NOTIFICATION, "신규 이벤트가 진행 중입니다.", 생성된_회원.getEmail());
+                NotificationRequest 발송할_알림_정보 = NotificationRequest.of(NotificationType.EVENT_NOTIFICATION, 생성된_회원.getEmail());
 
                 // when
                 NotificationResponse 발송된_알림_정보 = notificationService.send(발송할_알림_정보, LoginUser.of(생성된_관리자.getEmail()));
@@ -84,7 +84,7 @@ public class NotificationServiceTest extends ApplicationTest {
             @Test
             void 존재하지_않는_회원_알림_발송_실패() {
                 // given
-                NotificationRequest 발송할_알림_정보 = NotificationRequest.of(NotificationType.EVENT_NOTIFICATION, "신규 이벤트가 진행 중입니다.", 존재하지_않는_회원_이메일);
+                NotificationRequest 발송할_알림_정보 = NotificationRequest.of(NotificationType.EVENT_NOTIFICATION, 존재하지_않는_회원_이메일);
 
                 // when, then
                 assertThatExceptionOfType(NotFoundMemberException.class)
@@ -97,7 +97,7 @@ public class NotificationServiceTest extends ApplicationTest {
             @Test
             void 존재하지_않는_관리자_알림_발송_실패() {
                 // given
-                NotificationRequest 발송할_알림_정보 = NotificationRequest.of(NotificationType.EVENT_NOTIFICATION, "신규 이벤트가 진행 중입니다.", 생성된_회원.getEmail());
+                NotificationRequest 발송할_알림_정보 = NotificationRequest.of(NotificationType.EVENT_NOTIFICATION, 생성된_회원.getEmail());
 
                 // when, then
                 assertThatExceptionOfType(NotFoundAdminException.class)
@@ -126,7 +126,7 @@ public class NotificationServiceTest extends ApplicationTest {
             두번째_생성된_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
             생성된_관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
 
-            NotificationRequest 발송할_알림_정보 = NotificationRequest.of(NotificationType.EVENT_NOTIFICATION, "신규 이벤트가 진행 중입니다.", 첫번째_생성된_회원.getEmail());
+            NotificationRequest 발송할_알림_정보 = NotificationRequest.of(NotificationType.EVENT_NOTIFICATION, 첫번째_생성된_회원.getEmail());
             발송된_알림 = notificationRepository.save(발송할_알림_정보.toEntity(LocalDateTime.now(), 생성된_관리자.getEmail()));
         }
 
@@ -176,7 +176,7 @@ public class NotificationServiceTest extends ApplicationTest {
             void 읽을_수_없는_알림_확인_실패() {
                 // given
                 Notification 발송_실패한_알림
-                        = new Notification(NotificationType.EVENT_NOTIFICATION, "신규 이벤트가 진행 중입니다.", LocalDateTime.now(), NotificationStatus.FAILED, 첫번째_생성된_회원.getEmail(), 생성된_관리자.getEmail());
+                        = new Notification(NotificationType.EVENT_NOTIFICATION, LocalDateTime.now(), NotificationStatus.FAILED, 첫번째_생성된_회원.getEmail(), 생성된_관리자.getEmail());
                 notificationRepository.save(발송_실패한_알림);
 
                 // when, then
@@ -207,7 +207,7 @@ public class NotificationServiceTest extends ApplicationTest {
             두번째_생성된_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
             생성된_관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
 
-            NotificationRequest 발송할_알림_정보 = NotificationRequest.of(NotificationType.EVENT_NOTIFICATION, "신규 이벤트가 진행 중입니다.", 첫번째_생성된_회원.getEmail());
+            NotificationRequest 발송할_알림_정보 = NotificationRequest.of(NotificationType.EVENT_NOTIFICATION, 첫번째_생성된_회원.getEmail());
             발송된_알림 = notificationRepository.save(발송할_알림_정보.toEntity(LocalDateTime.now(), 생성된_관리자.getEmail()));
         }
 
@@ -221,7 +221,7 @@ public class NotificationServiceTest extends ApplicationTest {
 
                 // then
                 assertThat(찾은_알림).usingRecursiveComparison()
-                        .comparingOnlyFields("type", "message", "notificationStatus")
+                        .comparingOnlyFields("type", "notificationStatus")
                         .isEqualTo(NotificationResponse.of(발송된_알림));
             }
         }

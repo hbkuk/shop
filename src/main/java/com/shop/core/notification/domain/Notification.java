@@ -22,8 +22,6 @@ public class Notification {
     @Enumerated(EnumType.STRING)
     private NotificationType notificationType;
 
-    private String message;
-
     private LocalDateTime notificationAt;
 
     @Enumerated(EnumType.STRING)
@@ -35,9 +33,8 @@ public class Notification {
     @JoinColumn(name = "ADMIN_EMAIL")
     private String adminEmail;
 
-    public Notification(NotificationType notificationType, String message, LocalDateTime notificationAt, NotificationStatus notificationStatus, String memberEmail, String adminEmail) {
+    public Notification(NotificationType notificationType, LocalDateTime notificationAt, NotificationStatus notificationStatus, String memberEmail, String adminEmail) {
         this.notificationType = notificationType;
-        this.message = message;
         this.notificationAt = notificationAt;
         this.notificationStatus = notificationStatus;
         this.memberEmail = memberEmail;

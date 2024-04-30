@@ -16,15 +16,13 @@ public class NotificationRequest {
 
     private NotificationType notificationType;
 
-    private String message;
-
     private String memberEmail;
 
-    public static NotificationRequest of(NotificationType type, String message, String memberEmail) {
-        return new NotificationRequest(type, message, memberEmail);
+    public static NotificationRequest of(NotificationType type, String memberEmail) {
+        return new NotificationRequest(type, memberEmail);
     }
 
     public Notification toEntity(LocalDateTime notificationAt, String adminEmail) {
-        return new Notification(notificationType, message, notificationAt, NotificationStatus.UNREAD, memberEmail, adminEmail);
+        return new Notification(notificationType, notificationAt, NotificationStatus.UNREAD, memberEmail, adminEmail);
     }
 }

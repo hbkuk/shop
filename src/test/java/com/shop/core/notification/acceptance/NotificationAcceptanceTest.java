@@ -38,7 +38,7 @@ public class NotificationAcceptanceTest extends UserAcceptanceTest {
             회원_토큰 = 회원생성_후_토큰_발급(스미스);
 
             Notification 발송할_알림_정보
-                    = new Notification(NotificationType.EVENT_NOTIFICATION, "새로운 쿠폰 발급 이벤트가 추가되었습니다.", LocalDateTime.now(), NotificationStatus.UNREAD, 스미스.이메일, 황병국.email);
+                    = new Notification(NotificationType.EVENT_NOTIFICATION, LocalDateTime.now(), NotificationStatus.UNREAD, 스미스.이메일, 황병국.email);
             발송된_알림_정보 = notificationRepository.save(발송할_알림_정보);
         }
 
