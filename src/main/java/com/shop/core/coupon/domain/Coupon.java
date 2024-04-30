@@ -62,6 +62,7 @@ public class Coupon {
         checkRemainingIssueCoupon(issuedCoupons);
         checkIssuableStatus();
 
+        // TODO: 리팩토링
         this.issuedCoupons.addAll(issuedCoupons);
         this.remainingIssueCount -= issuedCoupons.size();
         if (this.remainingIssueCount == 0) {

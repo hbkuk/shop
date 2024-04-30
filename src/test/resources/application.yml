@@ -21,7 +21,7 @@ spring:
         show_sql: false # SQL 콘솔 출력
         jdbc:
           batch_size: 100
-        generate_statistics: true
+    #        generate_statistics: true
     database-platform: org.hibernate.dialect.MySQL57Dialect # MySQL 5.7의 방언
 
   datasource:
@@ -33,7 +33,9 @@ spring:
 
 logging:
   level:
-    org.hibernate.stat: debug
+    ROOT: INFO
+    org.springframework.orm.jpa: DEBUG
+#    org.hibernate.stat: debug
 
 security:
   jwt:

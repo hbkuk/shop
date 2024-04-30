@@ -1,6 +1,6 @@
 package com.shop.core.coupon.acceptance;
 
-import com.shop.common.util.AdminAcceptanceTest;
+import com.shop.common.util.UserAcceptanceTest;
 import com.shop.core.admin.auth.fixture.AdminGithubFixture;
 import com.shop.core.coupon.domain.CouponStatus;
 import com.shop.core.coupon.presentation.dto.CouponRequest;
@@ -23,7 +23,7 @@ import static com.shop.core.member.fixture.MemberFixture.스미스;
 import static com.shop.core.member.fixture.MemberFixture.윌리엄스;
 
 @DisplayName("쿠폰 관련 인수 테스트")
-public class CouponAcceptanceTest extends AdminAcceptanceTest {
+public class CouponAcceptanceTest extends UserAcceptanceTest {
 
     @Nested
     class 쿠폰_추가 {

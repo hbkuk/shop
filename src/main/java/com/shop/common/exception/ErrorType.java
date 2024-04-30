@@ -20,6 +20,9 @@ public enum ErrorType {
     COUPON_STATUS_CHANGE_NOT_ALLOWED(5003, "쿠폰의 상태를 변경할 수 없습니다."),
     COUPON_ISSUANCE_NOT_ALLOWED(5004, "쿠폰을 발급할 수 없는 상태입니다."),
 
+    NOT_FOUND_NOTIFICATION(6001, "존재하지 않는 알림입니다."),
+    CANNOT_NOTIFICATION_READ(6002, "확인할 수 없는 알림입니다."),
+
     NOT_FOUND_ADMIN(8001, "존재하지 않는 관리자입니다."),
 
     REQUEST_EXCEPTION(9001, "http 요청 에러입니다."),
