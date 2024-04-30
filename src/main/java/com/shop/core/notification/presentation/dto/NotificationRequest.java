@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class NotificationRequest {
 
-    private NotificationType type;
+    private NotificationType notificationType;
 
     private String message;
 
@@ -25,6 +25,6 @@ public class NotificationRequest {
     }
 
     public Notification toEntity(LocalDateTime notificationAt, String adminEmail) {
-        return new Notification(type, message, notificationAt, NotificationStatus.UNREAD, memberEmail, adminEmail);
+        return new Notification(notificationType, message, notificationAt, NotificationStatus.UNREAD, memberEmail, adminEmail);
     }
 }
