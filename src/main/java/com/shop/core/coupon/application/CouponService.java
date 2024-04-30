@@ -77,10 +77,7 @@ public class CouponService {
 
         Coupon coupon = couponRepository.findByCouponId(request.getCouponId());
         List<IssuedCoupon> issuedCoupons = toIssuedCoupons(request, coupon);
-
-        coupon.deductCouponCount(issuedCoupons);
-
-        // TODO: News 알려주기 => 의존성 분리하기
+        coupon.issue(issuedCoupons);
 
         return CouponIssueResponse.of(issuedCoupons);
     }

@@ -58,16 +58,19 @@ public class Coupon {
         this.issuerAdminEmail = issuerAdminEmail;
     }
 
-    public void deductCouponCount(List<IssuedCoupon> issuedCoupons) {
+    @PreUpdate
+    public void updateStatusIfExhausted() {
+        if (remainingIssueCount == 0) {
+            this.couponStatus = CouponStatus.EXHAUSTED;
+        }
+    }
+
+    public void issue(List<IssuedCoupon> issuedCoupons) {
         checkRemainingIssueCoupon(issuedCoupons);
         checkIssuableStatus();
 
-        // TODO: 리팩토링
         this.issuedCoupons.addAll(issuedCoupons);
         this.remainingIssueCount -= issuedCoupons.size();
-        if (this.remainingIssueCount == 0) {
-            this.couponStatus = CouponStatus.EXHAUSTED;
-        }
     }
 
     private void checkIssuableStatus() {
