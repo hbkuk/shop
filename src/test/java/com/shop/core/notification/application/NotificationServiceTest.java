@@ -114,9 +114,8 @@ public class NotificationServiceTest extends ApplicationTest {
 
         Member 첫번째_생성된_회원;
         Member 두번째_생성된_회원;
-        Admin 생성된_관리자;
 
-        String 존재하지_않는_회원_이메일 = "non-existent-member001@email.com";
+        Admin 생성된_관리자;
 
         Notification 발송된_알림;
 
@@ -194,5 +193,64 @@ public class NotificationServiceTest extends ApplicationTest {
     @Nested
     class 알림_찾기 {
 
+        Member 첫번째_생성된_회원;
+        Member 두번째_생성된_회원;
+
+        Admin 생성된_관리자;
+
+        Notification 발송된_알림;
+
+
+        @BeforeEach
+        void 사전_준비() {
+            첫번째_생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
+            두번째_생성된_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
+            생성된_관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
+
+            NotificationRequest 발송할_알림_정보 = NotificationRequest.of(NotificationType.EVENT_NOTIFICATION, "신규 이벤트가 진행 중입니다.", 첫번째_생성된_회원.getEmail());
+            발송된_알림 = notificationRepository.save(발송할_알림_정보.toEntity(LocalDateTime.now(), 생성된_관리자.getEmail()));
+        }
+
+        @Nested
+        class 성공 {
+
+            @Test
+            void 알림_찾기_성공() {
+                // when
+                NotificationResponse 찾은_알림 = notificationService.findById(발송된_알림.getId(), LoginUser.of(첫번째_생성된_회원.getEmail()));
+
+                // then
+                assertThat(찾은_알림).usingRecursiveComparison()
+                        .comparingOnlyFields("type", "message", "notificationStatus")
+                        .isEqualTo(NotificationResponse.of(발송된_알림));
+            }
+        }
+
+        @Nested
+        class 실패 {
+
+            @Test
+            void 존재하지_않는_알림_찾기_실패() {
+                // given
+                Long 존재하지_않는_알림_번호 = 100L;
+
+                // when, then
+                assertThatExceptionOfType(NotFoundNotificationException.class)
+                        .isThrownBy(() -> {
+                            notificationService.findById(존재하지_않는_알림_번호, LoginUser.of(첫번째_생성된_회원.getEmail()));
+                        })
+                        .withMessageMatching(ErrorType.NOT_FOUND_NOTIFICATION.getMessage());
+            }
+
+            @Test
+            void 타_회원의_알림_찾기() {
+                // when, then
+                assertThatExceptionOfType(NonMatchingMemberException.class)
+                        .isThrownBy(() -> {
+                            notificationService.findById(발송된_알림.getId(), LoginUser.of(두번째_생성된_회원.getEmail()));
+                        })
+                        .withMessageMatching(ErrorType.NON_MATCHING_MEMBER.getMessage());
+            }
+        }
     }
 }
