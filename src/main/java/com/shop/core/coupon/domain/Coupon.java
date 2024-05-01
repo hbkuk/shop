@@ -79,6 +79,7 @@ public class Coupon {
         }
     }
 
+    // TODO: 쿠폰이 소진된 상태인지, 발급 가능한 쿠폰이 없는지 구분할 것
     private void checkRemainingIssueCoupon(List<IssuedCoupon> issuedCoupons) {
         if (remainingIssueCount < issuedCoupons.size()) {
             throw new CouponExhaustedException(ErrorType.COUPON_EXHAUSTED);

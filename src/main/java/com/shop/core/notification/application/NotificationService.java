@@ -9,6 +9,7 @@ import com.shop.core.member.exception.NonMatchingMemberException;
 import com.shop.core.notification.domain.Notification;
 import com.shop.core.notification.domain.NotificationRepository;
 import com.shop.core.notification.domain.NotificationStatus;
+import com.shop.core.notification.domain.NotificationType;
 import com.shop.core.notification.exception.NotFoundNotificationException;
 import com.shop.core.notification.presentation.dto.NotificationRequest;
 import com.shop.core.notification.presentation.dto.NotificationResponse;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -36,6 +38,13 @@ public class NotificationService {
 
         Notification notification = new Notification(request.getNotificationType(), LocalDateTime.now(), NotificationStatus.UNREAD, request.getMemberEmail(), loginAdmin.getEmail());
         return NotificationResponse.of(notificationRepository.save(notification));
+    }
+
+    @Transactional
+    public void send(List<String> memberEmails, LoginUser loginAdmin, NotificationType notificationType) {
+        memberEmails.forEach(memberEmail -> {
+            send(NotificationRequest.of(notificationType, memberEmail), loginAdmin);
+        });
     }
 
     @Transactional

@@ -17,6 +17,8 @@ import com.shop.core.issuedCoupon.domain.IssuedCouponStatus;
 import com.shop.core.issuedCoupon.presentation.dto.CouponIssueRequest;
 import com.shop.core.issuedCoupon.presentation.dto.CouponIssueResponse;
 import com.shop.core.member.application.MemberService;
+import com.shop.core.notification.application.NotificationService;
+import com.shop.core.notification.domain.NotificationType;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +36,8 @@ public class CouponService {
     private final MemberService memberService;
 
     private final CouponRepository couponRepository;
+
+    private final NotificationService notificationService;
 
     public CouponResponse findById(Long couponId, LoginUser loginUser) {
         verifyAdminByEmail(loginUser);
@@ -78,6 +82,8 @@ public class CouponService {
         Coupon coupon = couponRepository.findByCouponId(request.getCouponId());
         List<IssuedCoupon> issuedCoupons = toIssuedCoupons(request, coupon);
         coupon.issue(issuedCoupons);
+
+        notificationService.send(request.getMemberEmails(), loginAdmin, NotificationType.COUPON_ISSUANCE);
 
         return CouponIssueResponse.of(issuedCoupons);
     }
