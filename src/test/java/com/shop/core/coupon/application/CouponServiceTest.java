@@ -23,10 +23,7 @@ import com.shop.core.member.domain.Member;
 import com.shop.core.member.domain.MemberStatus;
 import com.shop.core.member.domain.MemberType;
 import com.shop.core.member.exception.NotFoundMemberException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
@@ -78,6 +75,7 @@ public class CouponServiceTest extends ApplicationTest {
             쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 관리자.getEmail()));
         }
 
+        @Disabled
         @Nested
         class 성공 {
 

@@ -11,7 +11,7 @@ import com.shop.core.auth.domain.LoginUser;
 import com.shop.core.coupon.domain.Coupon;
 import com.shop.core.coupon.domain.CouponRepository;
 import com.shop.core.coupon.domain.CouponStatus;
-import com.shop.core.coupon.exception.CouponExhaustedException;
+import com.shop.core.coupon.exception.InsufficientCouponQuantityException;
 import com.shop.core.coupon.presentation.dto.CouponRequest;
 import com.shop.core.issuedCoupon.domain.IssuedCoupon;
 import com.shop.core.issuedCoupon.domain.IssuedCouponRepository;
@@ -125,11 +125,11 @@ public class CouponAndNotificationServiceTest extends ApplicationTest {
 
                 // when, then
                 CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getEmail(), 두번째_생성된_회원.getEmail()));
-                assertThatExceptionOfType(CouponExhaustedException.class)
+                assertThatExceptionOfType(InsufficientCouponQuantityException.class)
                         .isThrownBy(() -> {
                             couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
                         })
-                        .withMessageMatching(ErrorType.COUPON_EXHAUSTED.getMessage());
+                        .withMessageMatching(ErrorType.COUPON_INSUFFICIENT.getMessage());
 
                 // then
                 List<IssuedCoupon> 발급된_쿠폰_목록 = issuedCouponRepository.findByCoupon(등록된_쿠폰);

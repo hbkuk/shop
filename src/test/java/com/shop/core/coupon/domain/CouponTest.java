@@ -4,6 +4,7 @@ import com.shop.common.exception.ErrorType;
 import com.shop.core.coupon.exception.CouponExhaustedException;
 import com.shop.core.coupon.exception.CouponIssuanceNotAllowedException;
 import com.shop.core.coupon.exception.CouponStatusChangeNotAllowedException;
+import com.shop.core.coupon.exception.InsufficientCouponQuantityException;
 import com.shop.core.issuedCoupon.domain.IssuedCoupon;
 import com.shop.core.issuedCoupon.domain.IssuedCouponStatus;
 import org.junit.jupiter.api.DisplayName;
@@ -62,16 +63,18 @@ public class CouponTest {
             @DisplayName("잔여 발급 횟수가 남아있지 않는 경우 쿠폰을 발급할 수 없다.")
             void 잔여_발급_횟수_남지_않음() {
                 String adminEmail = "admin001@gmail.com";
-                Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 0, LocalDateTime.now(), CouponStatus.ISSUABLE, adminEmail);
+                Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.ISSUABLE, adminEmail);
 
-                String memberEmail = "member001@gmail.com";
-                IssuedCoupon issuedCoupon = new IssuedCoupon(memberEmail, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
+                String 첫번째_회원_이메일 = "member001@gmail.com";
+                String 두번째_회원_이메일 = "member002@gmail.com";
+                IssuedCoupon 첫번째_발급할_쿠폰_정보 = new IssuedCoupon(첫번째_회원_이메일, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
+                IssuedCoupon 두번째_발급할_쿠폰_정보 = new IssuedCoupon(두번째_회원_이메일, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
 
-                assertThatExceptionOfType(CouponExhaustedException.class)
+                assertThatExceptionOfType(InsufficientCouponQuantityException.class)
                         .isThrownBy(() -> {
-                            coupon.issue(List.of(issuedCoupon));
+                            coupon.issue(List.of(첫번째_발급할_쿠폰_정보, 두번째_발급할_쿠폰_정보));
                         })
-                        .withMessageMatching(ErrorType.COUPON_EXHAUSTED.getMessage());
+                        .withMessageMatching(ErrorType.COUPON_INSUFFICIENT.getMessage());
             }
 
             @Test
