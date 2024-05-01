@@ -4,6 +4,7 @@ import com.shop.common.exception.ErrorType;
 import com.shop.core.coupon.exception.CouponExhaustedException;
 import com.shop.core.coupon.exception.CouponIssuanceNotAllowedException;
 import com.shop.core.coupon.exception.CouponStatusChangeNotAllowedException;
+import com.shop.core.coupon.exception.InsufficientCouponQuantityException;
 import com.shop.core.issuedCoupon.domain.IssuedCoupon;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -66,14 +67,17 @@ public class Coupon {
     }
 
     public void issue(List<IssuedCoupon> issuedCoupons) {
-        checkRemainingIssueCoupon(issuedCoupons);
         checkIssuableStatus();
+        checkRemainingIssueCoupon(issuedCoupons);
 
         this.issuedCoupons.addAll(issuedCoupons);
         this.remainingIssueCount -= issuedCoupons.size();
     }
 
     private void checkIssuableStatus() {
+        if (this.couponStatus == CouponStatus.EXHAUSTED) {
+            throw new CouponExhaustedException(ErrorType.COUPON_EXHAUSTED);
+        }
         if (this.couponStatus != CouponStatus.ISSUABLE) {
             throw new CouponIssuanceNotAllowedException(ErrorType.COUPON_ISSUANCE_NOT_ALLOWED);
         }
@@ -82,7 +86,7 @@ public class Coupon {
     // TODO: 쿠폰이 소진된 상태인지, 발급 가능한 쿠폰이 없는지 구분할 것
     private void checkRemainingIssueCoupon(List<IssuedCoupon> issuedCoupons) {
         if (remainingIssueCount < issuedCoupons.size()) {
-            throw new CouponExhaustedException(ErrorType.COUPON_EXHAUSTED);
+            throw new InsufficientCouponQuantityException(ErrorType.COUPON_INSUFFICIENT);
         }
     }
 

@@ -29,7 +29,6 @@ public enum CouponStatus {
         if (this == STOPPED_ISSUANCE) {
             return statusToChange == ISSUABLE || statusToChange == CouponStatus.DELETED;
         }
-
         return false;
     }
 }

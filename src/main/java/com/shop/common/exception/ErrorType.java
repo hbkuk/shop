@@ -15,9 +15,10 @@ public enum ErrorType {
     NOT_FOUND_ADDRESS(4001, "존재하지 않는 주소록입니다."),
 
     NOT_FOUND_COUPON(5001, "존재하지 않는 쿠폰입니다."),
-    COUPON_EXHAUSTED(5002, "발급 가능한 쿠폰이 없습니다."),
-    COUPON_STATUS_CHANGE_NOT_ALLOWED(5003, "쿠폰의 상태를 변경할 수 없습니다."),
-    COUPON_ISSUANCE_NOT_ALLOWED(5004, "쿠폰을 발급할 수 없는 상태입니다."),
+    COUPON_INSUFFICIENT(5002, "발급 가능한 쿠폰의 수량이 부족합니다."),
+    COUPON_EXHAUSTED(5003, "모든 쿠폰이 소진되었습니다."),
+    COUPON_STATUS_CHANGE_NOT_ALLOWED(5004, "쿠폰의 상태를 변경할 수 없습니다."),
+    COUPON_ISSUANCE_NOT_ALLOWED(5005, "쿠폰을 발급할 수 없는 상태입니다."),
 
     NOT_FOUND_NOTIFICATION(6001, "존재하지 않는 알림입니다."),
     CANNOT_NOTIFICATION_READ(6002, "확인할 수 없는 알림입니다."),
