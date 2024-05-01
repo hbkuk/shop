@@ -81,6 +81,7 @@ public class CouponServiceTest extends ApplicationTest {
         @Nested
         class 성공 {
 
+            // TODO: 모든 Thread가 tryTimes 시도했음에도 발급 실패한 경우, 테스트 코드가 실행하는 상황 발생
             @Test
             @DisplayName("동시다발적으로 쿠폰을 발급한다.")
             void 동시에_쿠폰_발급_성공() throws InterruptedException {
