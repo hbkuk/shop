@@ -34,11 +34,9 @@ spring:
 
 logging:
   level:
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql: trace
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.transaction: DEBUG
+    org.hibernate.type.descriptor.sql: trace
 #    org.hibernate.stat: debug
 
 security:

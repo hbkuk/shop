@@ -13,7 +13,6 @@ import com.shop.core.coupon.domain.CouponRepository;
 import com.shop.core.coupon.domain.CouponStatus;
 import com.shop.core.coupon.exception.InsufficientCouponQuantityException;
 import com.shop.core.coupon.presentation.dto.CouponRequest;
-import com.shop.core.issuedCoupon.domain.IssuedCoupon;
 import com.shop.core.issuedCoupon.domain.IssuedCouponRepository;
 import com.shop.core.issuedCoupon.presentation.dto.CouponIssueRequest;
 import com.shop.core.member.domain.Member;
@@ -62,18 +61,22 @@ public class CouponAndNotificationServiceTest extends ApplicationTest {
         @Nested
         class 성공 {
 
-            Member 생성된_회원;
+            Member 첫번째_생성된_회원;
+            Member 두번째_생성된_회원;
+
             Admin 생성된_관리자;
 
             Coupon 등록된_쿠폰;
 
             @BeforeEach
             void 사전_준비() {
-                생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
+                첫번째_생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
+                두번째_생성된_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
+
                 생성된_관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
 
                 CouponRequest 등록할_쿠폰_정보 =
-                        CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 100);
+                        CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 2);
                 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
             }
 
@@ -81,22 +84,13 @@ public class CouponAndNotificationServiceTest extends ApplicationTest {
             @DisplayName("쿠폰이 발급된 경우, 알림이 발송된다.")
             void 쿠폰_정상_발급_시_알림_발송() {
                 // given
-                CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(생성된_회원.getEmail()));
+                CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getEmail(), 두번째_생성된_회원.getEmail()));
 
-                // when
+                // when, then
                 couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
 
-                // then
-                List<IssuedCoupon> 발급된_쿠폰_목록 = issuedCouponRepository.findByCoupon(등록된_쿠폰);
-                List<String> 발급된_쿠폰_목록의_회원_이메일 = 발급된_쿠폰_목록.stream().map(IssuedCoupon::getMemberEmail).collect(Collectors.toList());
-
-                List<Notification> 발송된_알림_목록 = notificationRepository.findByNotificationType(NotificationType.COUPON_ISSUANCE);
-                List<String> 발송된_알림_목록의_회원_이메일 = 발송된_알림_목록.stream().map(Notification::getMemberEmail).collect(Collectors.toList());
-
-                assertThat(발급된_쿠폰_목록의_회원_이메일).containsExactlyInAnyOrder(생성된_회원.getEmail());
-                assertThat(발송된_알림_목록의_회원_이메일).containsExactlyInAnyOrder(생성된_회원.getEmail());
+                assertThat(모든_쿠폰_알림_발송의_회원_이메일_가져오기()).containsExactlyInAnyOrder(첫번째_생성된_회원.getEmail(), 두번째_생성된_회원.getEmail());
             }
-
         }
 
         @Nested
@@ -107,40 +101,40 @@ public class CouponAndNotificationServiceTest extends ApplicationTest {
 
             Admin 생성된_관리자;
 
+            Coupon 등록된_쿠폰;
+
             @BeforeEach
             void 사전_준비() {
                 첫번째_생성된_회원 = 회원_생성(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
                 두번째_생성된_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
 
                 생성된_관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
+
+                CouponRequest 등록할_쿠폰_정보 =
+                        CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1);
+                등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
             }
 
             @Test
             @DisplayName("쿠폰이 발급에 실패한 경우, 알림이 발송되지 않는다.")
             void 쿠폰_발급_실패() {
                 // given
-                CouponRequest 등록할_쿠폰_정보 =
-                        CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1);
-                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
+                CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getEmail(), 두번째_생성된_회원.getEmail()));
 
                 // when, then
-                CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getEmail(), 두번째_생성된_회원.getEmail()));
                 assertThatExceptionOfType(InsufficientCouponQuantityException.class)
                         .isThrownBy(() -> {
                             couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
                         })
                         .withMessageMatching(ErrorType.COUPON_INSUFFICIENT.getMessage());
 
-                // then
-                List<IssuedCoupon> 발급된_쿠폰_목록 = issuedCouponRepository.findByCoupon(등록된_쿠폰);
-                List<String> 발급된_쿠폰_목록의_회원_이메일 = 발급된_쿠폰_목록.stream().map(IssuedCoupon::getMemberEmail).collect(Collectors.toList());
-
-                List<Notification> 발송된_알림_목록 = notificationRepository.findByNotificationType(NotificationType.COUPON_ISSUANCE);
-                List<String> 발송된_알림_목록의_회원_이메일 = 발송된_알림_목록.stream().map(Notification::getMemberEmail).collect(Collectors.toList());
-
-                assertThat(발급된_쿠폰_목록의_회원_이메일).isEmpty();
-                assertThat(발송된_알림_목록의_회원_이메일).isEmpty();
+                assertThat(모든_쿠폰_알림_발송의_회원_이메일_가져오기()).isEmpty();
             }
         }
+    }
+
+    private List<String> 모든_쿠폰_알림_발송의_회원_이메일_가져오기() {
+        List<Notification> 발송된_알림_목록 = notificationRepository.findByNotificationType(NotificationType.COUPON_ISSUANCE);
+        return 발송된_알림_목록.stream().map(Notification::getMemberEmail).collect(Collectors.toList());
     }
 }
