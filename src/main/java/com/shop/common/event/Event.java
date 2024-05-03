@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Event {
 
