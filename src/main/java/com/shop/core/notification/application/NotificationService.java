@@ -41,9 +41,9 @@ public class NotificationService {
     }
 
     @Transactional
-    public void send(List<String> memberEmails, LoginUser loginAdmin, NotificationType notificationType) {
+    public void send(List<String> memberEmails, String adminEmail, NotificationType notificationType) {
         memberEmails.forEach(memberEmail -> {
-            send(NotificationRequest.of(notificationType, memberEmail), loginAdmin);
+            send(NotificationRequest.of(notificationType, memberEmail), LoginUser.of(adminEmail));
         });
     }
 
