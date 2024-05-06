@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 public class NotificationController {
@@ -27,6 +29,13 @@ public class NotificationController {
     public ResponseEntity<NotificationResponse> findById(@PathVariable Long notificationId,
                                                          @AuthenticationPrincipal LoginUser loginMember) {
         NotificationResponse response = notificationService.findById(notificationId, loginMember);
+        return ResponseEntity.ok(response);
+    }
+
+    // TODO: admin controller 이동
+    @GetMapping("/notifications")
+    public ResponseEntity<List<NotificationResponse>> findAll(@AuthenticationPrincipal LoginUser loginAdmin) {
+        List<NotificationResponse> response = notificationService.findAll(loginAdmin);
         return ResponseEntity.ok(response);
     }
 }

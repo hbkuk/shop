@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +24,18 @@ public class NotificationResponse {
     @JsonProperty("notification_status")
     private NotificationStatus notificationStatus;
 
+    @JsonProperty("member_email")
+    private String memberEmail;
+
     public static NotificationResponse of(Notification notification) {
-        return new NotificationResponse(notification.getId(), notification.getNotificationType(), notification.getNotificationStatus());
+        return new NotificationResponse(notification.getId(), notification.getNotificationType(), notification.getNotificationStatus(), notification.getMemberEmail());
+    }
+
+    public static List<NotificationResponse> of(List<Notification> notifications) {
+        List<NotificationResponse> responses = new ArrayList<>();
+        notifications.forEach(notification -> {
+            responses.add(NotificationResponse.of(notification));
+        });
+        return responses;
     }
 }

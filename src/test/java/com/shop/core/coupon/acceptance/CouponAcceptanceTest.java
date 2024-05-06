@@ -105,7 +105,7 @@ public class CouponAcceptanceTest extends UserAcceptanceTest {
             void 쿠폰_발급_성공() {
                 // when
                 var 쿠폰_발급할_회원_번호_목록 = CouponIssueRequest.of(List.of(생성된_첫번째_회원.getEmail(), 생성된_두번째_회원.getEmail()));
-                쿠폰_발급_요청_토큰_포함(관리자_깃허브_토큰, 쿠폰_발급할_회원_번호_목록, 쿠폰_추가_요청_응답);
+                성공하는_쿠폰_발급_요청_토큰_포함(관리자_깃허브_토큰, 쿠폰_발급할_회원_번호_목록, 쿠폰_추가_요청_응답);
 
                 // then
                 쿠폰_발급_확인(관리자_깃허브_토큰, 쿠폰_추가_요청_응답, List.of(생성된_첫번째_회원, 생성된_두번째_회원));

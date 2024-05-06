@@ -56,7 +56,7 @@ public class CouponSteps {
                 .extract();
     }
 
-    public static void 쿠폰_발급_요청_토큰_포함(String 토큰_정보, CouponIssueRequest 쿠폰_발급할_회원_번호_목록, ExtractableResponse<Response> 쿠폰_추가_요청_응답) {
+    public static void 성공하는_쿠폰_발급_요청_토큰_포함(String 토큰_정보, CouponIssueRequest 쿠폰_발급할_회원_번호_목록, ExtractableResponse<Response> 쿠폰_추가_요청_응답) {
         given().log().all()
                 .header("Authorization", 토큰_정보)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -65,6 +65,18 @@ public class CouponSteps {
                 .post("/coupons/{couponId}/issue", getCreatedLocationId(쿠폰_추가_요청_응답))
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
+                .extract();
+    }
+
+    public static void 실패하는_쿠폰_발급_요청_토큰_포함(String 토큰_정보, CouponIssueRequest 쿠폰_발급할_회원_번호_목록, ExtractableResponse<Response> 쿠폰_추가_요청_응답) {
+        given().log().all()
+                .header("Authorization", 토큰_정보)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(쿠폰_발급할_회원_번호_목록)
+                .when()
+                .post("/coupons/{couponId}/issue", getCreatedLocationId(쿠폰_추가_요청_응답))
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
                 .extract();
     }
 
@@ -82,6 +94,19 @@ public class CouponSteps {
 
 
         assertThat(발급된_쿠폰의_회원_번호).containsAnyElementsOf(회원_이메일);
+    }
+
+    public static void 쿠폰_미발급_확인(String 토큰_정보, ExtractableResponse<Response> 쿠폰_추가_요청_응답) {
+        ExtractableResponse<Response> 발급된_쿠폰_조회_응답 = given().log().all()
+                .header("Authorization", 토큰_정보)
+                .when()
+                .get("/coupons/{couponId}/issue", getCreatedLocationId(쿠폰_추가_요청_응답))
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .extract();
+
+        List<String> 발급된_쿠폰의_회원_번호 = 발급된_쿠폰_조회_응답.jsonPath().getList("issued_member_emails", String.class);
+        assertThat(발급된_쿠폰의_회원_번호).isEmpty();
     }
 
     public static void 쿠폰_발급_요청_토큰_미포함(CouponIssueRequest 쿠폰_발급할_회원_번호_목록, ExtractableResponse<Response> 쿠폰_추가_요청_응답) {

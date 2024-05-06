@@ -69,6 +69,13 @@ public class NotificationService {
         return NotificationResponse.of(notification);
     }
 
+    public List<NotificationResponse> findAll(LoginUser loginAdmin) {
+        verifyAdmin(loginAdmin);
+
+        List<Notification> notifications = notificationRepository.findAll();
+        return NotificationResponse.of(notifications);
+    }
+
     private void verifyAdmin(LoginUser loginUser) {
         adminAuthService.findAdminByEmail(loginUser.getEmail());
     }
