@@ -13,15 +13,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
 import static com.shop.core.coupon.step.CouponSteps.*;
 import static com.shop.core.member.fixture.MemberFixture.스미스;
 import static com.shop.core.member.fixture.MemberFixture.윌리엄스;
-import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.shop.core.notification.step.NotificationSteps.알림_발송_없음_확인;
+import static com.shop.core.notification.step.NotificationSteps.알림_발송_확인;
 
 @DisplayName("쿠폰과 알림 인수 테스트")
 public class CouponAndNotificationAcceptanceTest extends UserAcceptanceTest {
@@ -65,16 +64,7 @@ public class CouponAndNotificationAcceptanceTest extends UserAcceptanceTest {
                 쿠폰_발급_확인(관리자_깃허브_토큰, 쿠폰_추가_요청_응답, List.of(생성된_첫번째_회원, 생성된_두번째_회원));
 
                 // then
-                ExtractableResponse<Response> 발송된_모든_알림_조회_응답 = given().log().all()
-                        .header("Authorization", 관리자_깃허브_토큰)
-                        .when()
-                        .get("/notifications")
-                        .then().log().all()
-                        .statusCode(HttpStatus.OK.value())
-                        .extract();
-
-                List<String> memberEmails = 발송된_모든_알림_조회_응답.jsonPath().getList("member_email");
-                assertThat(memberEmails).containsAnyElementsOf(List.of(생성된_첫번째_회원.getEmail(), 생성된_두번째_회원.getEmail()));
+                알림_발송_확인(관리자_깃허브_토큰, List.of(생성된_첫번째_회원.getEmail(), 생성된_두번째_회원.getEmail()));
             }
         }
 
@@ -100,16 +90,7 @@ public class CouponAndNotificationAcceptanceTest extends UserAcceptanceTest {
                 쿠폰_미발급_확인(관리자_깃허브_토큰, 쿠폰_추가_요청_응답);
 
                 // then
-                ExtractableResponse<Response> 발송된_모든_알림_조회_응답 = given().log().all()
-                        .header("Authorization", 관리자_깃허브_토큰)
-                        .when()
-                        .get("/notifications")
-                        .then().log().all()
-                        .statusCode(HttpStatus.OK.value())
-                        .extract();
-
-                List<String> memberEmails = 발송된_모든_알림_조회_응답.jsonPath().getList("member_email");
-                assertThat(memberEmails).isEmpty();
+                알림_발송_없음_확인(관리자_깃허브_토큰);
             }
         }
 
