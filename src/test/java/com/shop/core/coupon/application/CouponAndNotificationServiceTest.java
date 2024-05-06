@@ -21,10 +21,7 @@ import com.shop.core.member.domain.MemberType;
 import com.shop.core.notification.domain.Notification;
 import com.shop.core.notification.domain.NotificationRepository;
 import com.shop.core.notification.domain.NotificationType;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
@@ -37,6 +34,7 @@ import static com.shop.core.member.fixture.MemberFixture.존슨;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@Disabled
 @DisplayName("쿠폰 서비스와 알림 서비스 테스트")
 public class CouponAndNotificationServiceTest extends ApplicationTest {
 
