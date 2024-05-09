@@ -7,12 +7,12 @@ import com.shop.core.coupon.exception.CouponIssuanceNotAllowedException;
 import com.shop.core.coupon.exception.CouponStatusChangeNotAllowedException;
 import com.shop.core.coupon.exception.InsufficientCouponQuantityException;
 import com.shop.core.issuedCoupon.domain.IssuedCoupon;
+import com.shop.core.issuedCoupon.domain.IssuedCoupons;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -40,8 +40,8 @@ public class Coupon extends BaseEntity {
     @JoinColumn(name = "ADMIN_EMAIL")
     private String issuerAdminEmail;
 
-    @OneToMany(mappedBy = "coupon", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
-    private final List<IssuedCoupon> issuedCoupons = new ArrayList<>();
+    @Embedded
+    private IssuedCoupons issuedCoupons = new IssuedCoupons();
 
     @Version
     private Integer version;
@@ -93,5 +93,9 @@ public class Coupon extends BaseEntity {
 
         this.couponStatus = status;
         return this;
+    }
+
+    public List<IssuedCoupon> getIssuedCoupons() {
+        return this.issuedCoupons.getIssuedCoupons();
     }
 }
