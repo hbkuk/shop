@@ -63,15 +63,16 @@ public class Coupon extends BaseEntity {
         }
     }
 
+
     public void issue(List<IssuedCoupon> issuedCoupons) {
-        checkIssuableStatus();
-        checkRemainingIssueCoupon(issuedCoupons);
+        verifyIssuable();
+        verifyCountSufficient(issuedCoupons);
 
         this.issuedCoupons.addAll(issuedCoupons);
         this.remainingIssueCount -= issuedCoupons.size();
     }
 
-    private void checkIssuableStatus() {
+    private void verifyIssuable() {
         if (this.couponStatus == CouponStatus.EXHAUSTED) {
             throw new CouponExhaustedException(ErrorType.COUPON_EXHAUSTED);
         }
@@ -80,7 +81,7 @@ public class Coupon extends BaseEntity {
         }
     }
 
-    private void checkRemainingIssueCoupon(List<IssuedCoupon> issuedCoupons) {
+    private void verifyCountSufficient(List<IssuedCoupon> issuedCoupons) {
         if (remainingIssueCount < issuedCoupons.size()) {
             throw new InsufficientCouponQuantityException(ErrorType.COUPON_INSUFFICIENT);
         }
