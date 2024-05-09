@@ -29,7 +29,7 @@ public class CouponTest {
             @DisplayName("잔여 발급 횟수가 남아있을 경우 쿠폰을 발급할 수 있다.")
             void 잔여_발급_횟수_남아있음() {
                 String adminEmail = "admin001@gmail.com";
-                Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.ISSUABLE, adminEmail);
+                Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.ISSUABLE, adminEmail);
 
                 String memberEmail = "member001@gmail.com";
                 IssuedCoupon issuedCoupon = new IssuedCoupon(memberEmail, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
@@ -44,7 +44,7 @@ public class CouponTest {
             @DisplayName("발급 가능한 상태일 경우 쿠폰을 발급할 수 있다.")
             void 발급_가능한_상태() {
                 String adminEmail = "admin001@gmail.com";
-                Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.ISSUABLE, adminEmail);
+                Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.ISSUABLE, adminEmail);
 
                 String memberEmail = "member001@gmail.com";
                 IssuedCoupon issuedCoupon = new IssuedCoupon(memberEmail, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
@@ -63,7 +63,7 @@ public class CouponTest {
             @DisplayName("잔여 발급 횟수가 남아있지 않는 경우 쿠폰을 발급할 수 없다.")
             void 잔여_발급_횟수_남지_않음() {
                 String adminEmail = "admin001@gmail.com";
-                Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.ISSUABLE, adminEmail);
+                Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.ISSUABLE, adminEmail);
 
                 String 첫번째_회원_이메일 = "member001@gmail.com";
                 String 두번째_회원_이메일 = "member002@gmail.com";
@@ -81,7 +81,7 @@ public class CouponTest {
             @DisplayName("발급 중지 상태에서 쿠폰을 발급할 수 없다.")
             void 발급_중지_상태에서_쿠폰_발급() {
                 String adminEmail = "admin001@gmail.com";
-                Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.STOPPED_ISSUANCE, adminEmail);
+                Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.STOPPED_ISSUANCE, adminEmail);
 
                 String memberEmail = "member001@gmail.com";
                 IssuedCoupon issuedCoupon = new IssuedCoupon(memberEmail, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
@@ -97,7 +97,7 @@ public class CouponTest {
             @DisplayName("삭제 상태에서 쿠폰을 발급할 수 없다.")
             void 삭제_상태에서_쿠폰_발급() {
                 String adminEmail = "admin001@gmail.com";
-                Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.DELETED, adminEmail);
+                Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.DELETED, adminEmail);
 
                 String memberEmail = "member001@gmail.com";
                 IssuedCoupon issuedCoupon = new IssuedCoupon(memberEmail, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
@@ -113,7 +113,7 @@ public class CouponTest {
             @DisplayName("소진 상태에서 쿠폰을 발급할 수 없다.")
             void 소진_상태에서_쿠폰_발급() {
                 String adminEmail = "admin001@gmail.com";
-                Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 0, LocalDateTime.now(), CouponStatus.EXHAUSTED, adminEmail);
+                Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 0, CouponStatus.EXHAUSTED, adminEmail);
 
                 String memberEmail = "member001@gmail.com";
                 IssuedCoupon issuedCoupon = new IssuedCoupon(memberEmail, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, coupon);
@@ -140,7 +140,7 @@ public class CouponTest {
                 @DisplayName("발급 가능 상태에서 발급 중지 상태로 변경할 수 있다.")
                 void 발급_중지_상태로_변경() {
                     String adminEmail = "admin001@gmail.com";
-                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.ISSUABLE, adminEmail);
+                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.ISSUABLE, adminEmail);
 
                     Coupon updatedCoupon = coupon.updateStatus(CouponStatus.STOPPED_ISSUANCE);
 
@@ -151,7 +151,7 @@ public class CouponTest {
                 @DisplayName("발급 가능 상태에서 삭제 상태로 변경할 수 있다.")
                 void 삭제_상태로_변경() {
                     String adminEmail = "admin001@gmail.com";
-                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.ISSUABLE, adminEmail);
+                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.ISSUABLE, adminEmail);
 
                     Coupon updatedCoupon = coupon.updateStatus(CouponStatus.DELETED);
 
@@ -166,7 +166,7 @@ public class CouponTest {
                 @DisplayName("발급 중지 상태에서 발급 가능 상태로 변경할 수 있다.")
                 void 발급_가능_상태로_변경() {
                     String adminEmail = "admin001@gmail.com";
-                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.STOPPED_ISSUANCE, adminEmail);
+                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.STOPPED_ISSUANCE, adminEmail);
 
                     Coupon updatedCoupon = coupon.updateStatus(CouponStatus.ISSUABLE);
 
@@ -177,7 +177,7 @@ public class CouponTest {
                 @DisplayName("발급 중지 상태에서 삭제 상태로 변경할 수 있다.")
                 void 삭제_상태로_변경() {
                     String adminEmail = "admin001@gmail.com";
-                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.STOPPED_ISSUANCE, adminEmail);
+                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.STOPPED_ISSUANCE, adminEmail);
 
                     Coupon updatedCoupon = coupon.updateStatus(CouponStatus.DELETED);
 
@@ -196,7 +196,7 @@ public class CouponTest {
                 @DisplayName("발급 가능 상태에서 소진 상태로 변경할 수 없다.")
                 void 소진_상태로_변경() {
                     String adminEmail = "admin001@gmail.com";
-                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.ISSUABLE, adminEmail);
+                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.ISSUABLE, adminEmail);
 
                     assertThatExceptionOfType(CouponStatusChangeNotAllowedException.class)
                             .isThrownBy(() -> {
@@ -213,7 +213,7 @@ public class CouponTest {
                 @DisplayName("발급 중지 상태에서 소진 상태로 변경할 수 없다.")
                 void 소진_상태로_변경() {
                     String adminEmail = "admin001@gmail.com";
-                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.STOPPED_ISSUANCE, adminEmail);
+                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.STOPPED_ISSUANCE, adminEmail);
 
                     assertThatExceptionOfType(CouponStatusChangeNotAllowedException.class)
                             .isThrownBy(() -> {
@@ -230,7 +230,7 @@ public class CouponTest {
                 @DisplayName("삭제 상태에서 발급 가능 상태로 변경할 수 없다.")
                 void 발급_가능_상태로_변경() {
                     String adminEmail = "admin001@gmail.com";
-                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.DELETED, adminEmail);
+                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.DELETED, adminEmail);
 
                     assertThatExceptionOfType(CouponStatusChangeNotAllowedException.class)
                             .isThrownBy(() -> {
@@ -243,7 +243,7 @@ public class CouponTest {
                 @DisplayName("삭제 상태에서 발급 중지 상태로 변경할 수 없다.")
                 void 발급_중지_상태로_변경() {
                     String adminEmail = "admin001@gmail.com";
-                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.DELETED, adminEmail);
+                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.DELETED, adminEmail);
 
                     assertThatExceptionOfType(CouponStatusChangeNotAllowedException.class)
                             .isThrownBy(() -> {
@@ -256,7 +256,7 @@ public class CouponTest {
                 @DisplayName("삭제 상태에서 소진 상태로 변경할 수 없다.")
                 void 소진_상태로_변경() {
                     String adminEmail = "admin001@gmail.com";
-                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.DELETED, adminEmail);
+                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.DELETED, adminEmail);
 
                     assertThatExceptionOfType(CouponStatusChangeNotAllowedException.class)
                             .isThrownBy(() -> {
@@ -273,7 +273,7 @@ public class CouponTest {
                 @DisplayName("소진 상태에서 발급 가능 상태로 변경할 수 없다.")
                 void 발급_가능_상태로_변경() {
                     String adminEmail = "admin001@gmail.com";
-                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.EXHAUSTED, adminEmail);
+                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.EXHAUSTED, adminEmail);
 
                     assertThatExceptionOfType(CouponStatusChangeNotAllowedException.class)
                             .isThrownBy(() -> {
@@ -286,7 +286,7 @@ public class CouponTest {
                 @DisplayName("소진 상태에서 발급 중지 상태로 변경할 수 없다.")
                 void 발급_중지_상태로_변경() {
                     String adminEmail = "admin001@gmail.com";
-                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.EXHAUSTED, adminEmail);
+                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.EXHAUSTED, adminEmail);
 
                     assertThatExceptionOfType(CouponStatusChangeNotAllowedException.class)
                             .isThrownBy(() -> {
@@ -299,7 +299,7 @@ public class CouponTest {
                 @DisplayName("소진 상태에서 삭제 상태로 변경할 수 없다.")
                 void 삭제_상태로_변경() {
                     String adminEmail = "admin001@gmail.com";
-                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, LocalDateTime.now(), CouponStatus.EXHAUSTED, adminEmail);
+                    Coupon coupon = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1, CouponStatus.EXHAUSTED, adminEmail);
 
                     assertThatExceptionOfType(CouponStatusChangeNotAllowedException.class)
                             .isThrownBy(() -> {

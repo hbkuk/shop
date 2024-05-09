@@ -26,7 +26,6 @@ import com.shop.core.member.exception.NotFoundMemberException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -72,7 +71,7 @@ public class CouponServiceTest extends ApplicationTest {
             초기_잔여_발급_쿠폰_개수 = 2;
             CouponRequest 등록할_쿠폰_정보 =
                     CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 초기_잔여_발급_쿠폰_개수);
-            쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 관리자.getEmail()));
+            쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(CouponStatus.ISSUABLE, 관리자.getEmail()));
         }
 
         @Disabled
@@ -135,7 +134,7 @@ public class CouponServiceTest extends ApplicationTest {
 
                     CouponRequest 등록할_쿠폰_정보 =
                             CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 100);
-                    등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
+                    등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
                 }
 
                 @Test
@@ -169,7 +168,7 @@ public class CouponServiceTest extends ApplicationTest {
 
                     CouponRequest 등록할_쿠폰_정보 =
                             CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 100);
-                    등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
+                    등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
                 }
 
                 @Test
@@ -213,7 +212,7 @@ public class CouponServiceTest extends ApplicationTest {
                 // given
                 CouponRequest 등록할_쿠폰_정보 =
                         CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1);
-                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
+                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
 
                 // when, then
                 CouponIssueRequest 발급할_첫번째_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getEmail()));
@@ -233,7 +232,7 @@ public class CouponServiceTest extends ApplicationTest {
                 // when, then
                 CouponRequest 등록할_쿠폰_정보 =
                         CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1);
-                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
+                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
 
                 CouponIssueRequest 발급할_첫번째_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(존재하지_않는_회원_이메일));
                 assertThatExceptionOfType(NotFoundMemberException.class)
@@ -249,7 +248,7 @@ public class CouponServiceTest extends ApplicationTest {
                 // when
                 CouponRequest 등록할_쿠폰_정보 =
                         CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 100);
-                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 존재하지_않는_관리자_이메일));
+                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(CouponStatus.ISSUABLE, 존재하지_않는_관리자_이메일));
 
                 CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getEmail()));
                 assertThatExceptionOfType(NotFoundAdminException.class)
@@ -293,7 +292,7 @@ public class CouponServiceTest extends ApplicationTest {
                 // given
                 CouponRequest 등록할_쿠폰_정보 =
                         CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 100);
-                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
+                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
 
                 // when
                 CouponStatusRequest 쿠폰_상태_변경_정보 = CouponStatusRequest.of(등록된_쿠폰.getId(), CouponStatus.DELETED);
@@ -314,7 +313,7 @@ public class CouponServiceTest extends ApplicationTest {
                 // given
                 CouponRequest 등록할_쿠폰_정보 =
                         CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 100);
-                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 존재하지_않는_관리자_이메일));
+                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(CouponStatus.ISSUABLE, 존재하지_않는_관리자_이메일));
 
                 // when, then
                 CouponStatusRequest 쿠폰_상태_변경_정보 = CouponStatusRequest.of(등록된_쿠폰.getId(), CouponStatus.DELETED);
@@ -364,7 +363,7 @@ public class CouponServiceTest extends ApplicationTest {
                 // given
                 CouponRequest 등록할_쿠폰_정보 =
                         CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1);
-                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
+                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
 
                 CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getEmail()));
                 couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
@@ -387,7 +386,7 @@ public class CouponServiceTest extends ApplicationTest {
                 // given
                 CouponRequest 등록할_쿠폰_정보 =
                         CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 2);
-                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
+                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
 
                 // when
                 CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getEmail()));

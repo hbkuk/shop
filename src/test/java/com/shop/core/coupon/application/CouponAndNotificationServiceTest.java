@@ -24,7 +24,6 @@ import com.shop.core.notification.domain.NotificationType;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,7 +74,7 @@ public class CouponAndNotificationServiceTest extends ApplicationTest {
 
                 CouponRequest 등록할_쿠폰_정보 =
                         CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 2);
-                등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
+                등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
             }
 
             @Test
@@ -110,7 +109,7 @@ public class CouponAndNotificationServiceTest extends ApplicationTest {
 
                 CouponRequest 등록할_쿠폰_정보 =
                         CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 1);
-                등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(LocalDateTime.now(), CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
+                등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
             }
 
             @Test

@@ -102,7 +102,6 @@ public class CouponService {
     }
 
     private Coupon createCoupon(CouponRequest request, String adminEmail) {
-        LocalDateTime createdAt = LocalDateTime.now();
-        return request.toEntity(createdAt, CouponStatus.ISSUABLE, adminEmail);
+        return request.toEntity(CouponStatus.ISSUABLE, adminEmail);
     }
 }

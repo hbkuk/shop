@@ -17,7 +17,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -36,15 +35,13 @@ public class NotificationService {
         verifyAdmin(loginAdmin);
         verifyMemberByEmail(request.getMemberEmail());
 
-        Notification notification = new Notification(request.getNotificationType(), LocalDateTime.now(), NotificationStatus.UNREAD, request.getMemberEmail(), loginAdmin.getEmail());
+        Notification notification = new Notification(request.getNotificationType(), NotificationStatus.UNREAD, request.getMemberEmail(), loginAdmin.getEmail());
         return NotificationResponse.of(notificationRepository.save(notification));
     }
 
     @Transactional
     public void send(List<String> memberEmails, String adminEmail, NotificationType notificationType) {
-        memberEmails.forEach(memberEmail -> {
-            send(NotificationRequest.of(notificationType, memberEmail), LoginUser.of(adminEmail));
-        });
+        memberEmails.forEach(memberEmail -> send(NotificationRequest.of(notificationType, memberEmail), LoginUser.of(adminEmail)));
     }
 
     @Transactional

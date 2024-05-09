@@ -27,8 +27,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDateTime;
-
 import static com.shop.core.admin.auth.fixture.AdminGithubFixture.황병국;
 import static com.shop.core.member.fixture.MemberFixture.스미스;
 import static com.shop.core.member.fixture.MemberFixture.존슨;
@@ -127,7 +125,7 @@ public class NotificationServiceTest extends ApplicationTest {
             생성된_관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
 
             NotificationRequest 발송할_알림_정보 = NotificationRequest.of(NotificationType.EVENT_NOTIFICATION, 첫번째_생성된_회원.getEmail());
-            발송된_알림 = notificationRepository.save(발송할_알림_정보.toEntity(LocalDateTime.now(), 생성된_관리자.getEmail()));
+            발송된_알림 = notificationRepository.save(발송할_알림_정보.toEntity(생성된_관리자.getEmail()));
         }
 
 
@@ -176,7 +174,7 @@ public class NotificationServiceTest extends ApplicationTest {
             void 읽을_수_없는_알림_확인_실패() {
                 // given
                 Notification 발송_실패한_알림
-                        = new Notification(NotificationType.EVENT_NOTIFICATION, LocalDateTime.now(), NotificationStatus.FAILED, 첫번째_생성된_회원.getEmail(), 생성된_관리자.getEmail());
+                        = new Notification(NotificationType.EVENT_NOTIFICATION, NotificationStatus.FAILED, 첫번째_생성된_회원.getEmail(), 생성된_관리자.getEmail());
                 notificationRepository.save(발송_실패한_알림);
 
                 // when, then
@@ -208,7 +206,7 @@ public class NotificationServiceTest extends ApplicationTest {
             생성된_관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
 
             NotificationRequest 발송할_알림_정보 = NotificationRequest.of(NotificationType.EVENT_NOTIFICATION, 첫번째_생성된_회원.getEmail());
-            발송된_알림 = notificationRepository.save(발송할_알림_정보.toEntity(LocalDateTime.now(), 생성된_관리자.getEmail()));
+            발송된_알림 = notificationRepository.save(발송할_알림_정보.toEntity(생성된_관리자.getEmail()));
         }
 
         @Nested

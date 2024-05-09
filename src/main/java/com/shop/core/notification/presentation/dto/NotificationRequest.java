@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,7 +20,7 @@ public class NotificationRequest {
         return new NotificationRequest(type, memberEmail);
     }
 
-    public Notification toEntity(LocalDateTime notificationAt, String adminEmail) {
-        return new Notification(notificationType, notificationAt, NotificationStatus.UNREAD, memberEmail, adminEmail);
+    public Notification toEntity(String adminEmail) {
+        return new Notification(notificationType, NotificationStatus.UNREAD, memberEmail, adminEmail);
     }
 }

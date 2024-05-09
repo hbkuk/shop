@@ -56,7 +56,7 @@ public class MemberServiceTest extends ApplicationTest {
                 // then
                 assertThat(memberRepository.findByEmail(브라운.이메일).get())
                         .usingRecursiveComparison()
-                        .ignoringFields("id", "password")
+                        .ignoringFields("id", "password", "createdAt", "modifiedAt")
                         .isEqualTo(브라운_회원_생성_요청);
             }
 

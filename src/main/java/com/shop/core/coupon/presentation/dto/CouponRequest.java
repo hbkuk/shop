@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,7 +29,7 @@ public class CouponRequest {
         return new CouponRequest(name, description, maxDiscountAmount, discountAmount, remainingIssueCount);
     }
 
-    public Coupon toEntity(LocalDateTime createdAt, CouponStatus couponStatus, String adminEmail) {
-        return new Coupon(name, description, maxDiscountAmount, discountAmount, remainingIssueCount, createdAt, couponStatus, adminEmail);
+    public Coupon toEntity(CouponStatus couponStatus, String adminEmail) {
+        return new Coupon(name, description, maxDiscountAmount, discountAmount, remainingIssueCount, couponStatus, adminEmail);
     }
 }
