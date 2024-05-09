@@ -3,6 +3,7 @@ package com.shop.core.issuedCoupon.domain;
 import com.shop.common.entity.BaseEntity;
 import com.shop.core.coupon.domain.Coupon;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,5 +43,9 @@ public class IssuedCoupon extends BaseEntity {
         this.expiredAt = expiredAt;
         this.status = status;
         this.coupon = coupon;
+    }
+
+    public boolean isSameOwner(IssuedCoupon issuedCoupon) {
+        return memberEmail.equals(issuedCoupon.memberEmail);
     }
 }

@@ -79,11 +79,11 @@ public class CouponService {
         verifyMembersByEmail(request.getMemberEmails());
 
         Coupon coupon = couponRepository.findByCouponId(request.getCouponId());
-        List<IssuedCoupon> issuedCoupons = toIssuedCoupons(request, coupon);
-        coupon.issue(issuedCoupons);
+        List<IssuedCoupon> couponsToIssue = toIssuedCoupons(request, coupon);
+        coupon.issue(couponsToIssue);
 
         Event.publish(NotificationEvent.of(request.getMemberEmails(), loginAdmin.getEmail(), NotificationType.COUPON_ISSUANCE));
-        return CouponIssueResponse.of(issuedCoupons);
+        return CouponIssueResponse.of(couponsToIssue);
     }
 
     private List<IssuedCoupon> toIssuedCoupons(CouponIssueRequest request, Coupon coupon) {

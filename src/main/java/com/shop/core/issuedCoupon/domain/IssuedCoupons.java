@@ -16,7 +16,13 @@ public class IssuedCoupons {
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     private final List<IssuedCoupon> issuedCoupons = new ArrayList<>();
 
-    public void addAll(List<IssuedCoupon> issuedCoupons) {
-        this.issuedCoupons.addAll(issuedCoupons);
+    public void addAll(List<IssuedCoupon> couponsToIssue) {
+        this.issuedCoupons.addAll(couponsToIssue);
+    }
+
+    public boolean isAnyCouponAlreadyIssued(List<IssuedCoupon> couponsToIssue) {
+        return couponsToIssue.stream()
+                .anyMatch(couponToIssue -> issuedCoupons.stream()
+                        .anyMatch(couponToIssue::isSameOwner));
     }
 }

@@ -2,10 +2,7 @@ package com.shop.core.coupon.domain;
 
 import com.shop.common.entity.BaseEntity;
 import com.shop.common.exception.ErrorType;
-import com.shop.core.coupon.exception.CouponExhaustedException;
-import com.shop.core.coupon.exception.CouponIssuanceNotAllowedException;
-import com.shop.core.coupon.exception.CouponStatusChangeNotAllowedException;
-import com.shop.core.coupon.exception.InsufficientCouponQuantityException;
+import com.shop.core.coupon.exception.*;
 import com.shop.core.issuedCoupon.domain.IssuedCoupon;
 import com.shop.core.issuedCoupon.domain.IssuedCoupons;
 import lombok.AccessLevel;
@@ -64,12 +61,19 @@ public class Coupon extends BaseEntity {
     }
 
 
-    public void issue(List<IssuedCoupon> issuedCoupons) {
+    public void issue(List<IssuedCoupon> couponsToIssue) {
         verifyIssuable();
-        verifyCountSufficient(issuedCoupons);
+        verifyCountSufficient(couponsToIssue);
+        verifyAlreadyIssued(couponsToIssue);
 
-        this.issuedCoupons.addAll(issuedCoupons);
-        this.remainingIssueCount -= issuedCoupons.size();
+        this.issuedCoupons.addAll(couponsToIssue);
+        this.remainingIssueCount -= couponsToIssue.size();
+    }
+
+    private void verifyAlreadyIssued(List<IssuedCoupon> couponsToIssue) {
+        if (issuedCoupons.isAnyCouponAlreadyIssued(couponsToIssue)) {
+            throw new CouponAlreadyIssuedException(ErrorType.COUPON_ALREADY_ISSUED);
+        }
     }
 
     private void verifyIssuable() {
@@ -81,8 +85,8 @@ public class Coupon extends BaseEntity {
         }
     }
 
-    private void verifyCountSufficient(List<IssuedCoupon> issuedCoupons) {
-        if (remainingIssueCount < issuedCoupons.size()) {
+    private void verifyCountSufficient(List<IssuedCoupon> couponsToIssue) {
+        if (remainingIssueCount < couponsToIssue.size()) {
             throw new InsufficientCouponQuantityException(ErrorType.COUPON_INSUFFICIENT);
         }
     }
