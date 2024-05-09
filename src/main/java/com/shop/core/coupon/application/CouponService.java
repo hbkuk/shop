@@ -21,14 +21,12 @@ import com.shop.core.member.application.MemberService;
 import com.shop.core.notification.domain.NotificationEvent;
 import com.shop.core.notification.domain.NotificationType;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Slf4j
 @Service
 @AllArgsConstructor
 @Transactional(readOnly = true)
@@ -77,7 +75,6 @@ public class CouponService {
     @IsTryAgain
     @Transactional
     public CouponIssueResponse issueCoupon(CouponIssueRequest request, LoginUser loginAdmin) {
-        log.info(String.format("publish thread id: %s", Thread.currentThread().getId()));
         verifyAdminByEmail(loginAdmin);
         verifyMembersByEmail(request.getMemberEmails());
 
