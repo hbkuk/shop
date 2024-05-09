@@ -1,5 +1,6 @@
 package com.shop.core.coupon.domain;
 
+import com.shop.common.entity.BaseEntity;
 import com.shop.common.exception.ErrorType;
 import com.shop.core.coupon.exception.CouponExhaustedException;
 import com.shop.core.coupon.exception.CouponIssuanceNotAllowedException;
@@ -11,14 +12,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Coupon {
+public class Coupon extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,8 +34,6 @@ public class Coupon {
 
     private int remainingIssueCount;
 
-    private LocalDateTime createdAt;
-
     @Enumerated(EnumType.STRING)
     private CouponStatus couponStatus;
 
@@ -48,13 +46,12 @@ public class Coupon {
     @Version
     private Integer version;
 
-    public Coupon(String name, String description, int maxDiscountAmount, int discountAmount, int remainingIssueCount, LocalDateTime createdAt, CouponStatus couponStatus, String issuerAdminEmail) {
+    public Coupon(String name, String description, int maxDiscountAmount, int discountAmount, int remainingIssueCount, CouponStatus couponStatus, String issuerAdminEmail) {
         this.name = name;
         this.description = description;
         this.maxDiscountAmount = maxDiscountAmount;
         this.discountAmount = discountAmount;
         this.remainingIssueCount = remainingIssueCount;
-        this.createdAt = createdAt;
         this.couponStatus = couponStatus;
         this.issuerAdminEmail = issuerAdminEmail;
     }
@@ -83,7 +80,6 @@ public class Coupon {
         }
     }
 
-    // TODO: 쿠폰이 소진된 상태인지, 발급 가능한 쿠폰이 없는지 구분할 것
     private void checkRemainingIssueCoupon(List<IssuedCoupon> issuedCoupons) {
         if (remainingIssueCount < issuedCoupons.size()) {
             throw new InsufficientCouponQuantityException(ErrorType.COUPON_INSUFFICIENT);

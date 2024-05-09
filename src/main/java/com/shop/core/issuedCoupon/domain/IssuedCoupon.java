@@ -1,5 +1,6 @@
 package com.shop.core.issuedCoupon.domain;
 
+import com.shop.common.entity.BaseEntity;
 import com.shop.core.coupon.domain.Coupon;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class IssuedCoupon {
+public class IssuedCoupon extends BaseEntity {
 
     @Id
     @GeneratedValue(generator = "uuid2")

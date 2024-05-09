@@ -1,5 +1,6 @@
 package com.shop.core.address.domain;
 
+import com.shop.common.entity.BaseEntity;
 import com.shop.core.member.domain.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Address {
+public class Address extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,6 @@
 package com.shop.core.memberSecurity.domain;
 
+import com.shop.common.entity.BaseEntity;
 import com.shop.core.member.domain.Member;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -9,10 +10,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberSecurity {
+public class MemberSecurity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
