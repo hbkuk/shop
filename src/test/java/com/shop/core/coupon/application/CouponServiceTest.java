@@ -12,6 +12,7 @@ import com.shop.core.auth.domain.LoginUser;
 import com.shop.core.coupon.domain.Coupon;
 import com.shop.core.coupon.domain.CouponRepository;
 import com.shop.core.coupon.domain.CouponStatus;
+import com.shop.core.coupon.exception.CouponAlreadyIssuedException;
 import com.shop.core.coupon.exception.CouponExhaustedException;
 import com.shop.core.coupon.exception.NotFoundCouponException;
 import com.shop.core.coupon.presentation.dto.CouponRequest;
@@ -204,6 +205,25 @@ public class CouponServiceTest extends ApplicationTest {
                 두번째_생성된_회원 = 회원_생성(존슨.이메일, 존슨.비밀번호, 존슨.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
 
                 생성된_관리자 = 관리자_생성(황병국.email, 황병국.phoneNumber, AdminRole.ADMIN, AdminSignupChannel.GITHUB, AdminStatus.ACTIVE);
+            }
+
+            @Test
+            @DisplayName("동일한 회원에게 쿠폰을 발급할 수 없다.")
+            void 동일한_회원에게_쿠폰_발급() {
+                // given
+                CouponRequest 등록할_쿠폰_정보 =
+                        CouponRequest.of("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 10);
+                Coupon 등록된_쿠폰 = couponRepository.save(등록할_쿠폰_정보.toEntity(CouponStatus.ISSUABLE, 생성된_관리자.getEmail()));
+
+                CouponIssueRequest 발급할_쿠폰_정보 = CouponIssueRequest.of(등록된_쿠폰.getId(), List.of(첫번째_생성된_회원.getEmail()));
+                couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
+
+                // when, then
+                assertThatExceptionOfType(CouponAlreadyIssuedException.class)
+                        .isThrownBy(() -> {
+                            couponService.issueCoupon(발급할_쿠폰_정보, LoginUser.of(생성된_관리자.getEmail()));
+                        })
+                        .withMessageMatching(ErrorType.COUPON_ALREADY_ISSUED.getMessage());
             }
 
             @Test

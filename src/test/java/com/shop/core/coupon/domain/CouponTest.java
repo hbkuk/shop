@@ -1,10 +1,7 @@
 package com.shop.core.coupon.domain;
 
 import com.shop.common.exception.ErrorType;
-import com.shop.core.coupon.exception.CouponExhaustedException;
-import com.shop.core.coupon.exception.CouponIssuanceNotAllowedException;
-import com.shop.core.coupon.exception.CouponStatusChangeNotAllowedException;
-import com.shop.core.coupon.exception.InsufficientCouponQuantityException;
+import com.shop.core.coupon.exception.*;
 import com.shop.core.issuedCoupon.domain.IssuedCoupon;
 import com.shop.core.issuedCoupon.domain.IssuedCouponStatus;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +14,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@DisplayName("쿠폰 도메인 테스트")
 public class CouponTest {
 
     @Nested
@@ -58,6 +56,27 @@ public class CouponTest {
 
         @Nested
         class 실패 {
+
+            @Test
+            @DisplayName("이미 동일한 쿠폰이 발급된 경우 추가되지 않는다.")
+            void 동일한_회원에게_발급할_쿠폰_추가() {
+                // given
+                String 관리자_이메일 = "admin001@gmail.com";
+                Coupon 쿠폰_정보 = new Coupon("봄 맞이 특별 쿠폰", "인기 브랜드의 다양한 제품 할인", 30000, 10, 10, CouponStatus.ISSUABLE, 관리자_이메일);
+
+                String 회원_이메일 = "member001@gmail.com";
+                IssuedCoupon 발급할_첫번째_쿠폰 = new IssuedCoupon(회원_이메일, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, 쿠폰_정보);
+                쿠폰_정보.issue(List.of(발급할_첫번째_쿠폰));
+
+                // when, then
+                IssuedCoupon 발급할_두번째_쿠폰 = new IssuedCoupon(회원_이메일, LocalDateTime.now(), LocalDateTime.now(), IssuedCouponStatus.ACTIVE, 쿠폰_정보);
+                assertThatExceptionOfType(CouponAlreadyIssuedException.class)
+                        .isThrownBy(() -> {
+                            쿠폰_정보.issue(List.of(발급할_두번째_쿠폰));
+                        })
+                        .withMessageMatching(ErrorType.COUPON_ALREADY_ISSUED.getMessage());
+                assertThat(쿠폰_정보.getIssuedCoupons()).containsExactly(발급할_첫번째_쿠폰);
+            }
 
             @Test
             @DisplayName("잔여 발급 횟수가 남아있지 않는 경우 쿠폰을 발급할 수 없다.")
