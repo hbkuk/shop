@@ -29,6 +29,15 @@ public class RestAssuredTemplate {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> get_요청_토큰_미포함(String 경로, Object 파라미터, HttpStatus 예상하는_상태코드) {
+        return given().log().all()
+                .when()
+                .get(경로, 파라미터)
+                .then().log().all()
+                .statusCode(예상하는_상태코드.value())
+                .extract();
+    }
+
     public static ExtractableResponse<Response> post_요청_토큰_포함(String 토큰_정보, String 경로, Object 파라미터, Object 요청_정보, HttpStatus 예상하는_상태코드) {
         return given().log().all()
                 .header("Authorization", 토큰_정보)
