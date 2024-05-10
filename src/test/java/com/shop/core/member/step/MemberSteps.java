@@ -4,12 +4,11 @@ import com.shop.core.member.application.dto.MemberRequest;
 import com.shop.core.member.domain.MemberStatus;
 import com.shop.core.member.domain.MemberType;
 import com.shop.core.member.fixture.MemberFixture;
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
+import static com.shop.common.util.RestAssuredTemplate.post_요청_토큰_미포함;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MemberSteps {
@@ -20,12 +19,8 @@ public class MemberSteps {
     }
 
     public static ExtractableResponse<Response> 회원_생성_요청(String 이메일, String 비밀번호, int 나이) {
-        return RestAssured
-                .given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new MemberRequest(이메일, 비밀번호, 나이, MemberType.NORMAL, MemberStatus.ACTIVE))
-                .when().post("/members")
-                .then().log().all().extract();
+        MemberRequest 회원_생성_요청_정보 = new MemberRequest(이메일, 비밀번호, 나이, MemberType.NORMAL, MemberStatus.ACTIVE);
+        return post_요청_토큰_미포함("/members", 회원_생성_요청_정보);
     }
 
     public static ExtractableResponse<Response> 회원_생성_요청(MemberFixture memberFixture) {

@@ -64,6 +64,16 @@ public class RestAssuredTemplate {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> post_요청_토큰_미포함(String 경로, Object 요청_정보) {
+        return given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(요청_정보)
+                .when()
+                .post(경로)
+                .then().log().all()
+                .extract();
+    }
+
     public static ExtractableResponse<Response> post_요청_토큰_미포함(String 경로, Object 파라미터, Object 요청_정보, HttpStatus 예상하는_상태코드) {
         return given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
