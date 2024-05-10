@@ -1,61 +1,31 @@
 package com.shop.core.auth.step;
 
+import com.shop.core.auth.application.dto.AuthRequest;
 import com.shop.core.member.fixture.MemberFixture;
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import static com.shop.common.util.RestAssuredTemplate.post_요청_토큰_미포함;
 import static com.shop.core.member.step.MemberSteps.회원_생성_요청;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthSteps {
-    public static String 성공하는_토큰_발급_요청(MemberFixture memberFixture) {
-        Map<String, String> params = new HashMap<>();
-        params.put("email", memberFixture.이메일);
-        params.put("password", memberFixture.비밀번호);
+    public static String 성공하는_토큰_발급_요청(MemberFixture 회원) {
+        AuthRequest 인증_요청_정보 = AuthRequest.of(회원.이메일, 회원.비밀번호);
+        ExtractableResponse<Response> 응답 = post_요청_토큰_미포함("/login/token", 인증_요청_정보, HttpStatus.OK);
 
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(params)
-                .when().post("/login/token")
-                .then().log().all()
-                .statusCode(HttpStatus.OK.value()).extract();
-
-        String accessToken = response.jsonPath().getString("accessToken");
-        assertThat(accessToken).isNotBlank();
-        return accessToken;
+        return 응답.jsonPath().getString("accessToken");
     }
 
-    public static void 실패하는_토큰_발급_요청(MemberFixture memberFixture) {
-        Map<String, String> params = new HashMap<>();
-        params.put("email", memberFixture.이메일);
-        params.put("password", memberFixture.비밀번호);
-
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(params)
-                .when().post("/login/token")
-                .then().log().all()
-                .statusCode(HttpStatus.BAD_REQUEST.value()).extract();
+    public static void 실패하는_토큰_발급_요청(MemberFixture 회원) {
+        AuthRequest 인증_요청_정보 = AuthRequest.of(회원.이메일, 회원.비밀번호);
+        post_요청_토큰_미포함("/login/token", 인증_요청_정보, HttpStatus.BAD_REQUEST);
     }
 
     public static void 실패하는_토큰_발급_요청(MemberFixture 회원, String 변경된_비밀번호) {
-        Map<String, String> params = new HashMap<>();
-        params.put("email", 회원.이메일);
-        params.put("password", 변경된_비밀번호 + 회원.비밀번호);
-
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(params)
-                .when().post("/login/token")
-                .then().log().all()
-                .statusCode(HttpStatus.BAD_REQUEST.value()).extract();
+        AuthRequest 인증_요청_정보 = AuthRequest.of(회원.이메일, 변경된_비밀번호 + 회원.비밀번호);
+        post_요청_토큰_미포함("/login/token", 인증_요청_정보, HttpStatus.BAD_REQUEST);
     }
 
     public static void 토큰_확인(String 발급된_토큰) {
