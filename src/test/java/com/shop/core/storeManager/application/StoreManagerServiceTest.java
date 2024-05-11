@@ -6,7 +6,9 @@ import com.shop.core.storeManager.domain.StoreManager;
 import com.shop.core.storeManager.domain.StoreManagerRepository;
 import com.shop.core.storeManager.domain.StoreManagerStatus;
 import com.shop.core.storeManager.exception.DuplicateEmailException;
+import com.shop.core.storeManager.exception.NotFoundStoreManagerException;
 import com.shop.core.storeManager.presentation.dto.StoreManagerRequest;
+import com.shop.core.storeManager.presentation.dto.StoreManagerResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -80,10 +82,35 @@ public class StoreManagerServiceTest extends ApplicationTest {
         @Nested
         class 성공 {
 
+            @Test
+            @DisplayName("상점 관리자를 조회한다.")
+            void 상점_관리자_조회() {
+                // given
+                StoreManager 상점_관리자 = new StoreManager(김상점.이메일, 김상점.비밀번호, 김상점.핸드폰_번호, StoreManagerStatus.ACTIVE);
+                storeManagerRepository.save(상점_관리자);
+
+                // when
+                StoreManagerResponse 조회_상점_관리자 = storeManagerService.findManager(상점_관리자.getEmail());
+
+                // then
+                assertThat(조회_상점_관리자.getEmail()).isEqualTo(상점_관리자.getEmail());
+            }
+
         }
 
         @Nested
         class 실패 {
+
+            @Test
+            @DisplayName("존재하지 않는 관리자는 조회할 수 없다.")
+            void 존재하지_않는_상점_관리자_조회() {
+                // when, then
+                assertThatExceptionOfType(NotFoundStoreManagerException.class)
+                        .isThrownBy(() -> {
+                            storeManagerService.findManager(김상점.이메일);
+                        })
+                        .withMessageMatching(ErrorType.NOT_FOUND_STORE_MANAGER.getMessage());
+            }
 
         }
     }
