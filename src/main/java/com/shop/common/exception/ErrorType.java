@@ -25,6 +25,7 @@ public enum ErrorType {
     CANNOT_NOTIFICATION_READ(6002, "확인할 수 없는 알림입니다."),
 
     NOT_FOUND_ADMIN(7001, "존재하지 않는 관리자입니다."),
+    NOT_FOUND_STORE_MANAGER(7002, "존재하지 않는 상점 관리자입니다."),
 
     DUPLICATE_STORE_MANAGER_EMAIL(8002, "중복된 상점 관리자 이메일입니다."),
 

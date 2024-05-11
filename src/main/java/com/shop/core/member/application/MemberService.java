@@ -31,7 +31,7 @@ public class MemberService {
             throw new DuplicateEmailException(ErrorType.DUPLICATE_MEMBER_EMAIL);
         }
 
-        Member savedMember = memberRepository.save(request.toMember(MemberType.NORMAL, MemberStatus.ACTIVE));
+        Member savedMember = memberRepository.save(request.toEntity(MemberType.NORMAL, MemberStatus.ACTIVE));
         memberSecurityService.applyPasswordSecurity(savedMember);
 
         return MemberResponse.of(savedMember);
@@ -44,7 +44,7 @@ public class MemberService {
     @Transactional
     public void updateMember(Long id, MemberRequest request) {
         Member member = findById(id);
-        member.update(request.toMember());
+        member.update(request.toEntity());
     }
 
     @Transactional

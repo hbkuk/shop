@@ -53,7 +53,7 @@ public class MemberSecurityServiceTest extends ApplicationTest {
                 // given
                 MemberRequest 브라운_회원_생성_요청 =
                         MemberRequest.createOf(브라운.이메일, 브라운.비밀번호, 브라운.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
-                Member 저장된_브라운_정보 = memberRepository.save(브라운_회원_생성_요청.toMember());
+                Member 저장된_브라운_정보 = memberRepository.save(브라운_회원_생성_요청.toEntity());
 
                 // when
                 memberSecurityService.applyPasswordSecurity(저장된_브라운_정보);
@@ -78,7 +78,7 @@ public class MemberSecurityServiceTest extends ApplicationTest {
              * Then  일치한다.
              */
             @Test
-            void 패스워드_확인_성공() {
+            void 암호화_전_비밀번호_동일() {
                 // given
                 MemberRequest 브라운_회원_생성_요청 =
                         MemberRequest.createOf(브라운.이메일, 브라운.비밀번호, 브라운.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
@@ -101,7 +101,7 @@ public class MemberSecurityServiceTest extends ApplicationTest {
              * Then  일치하지 않는다.
              */
             @Test
-            void 패스워드_확인_실패() {
+            void 암호화_전_비밀번호_다름() {
                 // given
                 MemberRequest 브라운_회원_생성_요청 =
                         MemberRequest.createOf(브라운.이메일, 브라운.비밀번호, 브라운.나이, MemberType.NORMAL, MemberStatus.ACTIVE);

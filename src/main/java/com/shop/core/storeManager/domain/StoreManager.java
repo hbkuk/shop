@@ -33,4 +33,9 @@ public class StoreManager extends BaseEntity {
         this.phoneNumber = phoneNumber;
         this.status = status;
     }
+
+    public StoreManager updateEncodedPassword(String encryptedPassword) {
+        this.password = encryptedPassword;
+        return this;
+    }
 }

@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.shop.core.memberSecurity.util.MemberSecurityUtil.createSalt;
+import static com.shop.common.util.SecurityUtil.createSalt;
 
 @Service
 @AllArgsConstructor

@@ -20,11 +20,11 @@ public class MemberRequest {
     @JsonIgnore
     private MemberStatus memberStatus;
 
-    public Member toMember() {
+    public Member toEntity() {
         return new Member(email, password, age, memberType, memberStatus);
     }
 
-    public Member toMember(MemberType memberType, MemberStatus memberStatus) {
+    public Member toEntity(MemberType memberType, MemberStatus memberStatus) {
         return new Member(email, password, age, memberType, memberStatus);
     }
 
