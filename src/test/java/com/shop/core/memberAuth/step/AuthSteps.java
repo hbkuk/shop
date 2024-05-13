@@ -23,8 +23,8 @@ public class AuthSteps {
         post_요청_토큰_미포함("/login/member", 인증_요청_정보, HttpStatus.BAD_REQUEST);
     }
 
-    public static void 실패하는_토큰_발급_요청(MemberFixture 회원, String 변경된_비밀번호) {
-        AuthRequest 인증_요청_정보 = AuthRequest.of(회원.이메일, 변경된_비밀번호 + 회원.비밀번호);
+    public static void 실패하는_토큰_발급_요청(String 이메일, String 변경된_비밀번호) {
+        AuthRequest 인증_요청_정보 = AuthRequest.of(이메일, 변경된_비밀번호);
         post_요청_토큰_미포함("/login/member", 인증_요청_정보, HttpStatus.BAD_REQUEST);
     }
 

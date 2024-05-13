@@ -46,7 +46,7 @@ public class MemberAuthAcceptanceTest extends AcceptanceTest {
                 회원_생성_요청(존슨);
 
                 // then
-                실패하는_토큰_발급_요청(존슨, "Changed Password");
+                실패하는_토큰_발급_요청(존슨.이메일, "Changed Password" + 존슨.비밀번호);
             }
 
             /**

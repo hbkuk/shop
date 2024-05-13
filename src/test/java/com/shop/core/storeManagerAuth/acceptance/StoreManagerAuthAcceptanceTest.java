@@ -1,20 +1,13 @@
 package com.shop.core.storeManagerAuth.acceptance;
 
 import com.shop.common.util.AcceptanceTest;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.shop.common.util.RestAssuredTemplate.post_요청_토큰_미포함;
 import static com.shop.core.storeManager.fixture.StoreManagerFixture.김상점;
 import static com.shop.core.storeManager.step.StoreManagerSteps.상점_관리자_생성_요청;
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.shop.core.storeManagerAuth.step.StoreManagerSteps.*;
 
 @DisplayName("상점 관리자 인증 인수 테스트")
 public class StoreManagerAuthAcceptanceTest extends AcceptanceTest {
@@ -36,14 +29,10 @@ public class StoreManagerAuthAcceptanceTest extends AcceptanceTest {
                 상점_관리자_생성_요청(김상점.이메일, 김상점.비밀번호, 김상점.핸드폰_번호);
 
                 // when
-                Map<String, String> params = new HashMap<>();
-                params.put("email", 김상점.이메일);
-                params.put("password", 김상점.비밀번호);
-
-                ExtractableResponse<Response> 응답 = post_요청_토큰_미포함("/login/store-manager", params, HttpStatus.OK);
+                var 발급된_토큰 = 성공하는_상품_관리자_토큰_발급_요청(김상점);
 
                 // then
-                assertThat(응답.jsonPath().getString("access_token")).isNotBlank();
+                토큰_확인(발급된_토큰);
             }
 
         }
@@ -62,11 +51,7 @@ public class StoreManagerAuthAcceptanceTest extends AcceptanceTest {
                 상점_관리자_생성_요청(김상점.이메일, 김상점.비밀번호, 김상점.핸드폰_번호);
 
                 // when, then
-                Map<String, String> params = new HashMap<>();
-                params.put("email", 김상점.이메일);
-                params.put("password", "Changed Password" + 김상점.비밀번호);
-
-                ExtractableResponse<Response> 응답 = post_요청_토큰_미포함("/login/store-manager", params, HttpStatus.BAD_REQUEST);
+                실패하는_상품_관리자_토큰_발급_요청(김상점.이메일, "Changed Password" + 김상점.비밀번호);
             }
 
             /**
@@ -76,11 +61,7 @@ public class StoreManagerAuthAcceptanceTest extends AcceptanceTest {
             @Test
             void 존재하지_않는_상점_관리자_토큰_발급_요청() {
                 // when, then
-                Map<String, String> params = new HashMap<>();
-                params.put("email", 김상점.이메일);
-                params.put("password", 김상점.비밀번호);
-
-                ExtractableResponse<Response> 응답 = post_요청_토큰_미포함("/login/store-manager", params, HttpStatus.BAD_REQUEST);
+                실패하는_상품_관리자_토큰_발급_요청(김상점.이메일, 김상점.비밀번호);
             }
         }
     }
