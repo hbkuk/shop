@@ -1,15 +1,15 @@
 package com.shop.common.util;
 
-import com.shop.core.admin.auth.domain.*;
-import com.shop.core.admin.auth.fixture.AdminGithubFixture;
-import com.shop.core.admin.auth.presentation.dto.AdminGithubCodeRequest;
+import com.shop.core.adminAuth.domain.*;
+import com.shop.core.adminAuth.fixture.AdminGithubFixture;
+import com.shop.core.adminAuth.presentation.dto.AdminGithubCodeRequest;
 import com.shop.core.member.domain.Member;
 import com.shop.core.member.domain.MemberRepository;
 import com.shop.core.member.domain.MemberStatus;
 import com.shop.core.member.domain.MemberType;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.shop.core.admin.auth.step.AdminAuthSteps.깃허브_토큰_발급_요청;
+import static com.shop.core.adminAuth.step.AdminAuthSteps.깃허브_토큰_발급_요청;
 
 public class UserAcceptanceTest extends AcceptanceTest {
 
@@ -33,7 +33,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
         var 깃허브_코드_정보 = AdminGithubCodeRequest.of(깃허브_코드);
         var 깃허브_토큰_발급_정보 = 깃허브_토큰_발급_요청(깃허브_코드_정보);
 
-        return "Bearer " + 깃허브_토큰_발급_정보.jsonPath().getString("accessToken");
+        return "Bearer " + 깃허브_토큰_발급_정보.jsonPath().getString("access_token");
     }
 
     public Admin 관리자_생성(String email, AdminRole role, AdminSignupChannel signupChannel, AdminStatus status) {

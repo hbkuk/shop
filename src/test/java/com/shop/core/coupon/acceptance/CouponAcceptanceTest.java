@@ -1,7 +1,7 @@
 package com.shop.core.coupon.acceptance;
 
 import com.shop.common.util.UserAcceptanceTest;
-import com.shop.core.admin.auth.fixture.AdminGithubFixture;
+import com.shop.core.adminAuth.fixture.AdminGithubFixture;
 import com.shop.core.coupon.domain.CouponStatus;
 import com.shop.core.coupon.presentation.dto.CouponRequest;
 import com.shop.core.coupon.presentation.dto.CouponStatusRequest;

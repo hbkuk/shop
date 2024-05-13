@@ -1,9 +1,9 @@
 package com.shop.common.util;
 
-import com.shop.core.admin.auth.application.dto.AdminGithubClientCodeRequest;
-import com.shop.core.admin.auth.application.dto.GithubProfileResponse;
-import com.shop.core.admin.auth.application.dto.GithubTokenResponse;
-import com.shop.core.admin.auth.fixture.AdminGithubFixture;
+import com.shop.core.adminAuth.application.dto.AdminGithubClientCodeRequest;
+import com.shop.core.adminAuth.application.dto.GithubProfileResponse;
+import com.shop.core.adminAuth.application.dto.GithubTokenResponse;
+import com.shop.core.adminAuth.fixture.AdminGithubFixture;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

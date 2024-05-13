@@ -1,9 +1,9 @@
 package com.shop.core.member.application;
 
 import com.shop.common.exception.ErrorType;
-import com.shop.core.auth.application.UserDetailsService;
 import com.shop.core.member.domain.Member;
 import com.shop.core.member.exception.PasswordMismatchException;
+import com.shop.core.memberAuth.application.UserDetailsService;
 import com.shop.core.memberSecurity.application.MemberSecurityService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.shop.common.util;
 
-import com.shop.core.admin.auth.domain.*;
+import com.shop.core.adminAuth.domain.*;
 import com.shop.core.member.domain.Member;
 import com.shop.core.member.domain.MemberRepository;
 import com.shop.core.member.domain.MemberStatus;

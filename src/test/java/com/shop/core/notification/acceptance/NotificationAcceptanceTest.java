@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.shop.core.admin.auth.fixture.AdminGithubFixture.황병국;
-import static com.shop.core.auth.step.AuthSteps.회원생성_후_토큰_발급;
+import static com.shop.core.adminAuth.fixture.AdminGithubFixture.황병국;
 import static com.shop.core.member.fixture.MemberFixture.스미스;
+import static com.shop.core.memberAuth.step.AuthSteps.회원생성_후_토큰_발급;
 import static com.shop.core.notification.step.NotificationSteps.*;
 
 @DisplayName("알림 관련 인수 테스트")

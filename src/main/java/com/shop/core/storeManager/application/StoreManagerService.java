@@ -37,15 +37,20 @@ public class StoreManagerService {
         return StoreManagerResponse.of(storeManager);
     }
 
-    private boolean isEmailAlreadyRegistered(String email) {
-        return storeManagerRepository.findByEmail(email).isPresent();
+    public boolean verifyUser(String email, String password) {
+        StoreManager storeManager = findByEmail(email);
+        return storeManagerSecurityService.verifyPassword(password, storeManager);
     }
 
     public StoreManagerResponse findManager(String email) {
-        return StoreManagerResponse.of(findById(email));
+        return StoreManagerResponse.of(findByEmail(email));
     }
 
-    private StoreManager findById(String email) {
+    public StoreManager findByEmail(String email) {
         return storeManagerRepository.findByEmail(email).orElseThrow(() -> new NotFoundStoreManagerException(ErrorType.NOT_FOUND_STORE_MANAGER));
+    }
+
+    private boolean isEmailAlreadyRegistered(String email) {
+        return storeManagerRepository.findByEmail(email).isPresent();
     }
 }

@@ -2,13 +2,12 @@ package com.shop.core.coupon.application;
 
 import com.shop.common.exception.ErrorType;
 import com.shop.common.util.ApplicationTest;
-import com.shop.core.admin.auth.application.AdminAuthService;
-import com.shop.core.admin.auth.domain.Admin;
-import com.shop.core.admin.auth.domain.AdminRole;
-import com.shop.core.admin.auth.domain.AdminSignupChannel;
-import com.shop.core.admin.auth.domain.AdminStatus;
-import com.shop.core.admin.auth.exception.NotFoundAdminException;
-import com.shop.core.auth.domain.LoginUser;
+import com.shop.core.adminAuth.application.AdminAuthService;
+import com.shop.core.adminAuth.domain.Admin;
+import com.shop.core.adminAuth.domain.AdminRole;
+import com.shop.core.adminAuth.domain.AdminSignupChannel;
+import com.shop.core.adminAuth.domain.AdminStatus;
+import com.shop.core.adminAuth.exception.NotFoundAdminException;
 import com.shop.core.coupon.domain.Coupon;
 import com.shop.core.coupon.domain.CouponRepository;
 import com.shop.core.coupon.domain.CouponStatus;
@@ -24,6 +23,7 @@ import com.shop.core.member.domain.Member;
 import com.shop.core.member.domain.MemberStatus;
 import com.shop.core.member.domain.MemberType;
 import com.shop.core.member.exception.NotFoundMemberException;
+import com.shop.core.memberAuth.domain.LoginUser;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,7 +33,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-import static com.shop.core.admin.auth.fixture.AdminGithubFixture.황병국;
+import static com.shop.core.adminAuth.fixture.AdminGithubFixture.황병국;
 import static com.shop.core.member.fixture.MemberFixture.스미스;
 import static com.shop.core.member.fixture.MemberFixture.존슨;
 import static org.assertj.core.api.Assertions.assertThat;

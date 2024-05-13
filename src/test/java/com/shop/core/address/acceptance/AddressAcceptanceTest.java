@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.shop.core.address.step.AddressSteps.*;
-import static com.shop.core.auth.step.AuthSteps.회원생성_후_토큰_발급;
 import static com.shop.core.member.fixture.MemberFixture.스미스;
+import static com.shop.core.memberAuth.step.AuthSteps.회원생성_후_토큰_발급;
 
 @DisplayName("주소록 관련 인수 테스트")
 public class AddressAcceptanceTest extends AcceptanceTest {
