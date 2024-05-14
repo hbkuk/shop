@@ -15,7 +15,7 @@ public class StoreManagerSteps {
         assertThat(발급된_토큰).isNotBlank();
     }
 
-    public static String 성공하는_상품_관리자_토큰_발급_요청(StoreManagerFixture 상점_관리자) {
+    public static String 성공하는_상점_관리자_토큰_발급_요청(StoreManagerFixture 상점_관리자) {
         StoreManagerAuthRequest storeManagerAuthRequest = StoreManagerAuthRequest.of(상점_관리자.이메일, 상점_관리자.비밀번호);
         ExtractableResponse<Response> 응답 = post_요청_토큰_미포함("/login/store-manager", storeManagerAuthRequest, HttpStatus.OK);
 

@@ -1,10 +1,8 @@
-package com.shop.core.memberAuth.presentation;
+package com.shop.common.auth;
 
+import com.shop.common.domain.auth.LoginUser;
+import com.shop.common.domain.auth.NonLoginUser;
 import com.shop.common.exception.ErrorType;
-import com.shop.core.memberAuth.application.JwtTokenProvider;
-import com.shop.core.memberAuth.domain.LoginUser;
-import com.shop.core.memberAuth.domain.NonLoginUser;
-import com.shop.core.memberAuth.exception.InvalidTokenException;
 import lombok.AllArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

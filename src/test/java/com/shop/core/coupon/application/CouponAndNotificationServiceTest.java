@@ -1,5 +1,6 @@
 package com.shop.core.coupon.application;
 
+import com.shop.common.domain.auth.LoginUser;
 import com.shop.common.exception.ErrorType;
 import com.shop.common.util.ApplicationTest;
 import com.shop.core.adminAuth.application.AdminAuthService;
@@ -17,7 +18,6 @@ import com.shop.core.issuedCoupon.presentation.dto.CouponIssueRequest;
 import com.shop.core.member.domain.Member;
 import com.shop.core.member.domain.MemberStatus;
 import com.shop.core.member.domain.MemberType;
-import com.shop.core.memberAuth.domain.LoginUser;
 import com.shop.core.notification.domain.Notification;
 import com.shop.core.notification.domain.NotificationRepository;
 import com.shop.core.notification.domain.NotificationType;

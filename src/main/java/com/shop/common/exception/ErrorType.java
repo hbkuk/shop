@@ -26,8 +26,12 @@ public enum ErrorType {
 
     NOT_FOUND_ADMIN(7001, "존재하지 않는 관리자입니다."),
     NOT_FOUND_STORE_MANAGER(7002, "존재하지 않는 상점 관리자입니다."),
+    NON_MATCHING_STORE_MANAGER(7002, "다른 상점 관리자의 정보를 확인할 수 없습니다."),
 
-    DUPLICATE_STORE_MANAGER_EMAIL(8002, "중복된 상점 관리자 이메일입니다."),
+    DUPLICATE_STORE_MANAGER_EMAIL(8001, "중복된 상점 관리자 이메일입니다."),
+    DUPLICATE_STORE_NAME(8002, "중복된 상점명 입니다."),
+    DUPLICATE_STORE_CREATION(8003, "상점을 생성하는 데 허용된 횟수를 초과했습니다."),
+    NOT_FOUND_STORE(8004, "존재하지 않는 상점입니다."),
 
 
     NON_MATCHING_MEMBER(9000, "다른 회원의 정보를 확인할 수 없습니다."),

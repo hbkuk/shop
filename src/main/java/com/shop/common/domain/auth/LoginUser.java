@@ -1,4 +1,4 @@
-package com.shop.core.memberAuth.domain;
+package com.shop.common.domain.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

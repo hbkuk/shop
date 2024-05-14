@@ -1,7 +1,6 @@
-package com.shop.core.memberAuth.application;
+package com.shop.common.auth;
 
 import com.shop.common.exception.ErrorType;
-import com.shop.core.memberAuth.exception.AuthenticationException;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

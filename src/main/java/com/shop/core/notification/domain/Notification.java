@@ -1,6 +1,6 @@
 package com.shop.core.notification.domain;
 
-import com.shop.common.entity.BaseEntity;
+import com.shop.common.domain.base.BaseEntity;
 import com.shop.common.exception.ErrorType;
 import com.shop.core.member.domain.Member;
 import com.shop.core.notification.exception.CannotNotificationReadException;

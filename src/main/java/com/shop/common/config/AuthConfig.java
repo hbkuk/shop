@@ -1,7 +1,7 @@
 package com.shop.common.config;
 
-import com.shop.core.memberAuth.application.JwtTokenProvider;
-import com.shop.core.memberAuth.presentation.AuthenticationPrincipalArgumentResolver;
+import com.shop.common.auth.AuthenticationPrincipalArgumentResolver;
+import com.shop.common.auth.JwtTokenProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

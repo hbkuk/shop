@@ -1,5 +1,6 @@
 package com.shop.core.address.application;
 
+import com.shop.common.domain.auth.LoginUser;
 import com.shop.common.exception.ErrorType;
 import com.shop.core.address.domain.Address;
 import com.shop.core.address.domain.AddressRepository;
@@ -9,7 +10,6 @@ import com.shop.core.address.presentation.dto.AddressResponse;
 import com.shop.core.member.application.MemberService;
 import com.shop.core.member.domain.Member;
 import com.shop.core.member.exception.NonMatchingMemberException;
-import com.shop.core.memberAuth.domain.LoginUser;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

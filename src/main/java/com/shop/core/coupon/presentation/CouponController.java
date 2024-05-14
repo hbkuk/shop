@@ -1,13 +1,13 @@
 package com.shop.core.coupon.presentation;
 
+import com.shop.common.auth.AuthenticationPrincipal;
+import com.shop.common.domain.auth.LoginUser;
 import com.shop.core.coupon.application.CouponService;
 import com.shop.core.coupon.presentation.dto.CouponRequest;
 import com.shop.core.coupon.presentation.dto.CouponResponse;
 import com.shop.core.coupon.presentation.dto.CouponStatusRequest;
 import com.shop.core.issuedCoupon.presentation.dto.CouponIssueRequest;
 import com.shop.core.issuedCoupon.presentation.dto.CouponIssueResponse;
-import com.shop.core.memberAuth.domain.LoginUser;
-import com.shop.core.memberAuth.presentation.AuthenticationPrincipal;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

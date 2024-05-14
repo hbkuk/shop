@@ -1,6 +1,6 @@
 package com.shop.core.coupon.domain;
 
-import com.shop.common.entity.BaseEntity;
+import com.shop.common.domain.base.BaseEntity;
 import com.shop.common.exception.ErrorType;
 import com.shop.core.coupon.exception.*;
 import com.shop.core.issuedCoupon.domain.IssuedCoupon;

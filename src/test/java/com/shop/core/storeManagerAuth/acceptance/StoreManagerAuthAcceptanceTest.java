@@ -29,7 +29,7 @@ public class StoreManagerAuthAcceptanceTest extends AcceptanceTest {
                 상점_관리자_생성_요청(김상점.이메일, 김상점.비밀번호, 김상점.핸드폰_번호);
 
                 // when
-                var 발급된_토큰 = 성공하는_상품_관리자_토큰_발급_요청(김상점);
+                var 발급된_토큰 = 성공하는_상점_관리자_토큰_발급_요청(김상점);
 
                 // then
                 토큰_확인(발급된_토큰);

@@ -1,6 +1,6 @@
 package com.shop.core.storeManagerSecurity.domain;
 
-import com.shop.common.entity.BaseEntity;
+import com.shop.common.domain.base.BaseEntity;
 import com.shop.core.storeManager.domain.StoreManager;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

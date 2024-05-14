@@ -1,5 +1,6 @@
 package com.shop.core.coupon.application;
 
+import com.shop.common.domain.auth.LoginUser;
 import com.shop.common.event.Event;
 import com.shop.common.exception.ErrorType;
 import com.shop.common.reTry.IsTryAgain;
@@ -17,7 +18,6 @@ import com.shop.core.issuedCoupon.domain.IssuedCouponStatus;
 import com.shop.core.issuedCoupon.presentation.dto.CouponIssueRequest;
 import com.shop.core.issuedCoupon.presentation.dto.CouponIssueResponse;
 import com.shop.core.member.application.MemberService;
-import com.shop.core.memberAuth.domain.LoginUser;
 import com.shop.core.notification.domain.NotificationEvent;
 import com.shop.core.notification.domain.NotificationType;
 import lombok.AllArgsConstructor;
@@ -32,7 +32,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class CouponService {
 
-    private final AdminAuthService adminAuthService;
+    private final AdminAuthService adminAuthService; // TODO: AdminService 변경 확인
 
     private final MemberService memberService;
 

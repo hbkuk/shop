@@ -1,6 +1,6 @@
 package com.shop.core.issuedCoupon.domain;
 
-import com.shop.common.entity.BaseEntity;
+import com.shop.common.domain.base.BaseEntity;
 import com.shop.core.coupon.domain.Coupon;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;

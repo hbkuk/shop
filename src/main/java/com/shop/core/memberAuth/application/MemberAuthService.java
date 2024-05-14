@@ -1,15 +1,16 @@
 package com.shop.core.memberAuth.application;
 
+import com.shop.common.auth.JwtTokenProvider;
 import com.shop.core.memberAuth.application.dto.AuthResponse;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthService {
+public class MemberAuthService {
 
     private final UserDetailsService userDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthService(UserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider) {
+    public MemberAuthService(UserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider) {
         this.userDetailsService = userDetailsService;
         this.jwtTokenProvider = jwtTokenProvider;
     }

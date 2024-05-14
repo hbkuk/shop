@@ -1,6 +1,6 @@
 package com.shop.core.memberSecurity.domain;
 
-import com.shop.common.entity.BaseEntity;
+import com.shop.common.domain.base.BaseEntity;
 import com.shop.core.member.domain.Member;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;

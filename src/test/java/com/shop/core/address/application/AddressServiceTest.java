@@ -1,5 +1,6 @@
 package com.shop.core.address.application;
 
+import com.shop.common.domain.auth.LoginUser;
 import com.shop.common.exception.ErrorType;
 import com.shop.common.util.ApplicationTest;
 import com.shop.core.address.domain.Address;
@@ -12,7 +13,6 @@ import com.shop.core.member.domain.Member;
 import com.shop.core.member.domain.MemberStatus;
 import com.shop.core.member.domain.MemberType;
 import com.shop.core.member.exception.NonMatchingMemberException;
-import com.shop.core.memberAuth.domain.LoginUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

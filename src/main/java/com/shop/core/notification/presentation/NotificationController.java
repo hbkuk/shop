@@ -1,7 +1,7 @@
 package com.shop.core.notification.presentation;
 
-import com.shop.core.memberAuth.domain.LoginUser;
-import com.shop.core.memberAuth.presentation.AuthenticationPrincipal;
+import com.shop.common.auth.AuthenticationPrincipal;
+import com.shop.common.domain.auth.LoginUser;
 import com.shop.core.notification.application.NotificationService;
 import com.shop.core.notification.presentation.dto.NotificationResponse;
 import lombok.AllArgsConstructor;

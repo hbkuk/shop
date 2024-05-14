@@ -1,11 +1,11 @@
 package com.shop.core.notification.application;
 
+import com.shop.common.domain.auth.LoginUser;
 import com.shop.common.exception.ErrorType;
 import com.shop.core.adminAuth.application.AdminAuthService;
 import com.shop.core.member.application.MemberService;
 import com.shop.core.member.domain.Member;
 import com.shop.core.member.exception.NonMatchingMemberException;
-import com.shop.core.memberAuth.domain.LoginUser;
 import com.shop.core.notification.domain.Notification;
 import com.shop.core.notification.domain.NotificationRepository;
 import com.shop.core.notification.domain.NotificationStatus;

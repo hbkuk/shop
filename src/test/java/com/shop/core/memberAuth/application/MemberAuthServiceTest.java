@@ -1,5 +1,6 @@
 package com.shop.core.memberAuth.application;
 
+import com.shop.common.auth.JwtTokenProvider;
 import com.shop.common.exception.ErrorType;
 import com.shop.common.util.ApplicationTest;
 import com.shop.core.member.application.MemberService;
@@ -18,10 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @DisplayName("인증 서비스 레이어 테스트")
-public class AuthServiceTest extends ApplicationTest {
+public class MemberAuthServiceTest extends ApplicationTest {
 
     @Autowired
-    AuthService authService;
+    MemberAuthService memberAuthService;
 
     @Autowired
     UserDetailsService userDetailsService;
@@ -50,7 +51,7 @@ public class AuthServiceTest extends ApplicationTest {
                 memberService.createMember(브라운_회원_생성_요청);
 
                 // when
-                AuthResponse authResponse = authService.createToken(브라운.이메일, 브라운.비밀번호);
+                AuthResponse authResponse = memberAuthService.createToken(브라운.이메일, 브라운.비밀번호);
 
                 // then
                 assertThat(authResponse.getAccessToken()).isNotBlank();
@@ -74,7 +75,7 @@ public class AuthServiceTest extends ApplicationTest {
                 // when, then
                 assertThatExceptionOfType(PasswordMismatchException.class)
                         .isThrownBy(() -> {
-                            authService.createToken(브라운.이메일, "different" + 브라운.비밀번호);
+                            memberAuthService.createToken(브라운.이메일, "different" + 브라운.비밀번호);
                         })
                         .withMessageMatching(ErrorType.PASSWORD_MISMATCH.getMessage());
             }

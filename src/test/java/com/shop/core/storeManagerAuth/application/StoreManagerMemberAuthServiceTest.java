@@ -1,9 +1,9 @@
 package com.shop.core.storeManagerAuth.application;
 
+import com.shop.common.auth.JwtTokenProvider;
 import com.shop.common.exception.ErrorType;
 import com.shop.common.util.ApplicationTest;
 import com.shop.core.member.exception.PasswordMismatchException;
-import com.shop.core.memberAuth.application.JwtTokenProvider;
 import com.shop.core.storeManager.application.StoreManagerService;
 import com.shop.core.storeManager.exception.NotFoundStoreManagerException;
 import com.shop.core.storeManager.presentation.dto.StoreManagerRequest;
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @DisplayName("상점 관리자 서비스 레이어 테스트")
-public class StoreManagerAuthServiceTest extends ApplicationTest {
+public class StoreManagerMemberAuthServiceTest extends ApplicationTest {
 
     @Autowired
     StoreManagerAuthService storeManagerAuthService;

@@ -1,5 +1,6 @@
 package com.shop.core.adminAuth.application;
 
+import com.shop.common.auth.JwtTokenProvider;
 import com.shop.common.exception.ErrorType;
 import com.shop.core.adminAuth.application.dto.AdminGithubProfileResponse;
 import com.shop.core.adminAuth.domain.*;
@@ -7,7 +8,6 @@ import com.shop.core.adminAuth.exception.NonMatchingSignupChannelException;
 import com.shop.core.adminAuth.exception.NotFoundAdminException;
 import com.shop.core.adminAuth.fixture.AdminGithubFixture;
 import com.shop.core.adminAuth.presentation.dto.AdminTokenResponse;
-import com.shop.core.memberAuth.application.JwtTokenProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 @DisplayName("관리자 인증 서비스 레이어 테스트")
 @ExtendWith(MockitoExtension.class)
-public class AdminAuthServiceMockTest {
+public class AdminMemberAuthServiceMockTest {
 
     AdminAuthService adminAuthService;
 

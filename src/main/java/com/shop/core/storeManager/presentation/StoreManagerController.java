@@ -20,6 +20,6 @@ public class StoreManagerController {
     @PostMapping("/store-manager")
     public ResponseEntity<Void> createStoreManager(@RequestBody StoreManagerRequest request) {
         StoreManagerResponse storeManager = storeManagerService.createStoreManager(request);
-        return ResponseEntity.created(URI.create("/storeManager" + storeManager.getId())).build();
+        return ResponseEntity.created(URI.create("/storeManager/" + storeManager.getId())).build();
     }
 }

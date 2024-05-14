@@ -1,5 +1,6 @@
 package com.shop.core.adminAuth.application;
 
+import com.shop.common.auth.JwtTokenProvider;
 import com.shop.common.exception.ErrorType;
 import com.shop.core.adminAuth.application.dto.AdminGithubProfileResponse;
 import com.shop.core.adminAuth.domain.Admin;
@@ -8,7 +9,6 @@ import com.shop.core.adminAuth.domain.AdminSignupChannel;
 import com.shop.core.adminAuth.exception.NonMatchingSignupChannelException;
 import com.shop.core.adminAuth.exception.NotFoundAdminException;
 import com.shop.core.adminAuth.presentation.dto.AdminTokenResponse;
-import com.shop.core.memberAuth.application.JwtTokenProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

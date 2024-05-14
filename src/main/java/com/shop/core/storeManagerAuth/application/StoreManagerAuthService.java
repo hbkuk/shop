@@ -1,8 +1,8 @@
 package com.shop.core.storeManagerAuth.application;
 
+import com.shop.common.auth.JwtTokenProvider;
 import com.shop.common.exception.ErrorType;
 import com.shop.core.member.exception.PasswordMismatchException;
-import com.shop.core.memberAuth.application.JwtTokenProvider;
 import com.shop.core.storeManager.application.StoreManagerService;
 import com.shop.core.storeManagerAuth.presentation.dto.StoreManagerAuthResponse;
 import org.springframework.stereotype.Service;

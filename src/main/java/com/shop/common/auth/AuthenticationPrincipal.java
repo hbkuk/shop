@@ -1,4 +1,4 @@
-package com.shop.core.memberAuth.presentation;
+package com.shop.common.auth;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
