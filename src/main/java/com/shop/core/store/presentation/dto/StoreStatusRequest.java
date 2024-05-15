@@ -17,11 +17,19 @@ public class StoreStatusRequest {
     @JsonProperty("status")
     private StoreStatus status;
 
+    public StoreStatusRequest(StoreStatus status) {
+        this.status = status;
+    }
+
     public static StoreStatusRequest mergeStoreId(Long storeId, StoreStatusRequest request) {
         return new StoreStatusRequest(storeId, request.getStatus());
     }
 
     public static StoreStatusRequest of(Long id, StoreStatus storeStatus) {
         return new StoreStatusRequest(id, storeStatus);
+    }
+
+    public static StoreStatusRequest of(StoreStatus storeStatus) {
+        return new StoreStatusRequest(storeStatus);
     }
 }

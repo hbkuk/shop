@@ -7,9 +7,15 @@ import io.restassured.response.Response;
 import org.springframework.http.HttpStatus;
 
 import static com.shop.common.util.RestAssuredTemplate.post_요청_토큰_미포함;
+import static com.shop.core.storeManager.step.StoreManagerSteps.상점_관리자_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StoreManagerSteps {
+
+    public static String 상점_관리자_생성_후_토큰_발급(StoreManagerFixture 상점_관리자) {
+        상점_관리자_생성_요청(상점_관리자);
+        return "Bearer " + 성공하는_상점_관리자_토큰_발급_요청(상점_관리자);
+    }
 
     public static void 토큰_확인(String 발급된_토큰) {
         assertThat(발급된_토큰).isNotBlank();

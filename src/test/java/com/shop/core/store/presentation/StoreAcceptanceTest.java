@@ -1,23 +1,16 @@
 package com.shop.core.store.presentation;
 
 import com.shop.common.util.AcceptanceTest;
-import com.shop.core.store.domain.StoreStatus;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
+import com.shop.core.store.presentation.dto.StoreRequest;
+import com.shop.core.store.presentation.dto.StoreStatusRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.shop.common.util.HttpResponseUtil.getCreatedLocationId;
-import static com.shop.common.util.RestAssuredTemplate.*;
+import static com.shop.core.store.domain.StoreStatus.UNDER_MAINTENANCE;
+import static com.shop.core.store.step.StoreSteps.*;
 import static com.shop.core.storeManager.fixture.StoreManagerFixture.김상점;
-import static com.shop.core.storeManager.step.StoreManagerSteps.상점_관리자_생성_요청;
-import static com.shop.core.storeManagerAuth.step.StoreManagerSteps.성공하는_상점_관리자_토큰_발급_요청;
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.shop.core.storeManagerAuth.step.StoreManagerSteps.상점_관리자_생성_후_토큰_발급;
 
 @DisplayName("상점 관련 인수 테스트")
 public class StoreAcceptanceTest extends AcceptanceTest {
@@ -36,20 +29,14 @@ public class StoreAcceptanceTest extends AcceptanceTest {
             @Test
             void 상점_등록() {
                 // given
-                상점_관리자_생성_요청(김상점);
-                String 발급된_토큰 = "Bearer " + 성공하는_상점_관리자_토큰_발급_요청(김상점);
+                var 발급된_상점_관리자_토큰 = 상점_관리자_생성_후_토큰_발급(김상점);
 
                 // when
-                Map<String, String> 상점_등록_정보 = new HashMap<>();
-                상점_등록_정보.put("name", "패션 팔래트");
-                상점_등록_정보.put("content", "당신의 생활을 더 건강하고 지속 가능하게 만들어드립니다.");
-
-                ExtractableResponse<Response> 상점_등록_요청_응답 = post_요청_토큰_포함(발급된_토큰, "/store", 상점_등록_정보, HttpStatus.CREATED);
+                var 상점_등록_정보 = StoreRequest.of("패션 팔래트", "당신의 생활을 더 건강하고 지속 가능하게 만들어드립니다."); // TODO: Fixture 분리
+                var 상점_등록_요청_응답 = 성공하는_상점_등록_요청_토큰_포함(발급된_상점_관리자_토큰, 상점_등록_정보);
 
                 // then
-                ExtractableResponse<Response> 상점_조회_요청_응답 = get_요청_토큰_포함(발급된_토큰, "/store/{id}", getCreatedLocationId(상점_등록_요청_응답), HttpStatus.OK);
-
-                assertThat(상점_조회_요청_응답.jsonPath().getString("name")).isEqualTo(상점_등록_정보.get("name"));
+                상점_정상_등록_확인(발급된_상점_관리자_토큰, 상점_등록_요청_응답, 상점_등록_정보);
             }
 
         }
@@ -64,11 +51,8 @@ public class StoreAcceptanceTest extends AcceptanceTest {
             @Test
             void 토큰_없이_상품_등록() {
                 // when
-                Map<String, String> 상점_등록_정보 = new HashMap<>();
-                상점_등록_정보.put("name", "패션 팔래트");
-                상점_등록_정보.put("content", "당신의 생활을 더 건강하고 지속 가능하게 만들어드립니다.");
-
-                post_요청_토큰_미포함("/store", 상점_등록_정보, HttpStatus.UNAUTHORIZED);
+                var 상점_등록_정보 = StoreRequest.of("패션 팔래트", "당신의 생활을 더 건강하고 지속 가능하게 만들어드립니다.");
+                실패하는_상점_등록_요청_토큰_미포함(상점_등록_정보);
             }
         }
 
@@ -89,26 +73,18 @@ public class StoreAcceptanceTest extends AcceptanceTest {
             @Test
             void 상점_상태_변경() {
                 // given
-                상점_관리자_생성_요청(김상점);
-                String 발급된_토큰 = "Bearer " + 성공하는_상점_관리자_토큰_발급_요청(김상점);
+                var 발급된_토큰 = 상점_관리자_생성_후_토큰_발급(김상점);
 
                 // when
-                Map<String, String> 상점_등록_정보 = new HashMap<>();
-                상점_등록_정보.put("name", "패션 팔래트");
-                상점_등록_정보.put("content", "당신의 생활을 더 건강하고 지속 가능하게 만들어드립니다.");
-
-                ExtractableResponse<Response> 상점_등록_요청_응답 = post_요청_토큰_포함(발급된_토큰, "/store", 상점_등록_정보, HttpStatus.CREATED);
+                var 상점_등록_정보 = StoreRequest.of("패션 팔래트", "당신의 생활을 더 건강하고 지속 가능하게 만들어드립니다.");
+                var 상점_등록_요청_응답 = 성공하는_상점_등록_요청_토큰_포함(발급된_토큰, 상점_등록_정보);
 
                 // when
-                Map<String, String> 상점_변경_정보 = new HashMap<>();
-                상점_변경_정보.put("status", "UNDER_MAINTENANCE");
-
-                put_요청_토큰_포함(발급된_토큰, "/store/{storeId}", getCreatedLocationId(상점_등록_요청_응답), 상점_변경_정보, HttpStatus.OK);
+                var 상점_변경_정보 = StoreStatusRequest.of(UNDER_MAINTENANCE); // TODO: Fixture 분리
+                성공하는_상점_변경_요청_토큰_포함(발급된_토큰, 상점_등록_요청_응답, 상점_변경_정보);
 
                 // then
-                ExtractableResponse<Response> 상점_조회_요청_응답 = get_요청_토큰_포함(발급된_토큰, "/store/{id}", getCreatedLocationId(상점_등록_요청_응답), HttpStatus.OK);
-
-                assertThat(상점_조회_요청_응답.jsonPath().getString("status")).isEqualTo(상점_변경_정보.get("status"));
+                상점_상태_정상_변경_확인(발급된_토큰, 상점_등록_요청_응답, 상점_변경_정보);
             }
 
         }
@@ -125,26 +101,15 @@ public class StoreAcceptanceTest extends AcceptanceTest {
             @Test
             void 토큰_없이_상점_상태_변경() {
                 // given
-                상점_관리자_생성_요청(김상점);
-                String 발급된_토큰 = "Bearer " + 성공하는_상점_관리자_토큰_발급_요청(김상점);
+                var 발급된_토큰 = 상점_관리자_생성_후_토큰_발급(김상점);
 
                 // when
-                Map<String, String> 상점_등록_정보 = new HashMap<>();
-                상점_등록_정보.put("name", "패션 팔래트");
-                상점_등록_정보.put("content", "당신의 생활을 더 건강하고 지속 가능하게 만들어드립니다.");
+                var 상점_등록_정보 = StoreRequest.of("패션 팔래트", "당신의 생활을 더 건강하고 지속 가능하게 만들어드립니다.");
+                var 상점_등록_요청_응답 = 성공하는_상점_등록_요청_토큰_포함(발급된_토큰, 상점_등록_정보);
 
-                ExtractableResponse<Response> 상점_등록_요청_응답 = post_요청_토큰_포함(발급된_토큰, "/store", 상점_등록_정보, HttpStatus.CREATED);
-
-                // when
-                Map<String, String> 상점_변경_정보 = new HashMap<>();
-                상점_변경_정보.put("status", "UNDER_MAINTENANCE");
-
-                put_요청_토큰_미포함("/store/{storeId}", getCreatedLocationId(상점_등록_요청_응답), 상점_변경_정보, HttpStatus.UNAUTHORIZED);
-
-                // then
-                ExtractableResponse<Response> 상점_조회_요청_응답 = get_요청_토큰_포함(발급된_토큰, "/store/{id}", getCreatedLocationId(상점_등록_요청_응답), HttpStatus.OK);
-
-                assertThat(상점_조회_요청_응답.jsonPath().getString("status")).isEqualTo(StoreStatus.OPEN.toString());
+                // when, then
+                var 상점_변경_정보 = StoreStatusRequest.of(UNDER_MAINTENANCE);
+                실패하는_상점_변경_요청_토큰_미포함(상점_등록_요청_응답, 상점_변경_정보);
             }
         }
     }
