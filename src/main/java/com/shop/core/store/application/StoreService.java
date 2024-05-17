@@ -74,4 +74,8 @@ public class StoreService {
 
         store.get().updateStatus(storeStatusRequest.getStatus());
     }
+
+    public Store findByStoreManagerEmail(String email) {
+        return storeRepository.findByStoreManagerEmail(email).orElseThrow(() -> new NotFoundStoreException(ErrorType.NOT_FOUND_STORE));
+    }
 }

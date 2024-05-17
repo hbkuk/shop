@@ -1,6 +1,7 @@
 package com.shop.core.store.domain;
 
 import com.shop.common.domain.base.BaseEntity;
+import com.shop.core.product.domain.Product;
 import com.shop.core.storeManager.domain.StoreManager;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "store")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Store extends BaseEntity {
@@ -45,4 +47,9 @@ public class Store extends BaseEntity {
         this.status = status;
         return this;
     }
+
+    public boolean isOwn(Product product) {
+        return id.equals(product.getId());
+    }
+    
 }

@@ -33,6 +33,10 @@ public enum ErrorType {
     DUPLICATE_STORE_CREATION(8003, "상점을 생성하는 데 허용된 횟수를 초과했습니다."),
     NOT_FOUND_STORE(8004, "존재하지 않는 상점입니다."),
 
+    DUPLICATE_PRODUCT_NAME(8100, "중복된 상품명입니다."),
+    NOT_FOUND_PRODUCT(8101, "존재하지 않는 상품입니다."),
+    NON_MATCHING_PRODUCT(8101, "다른 상점의 상품입니다."),
+
 
     NON_MATCHING_MEMBER(9000, "다른 회원의 정보를 확인할 수 없습니다."),
     REQUEST_EXCEPTION(9001, "http 요청 에러입니다."),
