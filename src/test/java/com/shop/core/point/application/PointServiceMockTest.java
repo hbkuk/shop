@@ -53,7 +53,7 @@ public class PointServiceMockTest {
 
             /**
              * Given  회원을 생성한다.
-             * When   결제 번호로 결제한 회원의 정보를 요청한다.
+             * When   결제 번호에 해당하는 결제 정보를 요청한다.
              * Then   결제 정보에 일치하는 회원을 찾은 후 포인트를 충전한다.
              */
             @Test
@@ -84,8 +84,8 @@ public class PointServiceMockTest {
         class 실패 {
 
             /**
-             * When   결제 번호로 결제한 회원의 정보를 요청할 때
-             * And    결제 번호에 해당하는 정보가 없을 경우
+             * When   결제 번호에 해당하는 결제 정보를 요청할 때
+             * And    결제 번호에 해당하는 결제 정보가 없을 경우
              * Then   포인트가 충전되지 않는다.
              */
             @Test
@@ -105,7 +105,7 @@ public class PointServiceMockTest {
             }
 
             /**
-             * When   결제 번호로 결제한 회원의 정보를 요청한다.
+             * When   결제 번호에 해당하는 결제 정보를 요청할 때
              * Then   결제 정보에 일치하는 회원을 찾지 못한 경우
              * Then   포인트가 충전되지 않는다.
              */
