@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.shop.core.member.fixture.MemberFixture.스미스;
 import static com.shop.core.memberAuth.step.AuthSteps.회원생성_후_토큰_발급;
-import static com.shop.core.point.fixture.PaymentFixture.포인트_만원_충전;
+import static com.shop.core.point.fixture.PaymentFixture.첫번째_결제_정보;
 import static com.shop.core.point.step.PointStep.웹훅_포인트_충전_요청;
 import static com.shop.core.point.step.PointStep.포인트_충전_확인;
 
@@ -31,7 +31,7 @@ public class PointAcceptanceTest extends UserAcceptanceTest {
             void 포인트_충전() {
                 // given
                 var 회원_토큰 = 회원생성_후_토큰_발급(스미스);
-                var 결제_정보 = PaymentWebhookRequest.of(포인트_만원_충전.결제_번호, PaymentStatus.PAID);
+                var 결제_정보 = PaymentWebhookRequest.of(첫번째_결제_정보.결제_번호, PaymentStatus.PAID);
 
                 // when
                 var 포인트_충전_요청_응답 = 웹훅_포인트_충전_요청(결제_정보);

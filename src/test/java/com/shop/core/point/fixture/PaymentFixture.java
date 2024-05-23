@@ -1,7 +1,7 @@
 package com.shop.core.point.fixture;
 
 public enum PaymentFixture {
-    포인트_만원_충전("1234567890", 10000);
+    첫번째_결제_정보("1234567890", 10000);
 
     public final String 결제_번호;
     public final int 금액;

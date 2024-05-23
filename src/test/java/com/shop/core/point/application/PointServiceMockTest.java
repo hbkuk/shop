@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import static com.shop.core.member.fixture.MemberFixture.스미스;
+import static com.shop.core.point.fixture.PaymentFixture.첫번째_결제_정보;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
@@ -62,20 +63,18 @@ public class PointServiceMockTest {
                 Member 회원_정보 = new Member(스미스.이메일, 스미스.비밀번호, 스미스.나이, MemberType.NORMAL, MemberStatus.ACTIVE);
                 when(memberService.findMemberByEmail(스미스.이메일)).thenReturn(회원_정보);
 
-                String 결제_번호 = "1234567890";
-                int 금액 = 30000;
-                when(webhookClient.requestPaymentInfo(결제_번호)).thenReturn(PaymentInfoResponse.of(결제_번호, 스미스.이메일, PaymentStatus.PAID, 금액));
+                when(webhookClient.requestPaymentInfo(첫번째_결제_정보.결제_번호)).thenReturn(PaymentInfoResponse.of(첫번째_결제_정보.결제_번호, 스미스.이메일, PaymentStatus.PAID, 첫번째_결제_정보.금액));
 
-                Point 포인트 = new Point(금액, PointStatus.ACTIVE, PointType.CHARGE, 스미스.이메일);
+                Point 포인트 = new Point(첫번째_결제_정보.금액, PointStatus.ACTIVE, PointType.CHARGE, 스미스.이메일);
                 ReflectionTestUtils.setField(포인트, "id", 1L);
                 when(pointRepository.save(any(Point.class))).thenReturn(포인트);
 
                 // when
-                PaymentWebhookRequest 결재_웹훅_정보 = PaymentWebhookRequest.of("1234567890", PaymentStatus.PAID);
+                PaymentWebhookRequest 결재_웹훅_정보 = PaymentWebhookRequest.of(첫번째_결제_정보.결제_번호, PaymentStatus.PAID);
                 PointResponse 포인트_충전_정보 = pointService.receivePointWebhook(결재_웹훅_정보);
 
                 // then
-                assertThat(포인트_충전_정보.getAmount()).isEqualTo(금액);
+                assertThat(포인트_충전_정보.getAmount()).isEqualTo(첫번째_결제_정보.금액);
             }
 
         }
@@ -91,11 +90,10 @@ public class PointServiceMockTest {
             @Test
             void 존재하지_않는_결제_번호() {
                 // given
-                String 결제_번호 = "1234567890";
-                when(webhookClient.requestPaymentInfo(결제_번호)).thenThrow(new IllegalArgumentException(ErrorType.INVALID_PAYMENT_ID.getMessage()));
+                when(webhookClient.requestPaymentInfo(첫번째_결제_정보.결제_번호)).thenThrow(new IllegalArgumentException(ErrorType.INVALID_PAYMENT_ID.getMessage()));
 
                 // when, then
-                PaymentWebhookRequest 결재_웹훅_정보 = PaymentWebhookRequest.of("1234567890", PaymentStatus.PAID);
+                PaymentWebhookRequest 결재_웹훅_정보 = PaymentWebhookRequest.of(첫번째_결제_정보.결제_번호, PaymentStatus.PAID);
                 assertThatExceptionOfType(IllegalArgumentException.class)
                         .isThrownBy(() -> {
                             pointService.receivePointWebhook(결재_웹훅_정보);
@@ -114,12 +112,10 @@ public class PointServiceMockTest {
                 // given
                 when(memberService.findMemberByEmail(스미스.이메일)).thenThrow(new NotFoundMemberException(ErrorType.NOT_FOUND_MEMBER));
 
-                String 결제_번호 = "1234567890";
-                int 금액 = 30000;
-                when(webhookClient.requestPaymentInfo(결제_번호)).thenReturn(PaymentInfoResponse.of(결제_번호, 스미스.이메일, PaymentStatus.PAID, 금액));
+                when(webhookClient.requestPaymentInfo(첫번째_결제_정보.결제_번호)).thenReturn(PaymentInfoResponse.of(첫번째_결제_정보.결제_번호, 스미스.이메일, PaymentStatus.PAID, 첫번째_결제_정보.금액));
 
                 // when, then
-                PaymentWebhookRequest 결재_웹훅_정보 = PaymentWebhookRequest.of("1234567890", PaymentStatus.PAID);
+                PaymentWebhookRequest 결재_웹훅_정보 = PaymentWebhookRequest.of(첫번째_결제_정보.결제_번호, PaymentStatus.PAID);
                 assertThatExceptionOfType(NotFoundMemberException.class)
                         .isThrownBy(() -> {
                             pointService.receivePointWebhook(결재_웹훅_정보);
