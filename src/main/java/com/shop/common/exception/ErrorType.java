@@ -38,7 +38,12 @@ public enum ErrorType {
     NON_MATCHING_PRODUCT(8101, "다른 상점의 상품입니다."),
 
 
+    INVALID_PAYMENT_ID(8201, "잘못된 결제 번호입니다."),
+
+
     NON_MATCHING_MEMBER(9000, "다른 회원의 정보를 확인할 수 없습니다."),
+
+
     REQUEST_EXCEPTION(9001, "http 요청 에러입니다."),
 
     INVALID_PATH(9002, "잘못된 경로입니다."),
@@ -48,6 +53,8 @@ public enum ErrorType {
     DATA_INTEGRITY_VIOLATION(9004, "예상하지 못한 데이터가 입력되었습니다."),
 
     NO_MORE_TRY(9005, "요청한 작업에 실패했습니다."),
+
+    NOT_FOUND_DATA(9006, "요청한 데이터를 찾을 수 없습니다."),
 
     UNHANDLED_EXCEPTION(9999, "예상치 못한 예외입니다.");
 

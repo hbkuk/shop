@@ -44,3 +44,11 @@ github:
   client:
     id: client-id
     secret: github-client-secret
+
+payment-webhook:
+  base-url: https://payment-webhook.com/ # TODO 추후 외부 PG 연동 후 수정
+  get-access-token-url: /users/getToken
+  get-payment-info-url: /payments/%s/balance
+  client:
+    api-key: api-key
+    api-secret-key: api-secret-key

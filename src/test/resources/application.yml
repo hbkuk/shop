@@ -26,7 +26,6 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    #    url: jdbc:mysql://localhost:3306/test?rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=999999
     url: jdbc:mysql://localhost:3306/test?rewriteBatchedStatements=true
     username: root
     password: qudrnr132!
@@ -50,3 +49,11 @@ github:
   client:
     id: client-id
     secret: github-client-secret
+
+payment-webhook:
+  base-url: http://localhost:8080
+  get-access-token-url: /users/getToken
+  get-payment-info-url: /payments/%s/balance
+  client:
+    api-key: api-key
+    api-secret-key: api-secret-key
