@@ -39,7 +39,7 @@ public class PointAcceptanceTest extends UserAcceptanceTest {
 
                 Map<String, String> 결제_정보 = new HashMap<>();
                 결제_정보.put("payment_id", "1234567890");
-                결제_정보.put("status", "PAID");
+                결제_정보.put("payment_status", "PAID");
 
                 // when
                 ExtractableResponse<Response> 포인트_충전_요청_응답 = post_요청_토큰_미포함("/payment-webhook/points", 결제_정보, HttpStatus.CREATED);
@@ -47,7 +47,7 @@ public class PointAcceptanceTest extends UserAcceptanceTest {
                 // then
                 ExtractableResponse<Response> 포인트_조회_요청_응답 = get_요청_토큰_포함(정상적인_회원의_토큰, "/points/{id}", getCreatedLocationId(포인트_충전_요청_응답), HttpStatus.OK);
 
-                assertEquals(포인트_충전_요청_응답.jsonPath().getInt("amount"), 포인트_조회_요청_응답.jsonPath().getInt("amount"));
+                assertEquals(포인트_조회_요청_응답.jsonPath().getInt("amount"), 10000);
             }
 
         }
