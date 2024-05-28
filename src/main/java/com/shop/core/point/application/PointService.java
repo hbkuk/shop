@@ -26,17 +26,17 @@ public class PointService {
     private final MemberService memberService;
 
     @Transactional
-    public PointResponse receivePointWebhook(PaymentWebhookRequest request) {
-        PaymentInfoResponse paymentInfoResponse = webhookClient.requestPaymentInfo(request.getPaymentId());
-
-        if (request.getPaymentStatus() == PaymentStatus.PAID) {
-            Member member = memberService.findMemberByEmail(paymentInfoResponse.getEmail());
-            Point point = new Point(paymentInfoResponse.getAmount(), PointStatus.ACTIVE, PointType.CHARGE, member.getEmail());
-
-            return PointResponse.of(pointRepository.save(point));
+    public PointResponse receivePointWebhook(PaymentWebhookRequest request) { // TODO: 리팩토링
+        if (request.getPaymentStatus() != PaymentStatus.PAID) {
+            throw new IllegalStateException(ErrorType.NO_MORE_TRY.getMessage());
         }
 
-        return new PointResponse(); // TODO: 금액이 충전된 상황이 아닐 경우
+        PaymentInfoResponse paymentInfoResponse = webhookClient.requestPaymentInfo(request.getPaymentId());
+
+        Member member = memberService.findMemberByEmail(paymentInfoResponse.getEmail());
+        Point point = new Point(paymentInfoResponse.getAmount(), PointStatus.ACTIVE, PointType.CHARGE, member.getEmail());
+
+        return PointResponse.of(pointRepository.save(point));
     }
 
     public PointResponse findById(Long pointId, LoginUser loginUser) {
